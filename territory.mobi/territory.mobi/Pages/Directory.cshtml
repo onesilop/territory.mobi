@@ -1,0 +1,28 @@
+﻿@page
+@model territory.mobi.Pages.DirectoryModel
+
+@{
+    Layout = "./Shared/_Publayout";
+    ViewData["Title"] = "territory.mobi";
+    ViewData["LeftTitle"] = Model.Cong.CongName;
+}
+
+
+<div>
+            @foreach (var item in Model.Map)
+            {
+                if (item.NavigationType == "Section")
+                {
+                     <div class="DirectorySection">@Html.DisplayFor(modelItem => item.MapDesc)</div>
+                }
+                else if (item.NavigationType == "Map")
+                {
+                     <a class="DirectoryItem" asp-page="./Map" asp-route-CongName="@Model.Cong.CongName" asp-route-MapNo="@item.MapKey" >@Html.DisplayFor(modelItem => item.MapKey)</a>
+                }
+
+            }
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Cong.CongId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

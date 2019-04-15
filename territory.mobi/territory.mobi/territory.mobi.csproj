@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <UserSecretsId>aspnet-territory.mobi-EC8755EB-3BB3-4DB0-80AB-E3D09EF24867</UserSecretsId>
+    <UserSecretsId>aspnet-territory.mobi-EB4DF5AD-607D-4E80-A1A9-AF42E78C60DA</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +12,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\NewFolder\" />
+    <Content Update="Pages\Directory.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Pages\Shared\_PubLayout.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\map_images\" />
+    <Folder Include="wwwroot\images\assets\" />
+    <Folder Include="wwwroot\lib\fancybox\" />
   </ItemGroup>
 
 </Project>

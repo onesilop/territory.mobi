@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using territory.mobi.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using territory.mobi.Models;
 
 namespace territory.mobi
 {
@@ -33,6 +34,10 @@ namespace territory.mobi
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            services.AddDbContext<TerritoryContext>(options =>
+                options.UseSqlServer(
+                 Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

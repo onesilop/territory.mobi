@@ -1,0 +1,110 @@
+﻿@page
+@model territory.mobi.Pages.Admin.Congregation.Maps.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Map[0].CongId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Map[0].MapKey)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Map[0].MapDesc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Map[0].MapArea)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Map[0].MapPolygon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Map[0].MapType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Map[0].ImgId)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Map[0].GoogleRef)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Map[0].Notes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Map[0].Parking)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Map[0].ParentPage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Map[0].SortOrder)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Map[0].UpdateDatetime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Map) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CongId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MapKey)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MapDesc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MapArea)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MapPolygon)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MapType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImgId)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.GoogleRef)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Notes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Parking)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParentPage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SortOrder)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdateDatetime)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.MapId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.MapId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.MapId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

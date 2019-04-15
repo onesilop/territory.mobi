@@ -1,0 +1,42 @@
+.street {
+    padding-left: 20px;
+    padding-top: 3px;
+    font-size: 5vh;
+    list-style: none;
+}
+
+.detailsHeader {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #445d79), color-stop(1, #1e62d0));
+    background: -moz-linear-gradient(center top, #445d79 5%, #1e62d0 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#445d79', endColorstr='#1e62d0');
+    background-color: #445d79;
+    -webkit-border-top-left-radius: 0px;
+    -moz-border-radius-topleft: 0px;
+    border-top-left-radius: 0px;
+    -webkit-border-top-right-radius: 0px;
+    -moz-border-radius-topright: 0px;
+    border-top-right-radius: 0px;
+    -webkit-border-bottom-right-radius: 0px;
+    -moz-border-radius-bottomright: 0px;
+    border-bottom-right-radius: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+    -moz-border-radius-bottomleft: 0px;
+    border-bottom-left-radius: 0px;
+    border: 1px solid #445d79;
+    color: #ffffff;
+    text-shadow: 1px 1px 0px #1570cd;
+    font-family: verdana;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: middle;
+    height: 13%;
+    width: 104%;
+    margin-left: -2%;
+    margin-top: -1vh;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
+}

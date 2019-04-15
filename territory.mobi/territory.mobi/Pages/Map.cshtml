@@ -1,0 +1,61 @@
+﻿@page
+@model territory.mobi.Pages.mapModel
+
+@{
+    Layout = "./Shared/_Publayout";
+    ViewData["Title"] = "territory.mobi";
+    ViewData["LeftTitle"] = Model.Map.MapDesc;
+    ViewData["RightTitle"] = Model.Map.MapArea;
+}
+
+<div class="imagediv">
+        <form method="post">
+            @if (Model.Image.ImgImage == null)
+            {
+                <img id="mappic" class="MapImg" src="@Model.Image.ImgPath" alt="@Model.Image.ImgText" />
+            }
+            else
+            {
+                <img id="mappic" class="MapImg" src="data:image;base64,@System.Convert.ToBase64String(Model.Image.ImgImage)" alt="@Model.Image.ImgText"/>
+            }
+                <div class="footer">
+                    <a id="dirlink" class="footlink" href="">
+                        <img class="MapMenuIcon" src="~/images/assets/TOC1.png" />
+                    </a>
+                    <a id="menunav" class="footlink" href="">
+                        <img class="MapMenuIcon" src="~/images/assets/Navigation.png" />
+                    </a>
+                    <a id="menudnc" class="footlink" href="#0">
+                        <img class="MapMenuIcon" src="~/images/assets/DNC.png" />
+                    </a>
+                    <a id="menupark" class="footlink" href="">
+                        <img class="MapMenuIcon" src="~/images/assets/Parking.png" />
+                    </a>
+                    <a id="menunote" class="footlink" href="">
+                        <img class="MapMenuIcon" src="~/images/assets/Notes.png" />
+                    </a>
+                </div>
+        </form>
+</div>
+
+<div>
+    <a asp-page="./Directory" asp-route-CongName="@Model.Cong.CongName">Back to List</a>
+    @if (Model.Map.Parking != "")
+    {
+        //some code to show parking
+    }
+    @if (Model.Map.Notes != "")
+    {
+        //some code to show notes
+    }
+    @if (Model.DNC.Count() > 0)
+    {
+        //some code to show Donot calls
+    }
+
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
