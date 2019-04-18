@@ -1,0 +1,80 @@
+﻿@page
+@model territory.mobi.Pages.Admin.Congregation.DoNotCalls.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>DoNotCall</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="DoNotCall.DncId" />
+            <div class="form-group">
+                <label asp-for="DoNotCall.MapId" class="control-label"></label>
+                <input asp-for="DoNotCall.MapId" class="form-control" />
+                <span asp-validation-for="DoNotCall.MapId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DoNotCall.DateCreated" class="control-label"></label>
+                <input asp-for="DoNotCall.DateCreated" class="form-control" />
+                <span asp-validation-for="DoNotCall.DateCreated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DoNotCall.DateValidated" class="control-label"></label>
+                <input asp-for="DoNotCall.DateValidated" class="form-control" />
+                <span asp-validation-for="DoNotCall.DateValidated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DoNotCall.StreetNo" class="control-label"></label>
+                <input asp-for="DoNotCall.StreetNo" class="form-control" />
+                <span asp-validation-for="DoNotCall.StreetNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DoNotCall.StreetName" class="control-label"></label>
+                <input asp-for="DoNotCall.StreetName" class="form-control" />
+                <span asp-validation-for="DoNotCall.StreetName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DoNotCall.AptNo" class="control-label"></label>
+                <input asp-for="DoNotCall.AptNo" class="form-control" />
+                <span asp-validation-for="DoNotCall.AptNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DoNotCall.Suburb" class="control-label"></label>
+                <input asp-for="DoNotCall.Suburb" class="form-control" />
+                <span asp-validation-for="DoNotCall.Suburb" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DoNotCall.Note" class="control-label"></label>
+                <input asp-for="DoNotCall.Note" class="form-control" />
+                <span asp-validation-for="DoNotCall.Note" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DoNotCall.Display" class="control-label"></label>
+                <input asp-for="DoNotCall.Display" class="form-control" />
+                <span asp-validation-for="DoNotCall.Display" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DoNotCall.UpdateDatetime" class="control-label"></label>
+                <input asp-for="DoNotCall.UpdateDatetime" class="form-control" />
+                <span asp-validation-for="DoNotCall.UpdateDatetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

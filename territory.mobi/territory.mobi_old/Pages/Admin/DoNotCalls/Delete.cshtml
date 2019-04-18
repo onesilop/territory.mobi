@@ -1,0 +1,82 @@
+﻿@page
+@model territory.mobi.Pages.Admin.Congregation.DoNotCalls.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>DoNotCall</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DoNotCall.MapId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DoNotCall.MapId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DoNotCall.DateCreated)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DoNotCall.DateCreated)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DoNotCall.DateValidated)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DoNotCall.DateValidated)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DoNotCall.StreetNo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DoNotCall.StreetNo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DoNotCall.StreetName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DoNotCall.StreetName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DoNotCall.AptNo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DoNotCall.AptNo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DoNotCall.Suburb)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DoNotCall.Suburb)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DoNotCall.Note)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DoNotCall.Note)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DoNotCall.Display)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DoNotCall.Display)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DoNotCall.UpdateDatetime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DoNotCall.UpdateDatetime)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="DoNotCall.DncId" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>
