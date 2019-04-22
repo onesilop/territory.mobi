@@ -9,9 +9,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using territory.mobi.Models;
 using static System.Net.WebRequestMethods;
+using System.Security.Cryptography;
 
 namespace territory.mobi.Pages
 {
+
+
     public class mapModel : PageModel
     {
         private readonly territory.mobi.Models.TerritoryContext _context;
@@ -30,8 +33,15 @@ namespace territory.mobi.Pages
         public string NotesHT { get; set; }
         public string DncHT { get; set; }
 
-
-        public async Task<IActionResult> OnGetAsync(string CongName, string MapNo)
+        public bool pwdCheck(string pwd)
+        {
+            if (_context.Dncpword.Count(x => x.PasswordHash == pwd && x.Notinuse == 0) > 0)
+                return true;
+            else
+                return false; 
+        }
+        
+    public async Task<IActionResult> OnGetAsync(string CongName, string MapNo)
         {
             if (MapNo == null)
             {

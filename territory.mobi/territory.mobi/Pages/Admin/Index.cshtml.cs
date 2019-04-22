@@ -7,18 +7,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using territory.mobi.Models;
 
-namespace territory.mobi.Pages.Admin.Congregation
+namespace territory.mobi.Pages
 {
-    public class IndexModel : PageModel
+    public class AdminModel : PageModel
     {
-        private readonly territory.mobi.Models.TerritoryContext _context;
 
-        public IndexModel(territory.mobi.Models.TerritoryContext context)
+             private readonly territory.mobi.Models.TerritoryContext _context;
+
+        public AdminModel(territory.mobi.Models.TerritoryContext context)
         {
             _context = context;
         }
 
-        public IList<Cong> Cong { get;set; }
+        public IList<Cong> Cong { get; set; }
 
         public async Task OnGetAsync()
         {

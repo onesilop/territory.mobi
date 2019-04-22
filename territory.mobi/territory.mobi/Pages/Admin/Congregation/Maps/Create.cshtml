@@ -1,0 +1,94 @@
+﻿@page
+@model territory.mobi.Pages.Admin.Congregation.Maps.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>Map</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Map.MapId" class="control-label"></label>
+                <input asp-for="Map.MapId" class="form-control" />
+                <span asp-validation-for="Map.MapId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Map.CongId" class="control-label"></label>
+                <input asp-for="Map.CongId" class="form-control" />
+                <span asp-validation-for="Map.CongId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Map.MapKey" class="control-label"></label>
+                <input asp-for="Map.MapKey" class="form-control" />
+                <span asp-validation-for="Map.MapKey" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Map.MapDesc" class="control-label"></label>
+                <input asp-for="Map.MapDesc" class="form-control" />
+                <span asp-validation-for="Map.MapDesc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Map.MapArea" class="control-label"></label>
+                <input asp-for="Map.MapArea" class="form-control" />
+                <span asp-validation-for="Map.MapArea" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Map.MapPolygon" class="control-label"></label>
+                <input asp-for="Map.MapPolygon" class="form-control" />
+                <span asp-validation-for="Map.MapPolygon" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Map.MapType" class="control-label"></label>
+                <input asp-for="Map.MapType" class="form-control" />
+                <span asp-validation-for="Map.MapType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Map.ImgId" class="control-label"></label>
+                <input asp-for="Map.ImgId" class="form-control" />
+                <span asp-validation-for="Map.ImgId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Map.GoogleRef" class="control-label"></label>
+                <input asp-for="Map.GoogleRef" class="form-control" />
+                <span asp-validation-for="Map.GoogleRef" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Map.Notes" class="control-label"></label>
+                <input asp-for="Map.Notes" class="form-control" />
+                <span asp-validation-for="Map.Notes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Map.Parking" class="control-label"></label>
+                <input asp-for="Map.Parking" class="form-control" />
+                <span asp-validation-for="Map.Parking" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Map.SortOrder" class="control-label"></label>
+                <input asp-for="Map.SortOrder" class="form-control" />
+                <span asp-validation-for="Map.SortOrder" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Map.UpdateDatetime" class="control-label"></label>
+                <input asp-for="Map.UpdateDatetime" class="form-control" />
+                <span asp-validation-for="Map.UpdateDatetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

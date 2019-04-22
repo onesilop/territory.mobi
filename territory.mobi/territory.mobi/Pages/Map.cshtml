@@ -8,45 +8,45 @@
     ViewData["RightTitle"] = Model.Map.MapArea;
 }
 
-<div>
-    <form method="post">
-        <div class="imagediv">
-            @if (Model.Image.ImgImage == null)
-            {
-                <img id="mappic" class="MapImg" src="@Model.Image.ImgPath" alt="@Model.Image.ImgText" />
-            }
-            else
-            {
-                <img id="mappic" class="MapImg" src="data:image;base64,@System.Convert.ToBase64String(Model.Image.ImgImage)" alt="@Model.Image.ImgText" />
-            }
+        <div>
+
+                @if (Model.Image.ImgImage == null)
+                {
+                    <img id="mappic" class="img-fluid align-self-center align-middle" src="@Model.Image.ImgPath" alt="@Model.Image.ImgText" />
+                }
+                else
+                {
+                    <img id="mappic" class="img-fluid align-self-center align-middle" src="data:image;base64,@System.Convert.ToBase64String(Model.Image.ImgImage)" alt="@Model.Image.ImgText" />
+                }
 
         </div>
-        <div class="footer">
-            <a class="footlink" asp-page="./Directory" asp-route-CongName="@Model.Cong.CongName">
+        <div class="d-inline-flex fixed-bottom bg-primary justify-content-center setwidth-100">
+            <a class="footer-link align-self-center m-1" asp-page="./Directory" asp-route-CongName="@Model.Cong.CongName">
                 <img class="MapMenuIcon" src="~/images/assets/TOC1.png" />
             </a>
             @if (Model.Map.Parking != "")
             {
-                <a id="parking" class="footlink" href="#">
+                <a id="parking" class="footer-link align-self-center m-1" href="#">
                     <img class="MapMenuIcon" src="~/images/assets/Parking.png" />
                 </a>
 
             }
             @if (Model.Map.Notes != "")
             {
-                <a id="notes" class="footlink" href="#">
+                <a id="notes" class="footer-link align-self-center m-1" href="#">
                     <img class="MapMenuIcon" src="~/images/assets/Notes.png" />
                 </a>
             }
             @if (Model.DNC.Count() > 0)
             {
-                <div class="footlink" id="dnc">
+                <div class="footer-link align-self-center m-1" id="dnc" href="#">
                     <img class="MapMenuIcon" src="~/images/assets/DNC.png" />
                 </div>
             }
         </div>
-    </form>
-</div>
+<form id="pwrdInput" method="post" class="invisible">
+    <div>Enter In your Password</div>
+</form>
 
 
 @section Scripts {
@@ -57,7 +57,7 @@
                 $(document).ready(function () {
                     $("#parking").click(function () {
                     bootbox.dialog({
-                        title: "<h2>Parking</h2>",
+                        title: "<h3>Parking</h3>",
                         message: "@Model.Map.Parking",
                         onEscape: true,
                         backdrop: true,
@@ -68,10 +68,26 @@
 
                     $("#notes").click(function () {
                     bootbox.dialog({
-                        title: "<h2>Notes</h2>",
+                        title: "<h3>Notes</h3>",
                         message: "@Model.Map.Notes",
                         onEscape: true,
-                        backdrop: true
+                        backdrop: true,
+                        centerVertical: true,
+                        scrollable: true
+                        });
+                    });
+
+                    $("#dnc").click(function () {
+                        bootbox.prompt({
+                            title: "<h3>Enter your password</h3>",
+                            inputType: "password",
+                            onEscape: true,
+                            backdrop: true,
+                            centerVertical: true,
+                            scrollable: true
+                            , callback: function (result) {
+
+                            }
                         });
                     });
                 });

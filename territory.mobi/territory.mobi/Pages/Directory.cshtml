@@ -8,21 +8,21 @@
 }
 
 
-<div>
-            @foreach (var item in Model.Map)
-            {
-                if (item.NavigationType == "Section")
-                {
-                     <div class="MapDir">@Html.DisplayFor(modelItem => item.MapDesc)</div>
+<diV >
+    @foreach (var item in Model.Map.OrderBy(x=> x.SortOrder))
+    {
+        if (item.NavigationType == "Section")
+                {                    
+                    <div class="d-flex bg-primary dir-sec mt-1 mb-1 w-100"><h3 class="text-white">@Html.DisplayFor(modelItem => item.MapArea)</h3></div> 
                 }
                 else if (item.NavigationType == "Map")
                 {
-                     <a class="MainMapDir" asp-page="./Map" asp-route-CongName="@Model.Cong.CongName" asp-route-MapNo="@item.MapKey" >@Html.DisplayFor(modelItem => item.MapKey)</a>
+                     <a class="btn btn-primary btn-med dir-btn mt-1 mb-1 h4" asp-page="./Map" asp-route-CongName="@Model.Cong.CongName" asp-route-MapNo="@item.MapKey" ><h4 class="text-white">@Html.DisplayFor(modelItem => item.MapKey)</h4></a>
                 }
 
             }
-</div>
+</diV>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Cong.CongId">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+<hr />
+    <a asp-page="./Index">Congregations</a>
 </div>

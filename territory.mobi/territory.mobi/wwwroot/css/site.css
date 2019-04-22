@@ -45,12 +45,47 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  line-height: 60px; /* Vertically center the text there */
+
+
+.footer-link {
+    text-decoration: none;
+}
+
+.dir-sec {
+    height: 40px;
+    max-height: 40px;
+    border-radius: 3.5px !important;
+    text-align: center !important;
+    padding-top: 3px !important;
+    padding-left: 3px !important;
+}
+
+.dir-btn {
+    width: 60px;
+    max-width: 60px;
+    height: 60px;
+    max-height: 60px;
+    border-radius: 3.5px !important;
+    text-align: center !important;
+    padding: 17px 0 0 0 !important;
+    }
+
+.MapMenuIcon {
+    min-height: 7vh;
+    width: auto;
+    text-decoration: none;
+    max-height: 12vh;
+}
+
+.setwidth-100 {
+    min-height: 7vh;
+    max-height: 10vh;
+    -webkit-text-size-adjust: none;
+    -ms-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    text-size-adjust: none;
+}
+
+.bdy {
+    padding-top: 10vh;
 }

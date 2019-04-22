@@ -2,27 +2,23 @@
 @model IndexModel
 @{
     Layout = "./Shared/_Publayout";
-    ViewData["Title"] = "territori.mobi";
-    ViewData["LeftTitle"] = "territori.mobi";
+    ViewData["Title"] = "territory.mobi";
+    ViewData["LeftTitle"] = "territory.mobi";
 }
 
-<div class="row">
+<div>
 
-    <table class="table">
-        <tbody>
-            @foreach (var item in Model.Cong)
-            {
-                <tr>
-                    <td>
-                        <a class="MapDir" asp-page="./Directory" asp-route-CongName="@item.CongName">@Html.DisplayFor(modelItem => item.CongName)</a>
-                    </td>
-                </tr>
-            }
-            <tr>
-                <td>
-                    <a class="MapDir" asp-page="./Admin">Administration Portal</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+
+    @foreach (var item in Model.Cong)
+    {
+        <div class="d-flex bg-primary dir-sec mt-1 mb-1 w-100 justify-content-center">
+            <a class="text-white h4 pt-1 text-decoration-none" asp-page="./Directory" asp-route-CongName="@item.CongName">@Html.DisplayFor(modelItem => item.CongName)</a>
+        </div>
+
+    }
+
+    <div class="d-flex bg-primary dir-sec mt-1 mb-1 w-100 justify-content-center">
+        <a class="text-white h4 pt-1 text-decoration-none" asp-page="./Admin/Index">Administration Portal</a>
+    </div>
+
 </div>

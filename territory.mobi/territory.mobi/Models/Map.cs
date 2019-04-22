@@ -17,7 +17,6 @@ namespace territory.mobi.Models
         public string Notes { get; set; }
         public string Parking { get; set; }
         public string NavigationType { get; set; }
-        public Guid ParentPage { get; set; }
         public int SortOrder { get; set; }
         public DateTime UpdateDatetime { get; set; }
     }
