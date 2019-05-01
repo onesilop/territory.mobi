@@ -54,7 +54,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
     <script type="text/javascript">
-                $(document).ready(function () {
+        $(document).ready(function () {
                     $("#parking").click(function () {
                     bootbox.dialog({
                         title: "<h3>Parking</h3>",
@@ -78,18 +78,52 @@
                     });
 
                     $("#dnc").click(function () {
-                        bootbox.prompt({
-                            title: "<h3>Enter your password</h3>",
-                            inputType: "password",
+                        var pass = "";
+                        pass = Cookies.get("territory.mobi.dnclogin");
+                        console.log(pass);
+                        if (typeof pass === 'undefined') {
+                            bootbox.prompt({
+                                title: "<h3>Enter the do not call password</h3>",
+                                inputType: "password",
+                                onEscape: true,
+                                backdrop: true,
+                                centerVertical: true,
+                                scrollable: true
+                                , callback: function (result) {
+                                    checkpassword(sha1(result));
+                                }
+                            });
+                        } else {
+                            checkpassword(pass);
+                        };
+              
+                    });
+        });
+        function checkpassword(pass) {
+            $.ajax({
+                url: '/Map?handler=PwdCheck',
+                data: {
+                    pwd: pass,
+                    congId: "@Model.Cong.CongId",
+                    mapId: "@Model.Map.MapId"}
+                })
+                .done(function (result) {
+                    console.log(result);
+                    if (result == "false") {
+                        Cookies.remove("territory.mobi.dnclogin");
+                        bootbox.alert("Password incorrect");
+                    } else {
+                        Cookies.set("territory.mobi.dnclogin", pass,1);
+                        bootbox.dialog({
+                            title: "<h3>Do Not Calls</h3>",
+                            message: result,
                             onEscape: true,
                             backdrop: true,
                             centerVertical: true,
                             scrollable: true
-                            , callback: function (result) {
-
-                            }
-                        });
-                    });
-                });
+                            });
+                    }
+                })
+        };
     </script>
 }

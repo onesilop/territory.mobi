@@ -33,15 +33,26 @@ namespace territory.mobi.Pages
         public string NotesHT { get; set; }
         public string DncHT { get; set; }
 
-        public bool pwdCheck(string pwd)
+        public ContentResult OnGetPwdCheck(string pwd,Guid congId, Guid mapId)
         {
-            if (_context.Dncpword.Count(x => x.PasswordHash == pwd && x.Notinuse == 0) > 0)
-                return true;
+            if (_context.Dncpword.Count(x => x.PasswordHash == pwd && x.Notinuse == 0 && x.CongId == congId ) > 0)
+            {
+                string res = "";
+                IList<DoNotCall> dd = _context.DoNotCall.Where(d => d.MapId == mapId && d.Display == 1).ToList();
+                foreach (DoNotCall d in dd)
+                {
+                    string tmp = "";
+                    if (d.AptNo != "") { tmp = d.AptNo + "/ "; }
+                    tmp = tmp + d.StreetNo + " " + d.StreetName+"</br>";
+                    res = res + tmp;
+                }
+                return Content(res);
+            }
             else
-                return false; 
+                return Content("false"); 
         }
-        
-    public async Task<IActionResult> OnGetAsync(string CongName, string MapNo)
+
+        public async Task<IActionResult> OnGetAsync(string CongName, string MapNo)
         {
             if (MapNo == null)
             {
@@ -71,7 +82,7 @@ namespace territory.mobi.Pages
             Image = await _context.Images.FirstOrDefaultAsync(m => m.ImgId == Map.ImgId);
 
             DNC = await _context.DoNotCall.ToListAsync();
-            DNC = DNC.Where(d => d.MapId == Map.MapId).ToList();
+            DNC = DNC.Where(d => d.MapId == Map.MapId && d.Display == 1).ToList();
 
             return Page();
         }
