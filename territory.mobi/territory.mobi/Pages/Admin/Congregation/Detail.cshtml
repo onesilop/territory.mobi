@@ -1,0 +1,43 @@
+﻿@page
+@model territory.mobi.Pages.Admin.Congregation.DetailModel
+
+@{
+    ViewData["Title"] = Model.Cong.CongName;
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Cong</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Cong.CongName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Cong.CongName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Cong.ServId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Cong.ServId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Cong.PageId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Cong.PageId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Cong.UpdateDatetime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Cong.UpdateDatetime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Cong.CongId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

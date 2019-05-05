@@ -11,6 +11,7 @@ namespace territory.mobi.Pages.Admin.Congregation
 {
     public class IndexModel : PageModel
     {
+
         private readonly territory.mobi.Models.TerritoryContext _context;
 
         public IndexModel(territory.mobi.Models.TerritoryContext context)
@@ -18,10 +19,14 @@ namespace territory.mobi.Pages.Admin.Congregation
             _context = context;
         }
 
-        public IList<Cong> Cong { get;set; }
+        public IList<Cong> Cong { get; set; }
 
         public async Task OnGetAsync()
         {
+            if (User.Identity.IsAuthenticated == false)
+            {
+                Response.Redirect("/Admin/Index");
+            }
             Cong = await _context.Cong.ToListAsync();
         }
     }

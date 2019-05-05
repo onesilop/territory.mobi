@@ -7,8 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using territory.mobi.Data;
 
-[assembly: HostingStartup(typeof(territory.mobi2._2.Areas.Identity.IdentityHostingStartup))]
-namespace territory.mobi2._2.Areas.Identity
+[assembly: HostingStartup(typeof(territory.mobi.Areas.Identity.IdentityHostingStartup))]
+namespace territory.mobi.Areas.Identity
 {
     public class IdentityHostingStartup : IHostingStartup
     {

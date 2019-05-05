@@ -146,12 +146,16 @@ namespace territory.mobi.Models
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Email).HasMaxLength(256);
-
+                               
                 entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
 
                 entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
 
                 entity.Property(e => e.UserName).HasMaxLength(256);
+
+                entity.Property(e => e.Name).HasMaxLength(100);
+
+                entity.Property(e => e.Surname).HasMaxLength(100);
             });
 
             modelBuilder.Entity<AspNetUserTokens>(entity =>

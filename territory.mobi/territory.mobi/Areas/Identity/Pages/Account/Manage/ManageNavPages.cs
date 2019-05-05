@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace territory.mobi2._2.Areas.Identity.Pages.Account.Manage
+namespace territory.mobi.Areas.Identity.Pages.Account.Manage
 {
     public static class ManageNavPages
     {
