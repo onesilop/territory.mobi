@@ -7,7 +7,7 @@
 
 <h2>Edit</h2>
 
-<h4>Cong</h4>
+<h4>Congregation Details</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -25,11 +25,6 @@
                 <span asp-validation-for="Cong.ServId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Cong.PageId" class="control-label"></label>
-                <input asp-for="Cong.PageId" class="form-control" />
-                <span asp-validation-for="Cong.PageId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Cong.UpdateDatetime" class="control-label"></label>
                 <input asp-for="Cong.UpdateDatetime" class="form-control" />
                 <span asp-validation-for="Cong.UpdateDatetime" class="text-danger"></span>
@@ -40,6 +35,18 @@
         </form>
     </div>
 </div>
+<div>
+    <h4>Assigned Users</h4>
+    <div>
+        @foreach (var item in Model.CongUsers)
+        {
+            <label>@item.User.Name @item.User.Surname - @item.Role.Name</label> 
+            <a asp-page="/Admin/Users/DeleteCong" asp-route-id="@item.User.Id" asp-route-claimid="@item.Claims.Id" asp-route-returl="Congregation" asp-route-cong="@Request.Query["id"]">Remove</a>
+        }
+    </div>
+</div>
+
+
 
 <div>
     <a asp-page="./Index">Back to List</a>

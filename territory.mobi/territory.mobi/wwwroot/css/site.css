@@ -52,33 +52,37 @@ body {
 }
 
 .dir-sec {
-    height: 40px;
-    max-height: 40px;
+    height: 50px;
+    max-height: 50px;
     border-radius: 3.5px !important;
     text-align: center !important;
-    padding-top: 3px !important;
+    padding-top: 9px !important;
     padding-left: 3px !important;
 }
 
 .dir-btn {
-    width: 60px;
-    max-width: 60px;
-    height: 60px;
-    max-height: 60px;
+    width: 50px;
+    max-width: 50px;
+    height: 50px;
+    max-height: 50px;
     border-radius: 3.5px !important;
     text-align: center !important;
-    padding: 17px 0 0 0 !important;
+    padding: 12px 0 0 0 !important;
     }
+
+.sec-head {
+    border-radius: 3.5px;
+}
 
 .MapMenuIcon {
     min-height: 7vh;
     width: auto;
     text-decoration: none;
-    max-height: 12vh;
+    max-height: 9vh;
 }
 
 .setwidth-100 {
-    min-height: 7vh;
+    min-height: 8vh;
     max-height: 10vh;
     -webkit-text-size-adjust: none;
     -ms-text-size-adjust: none;
@@ -90,29 +94,7 @@ body {
     padding-top: 10vh;
 }
 
-/* Ensure Nav is always collapsed 
-
-.navbar-header {
-    float: none;
+#map {
+    height: 400px; /* The height is 400 pixels */
+    width: 100%; /* The width is the width of the web page */
 }
-
-.navbar-toggle {
-    display: block;
-}
-
-.navbar-collapse.collapse {
-    display: none !important;
-}
-
-.navbar-nav {
-    float: none !important;
-}
-
-    .navbar-nav > li {
-        float: none;
-    }
-
-.navbar-collapse.collapse.in {
-    display: block !important;
-}
-    */

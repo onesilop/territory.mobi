@@ -28,7 +28,8 @@ namespace territory.mobi.Models
         public virtual DbSet<DoNotCall> DoNotCall { get; set; }
         public virtual DbSet<Images> Images { get; set; }
         public virtual DbSet<Map> Map { get; set; }
-        public virtual DbSet<tmPage> tmPage { get; set; }
+        public virtual DbSet<Section> Section { get; set; }
+        public virtual DbSet<Token> Token { get; set; }
 
         // Unable to generate entity type for table 'dbo.Boronia_Do_Not_Calls'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.Boronia_Map_Data'. Please see the warning messages.
@@ -310,11 +311,6 @@ namespace territory.mobi.Models
                     .HasMaxLength(30)
                     .IsUnicode(false);
 
-                entity.Property(e => e.NavigationType)
-                    .HasMaxLength(50)
-                    .IsRequired()
-                    .IsUnicode(false);
-
                 entity.Property(e => e.MapDesc)
                     .HasMaxLength(10)
                     .IsUnicode(false);
@@ -333,30 +329,43 @@ namespace territory.mobi.Models
 
                 entity.Property(e => e.Parking).IsUnicode(false);
 
+                entity.Property(e => e.SectionId).HasColumnName("SectionID");
+
                 entity.Property(e => e.UpdateDatetime).HasColumnType("datetime");
             });
 
-            modelBuilder.Entity<tmPage>(entity =>
+            modelBuilder.Entity<Section>(entity =>
             {
-                entity.HasKey(e => e.PageId);
+                entity.Property(e => e.SectionId).ValueGeneratedNever();
 
-                entity.Property(e => e.PageId)
-                    .HasColumnName("PageID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.SectionTitle)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.CongId).HasColumnName("CongID");
 
-                entity.Property(e => e.PageName)
-                    .IsRequired()
+                entity.Property(e => e.SortOrder).HasColumnName("SortOrder");
+
+            });
+
+            modelBuilder.Entity<Token>(entity =>
+            {
+                entity.ToTable("token");
+
+                entity.Property(e => e.TokenId)
+                    .HasColumnName("tokenId")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.UserCong)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PageTitle)
-                    .IsRequired()
-                    .HasMaxLength(50)
+                entity.Property(e => e.UserEmail)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
 
-                entity.Property(e => e.UpdateDate).HasColumnType("datetime");
+                entity.Property(e => e.UpdateDateTime).HasColumnName("updateDateTime");
             });
         }
     }

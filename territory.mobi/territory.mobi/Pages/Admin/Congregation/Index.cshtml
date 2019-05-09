@@ -7,16 +7,10 @@
 
 <div class="row">
 
-    <table class="table ">
-        <tbody>
-            @foreach (var item in Model.Cong)
-            {
-                <tr>
-                    <td>
-                        <a class="d-flex text-white bg-primary dir-sec mt-1 mb-1 w-100" asp-page="./Detail" asp-route-CongName="@item.CongName"><h3>@Html.DisplayFor(modelItem => item.CongName)</h3></a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    @foreach (var item in Model.Cong)
+    {
+        <div class="d-flex bg-primary dir-sec mt-1 mb-1 w-100 justify-content-center">
+            <a class="text-white h4 pt-1 text-decoration-none" asp-page="./Edit" asp-route-id="@item.CongId"><h3>@Html.DisplayFor(modelItem => item.CongName)</h3></a>
+        </div>
+     }
 </div>

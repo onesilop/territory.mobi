@@ -1,0 +1,28 @@
+﻿@page
+@model territory.mobi.Pages.Admin.Users.Claims.DeleteCongModel
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+
+    <h3>Are you sure you want to remove @ViewData["name"] from @Html.DisplayFor(model => model.AspNetUserClaims.ClaimValue)?</h3>
+    <form method="post">
+        <input type="hidden" asp-for="AspNetUserClaims.Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        @if (Request.Query["returl"] != "")
+        {
+            <a asp-page="/Admin/@Request.Query["returl"]/Edit" asp-route-id=@Request.Query["cong"]>Back to Congregation</a>
+        }
+        else
+        {
+            <a asp-page="/Admin/Users/Edit" asp-route-id=@Request.Query["id"]>Back to @ViewData["name"]</a>
+        }
+    </form>
+</body>
+</html>

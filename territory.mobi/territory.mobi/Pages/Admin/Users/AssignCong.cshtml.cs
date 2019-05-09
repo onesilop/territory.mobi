@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using territory.mobi.Models;
 
-namespace territory.mobi.Pages.Admin.Users
+namespace territory.mobi.Pages.Admin.Users.Claims
 {
     public class AssignCongModel : PageModel
     {
@@ -20,27 +20,35 @@ namespace territory.mobi.Pages.Admin.Users
 
         public IActionResult OnGet(string id, string assignType)
         {
-
-            if (assignType == null)
+            if (User.Identity.IsAuthenticated == false)
             {
-                ViewData["Assign"] = "Congregation";
+                return this.Redirect("/Admin/Index");
             }
             else
             {
-                ViewData["Assign"] = assignType;
+                IList<AspNetUserClaims> clm = _context.AspNetUserClaims.Where(u => u.UserId == id).ToList();
+                IList<Cong> cng = _context.Cong.ToList();
+                foreach (AspNetUserClaims c in clm)
+                {
+                   cng.Remove(cng.Where(a => a.CongName == c.ClaimValue).FirstOrDefault());
+                }
+                ViewData["Congs"] = new SelectList(cng, "CongName", "CongName");
+                ViewData["name"] = _context.AspNetUsers.Where(u => u.Id == id).FirstOrDefault().Name + " " + _context.AspNetUsers.Where(u => u.Id == id).FirstOrDefault().Surname;
+                return Page();
             }
-            ViewData["UserID"] = id;
-            ViewData["Congs"] = new SelectList(_context.Cong, "CongName", "CongName");
-            return Page();
         }
 
         [BindProperty]
         public AspNetUserClaims AspNetUserClaims { get; set; }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string id, string assignType)
         {
-            AspNetUserClaims.UserId = ViewData["UserId"].ToString();
-            AspNetUserClaims.ClaimType = ViewData["Assign"].ToString();
+            AspNetUserClaims.UserId = id;
+            if (assignType == null)
+            {
+                assignType = "Congregation";
+            }
+            AspNetUserClaims.ClaimType = assignType;
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -49,7 +57,9 @@ namespace territory.mobi.Pages.Admin.Users
             _context.AspNetUserClaims.Add(AspNetUserClaims);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            IDictionary<string, string> args = new Dictionary<string, string>();
+            args.Add("id", id);
+            return RedirectToPage("/Admin/Users/Edit", args);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,6 +11,7 @@ using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.Users
 {
+    [Authorize(Roles= "Admin")]
     public class EditModel : PageModel
     {
         private readonly territory.mobi.Models.TerritoryContext _context;
@@ -49,11 +51,11 @@ namespace territory.mobi.Pages.Admin.Users
             AspNetUserRoles = await _context.AspNetUserRoles
                             .Include(a => a.Role)
                             .Include(a => a.User).ToListAsync();
-            AspNetUserRoles = AspNetUserRoles.Where(m => m.UserId == AspNetUsers.Id).ToList();
+            AspNetUserRoles = AspNetUserRoles.Where(m => m.UserId == id).ToList();
 
 
             AspNetUserClaims = await _context.AspNetUserClaims.ToListAsync();
-            AspNetUserClaims = AspNetUserClaims.Where(m => m.UserId == AspNetUsers.Id).ToList();
+            AspNetUserClaims = AspNetUserClaims.Where(m => m.UserId == id).ToList();
   
             return Page();
         }

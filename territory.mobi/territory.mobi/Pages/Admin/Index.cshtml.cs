@@ -51,17 +51,17 @@ namespace territory.mobi.Pages.Admin
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            if (User.Identity.IsAuthenticated) {
-                Response.Redirect("/Admin/Congregation/Index");
-            }
-            else
-            { 
+
+            returnUrl = returnUrl ?? Url.Content("/Admin/Congregation/Index");
+            if (User.Identity.IsAuthenticated == false)
+            {
+
                 if (!string.IsNullOrEmpty(ErrorMessage))
                 {
                     ModelState.AddModelError(string.Empty, ErrorMessage);
                 }
 
-                returnUrl = returnUrl ?? Url.Content("~/");
+                
 
                 // Clear the existing external cookie to ensure a clean login process
                 await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -70,6 +70,11 @@ namespace territory.mobi.Pages.Admin
 
                 ReturnUrl = returnUrl;
             }
+            else
+            {
+                Response.Redirect(returnUrl);
+            }
+            
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

@@ -17,11 +17,11 @@ namespace territory.mobi.Pages
 {
 
 
-    public class MapModel : PageModel
+    public class MapgModel : PageModel
     {
         private readonly territory.mobi.Models.TerritoryContext _context;
 
-        public MapModel(territory.mobi.Models.TerritoryContext context)
+        public MapgModel(territory.mobi.Models.TerritoryContext context)
         {
             _context = context;
         }
@@ -34,6 +34,7 @@ namespace territory.mobi.Pages
         public string ParkingHT { get; set; }
         public string NotesHT { get; set; }
         public string DncHT { get; set; }
+        public string GoogleKey { get; } = "AIzaSyBiV3s1nv26sezV7a7qdgcslxl2ayDTA-8";
         public bool ShowMap { get; set; } = false;
 
 
@@ -55,6 +56,20 @@ namespace territory.mobi.Pages
             }
             else
                 return Content("false"); 
+        }
+
+        public ContentResult OnGetPolygon(Guid mapId)
+        {
+            if (mapId == null)
+            {
+                return null;
+            }
+            Map =  _context.Map.FirstOrDefault(m => m.MapId == mapId);
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(Map.MapPolygon.ToString());
+            string jsonText = JsonConvert.SerializeXmlNode(doc);
+
+            return Content(jsonText);
         }
 
         public async Task<IActionResult> OnGetAsync(string CongName, string MapNo)

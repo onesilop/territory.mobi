@@ -8,9 +8,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using territory.mobi.Areas.Identity.Data;
-
+using territory.mobi.Models;
 
 namespace territory.mobi.Areas.Identity.Pages.Account
 {
@@ -21,24 +22,29 @@ namespace territory.mobi.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly territory.mobi.Models.TerritoryContext _context;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            TerritoryContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         [BindProperty]
         public InputModel Input { get; set; }
+        [BindProperty]
+        public AspNetUserClaims AspNetUserClaims { get; set; }
 
         public string ReturnUrl { get; set; }
-
+        
         public class InputModel
         {
             [Required]
@@ -70,6 +76,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
 
         public void OnGet(string returnUrl = null)
         {
+            ViewData["Congs"] = new SelectList(_context.Cong, "CongName", "CongName");
             ReturnUrl = returnUrl;
         }
 
@@ -78,7 +85,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, Name = Input.Name, Surname = Input.Surname };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
@@ -95,6 +102,13 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    AspNetUserClaims.UserId = user.Id;
+                    AspNetUserClaims.ClaimType = "TempCong";
+
+                    _context.AspNetUserClaims.Add(AspNetUserClaims);
+                    await _context.SaveChangesAsync();
+
                     return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)

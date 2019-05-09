@@ -23,20 +23,27 @@ namespace territory.mobi.Pages.Admin.Users.Roles
 
         public async Task<IActionResult> OnGetAsync(string roleid, string id)
         {
-            if (id == null)
+            if (User.Identity.IsAuthenticated == false)
             {
-                return NotFound();
+                return this.Redirect("/Admin/Index");
             }
+            else
+            { 
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            AspNetUserRoles = await _context.AspNetUserRoles
-                .Include(a => a.Role) 
-                .Include(a => a.User).FirstOrDefaultAsync(m => m.UserId == id && m.RoleId == roleid);
+                AspNetUserRoles = await _context.AspNetUserRoles
+                    .Include(a => a.Role) 
+                    .Include(a => a.User).FirstOrDefaultAsync(m => m.UserId == id && m.RoleId == roleid);
 
-            if (AspNetUserRoles == null)
-            {
-                return NotFound();
+                if (AspNetUserRoles == null)
+                {
+                    return NotFound();
+                }
+                return Page();
             }
-            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string roleid, string id)
@@ -53,8 +60,9 @@ namespace territory.mobi.Pages.Admin.Users.Roles
                 _context.AspNetUserRoles.Remove(AspNetUserRoles);
                 await _context.SaveChangesAsync();
             }
-
-            return RedirectToPage("~/Admin/Users/Edit?id="+id);
+            IDictionary<string, string> args = new Dictionary<string, string>();
+            args.Add("id", id);
+            return RedirectToPage("/Admin/Users/Edit",args);
         }
     }
 }

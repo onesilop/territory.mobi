@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.Congregation
 {
+    [Authorize(Roles = "Admin")]
     public class DeleteModel : PageModel
     {
         private readonly territory.mobi.Models.TerritoryContext _context;
@@ -23,18 +25,25 @@ namespace territory.mobi.Pages.Admin.Congregation
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            if (User.Identity.IsAuthenticated == false)
             {
-                return NotFound();
+                return this.Redirect("/Admin/Index");
             }
-
-            Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongId == id);
-
-            if (Cong == null)
+            else
             {
-                return NotFound();
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongId == id);
+
+                if (Cong == null)
+                {
+                    return NotFound();
+                }
+                return Page();
             }
-            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(Guid? id)
