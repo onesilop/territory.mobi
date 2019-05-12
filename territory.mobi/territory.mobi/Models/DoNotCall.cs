@@ -16,5 +16,7 @@ namespace territory.mobi.Models
         public string Note { get; set; }
         public int Display { get; set; }
         public DateTime UpdateDatetime { get; set; }
+
+        public virtual Map Map { get; set; }
     }
 }

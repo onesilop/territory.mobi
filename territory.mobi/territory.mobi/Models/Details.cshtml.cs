@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using territory.mobi.Models;
 
-namespace territory.mobi.Pages.Admin.Congregation.Maps
+namespace territory.mobi.Pages.Admin.Congregation.Sections
 {
     public class DetailsModel : PageModel
     {
@@ -18,7 +18,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
             _context = context;
         }
 
-        public Map Map { get; set; }
+        public Models.Section Section { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
@@ -27,9 +27,9 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
                 return NotFound();
             }
 
-            Map = await _context.Map.FirstOrDefaultAsync(m => m.MapId == id);
+            Section = await _context.Section.FirstOrDefaultAsync(m => m.SectionId == id);
 
-            if (Map == null)
+            if (Section == null)
             {
                 return NotFound();
             }

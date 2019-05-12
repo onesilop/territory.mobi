@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace territory.mobi.Models
 {
@@ -12,5 +11,7 @@ namespace territory.mobi.Models
         public byte[] ImgImage { get; set; }
         public Guid? MapId { get; set; }
         public DateTime? Updatedatetime { get; set; }
+
+        public virtual Map Map { get; set; }
     }
 }

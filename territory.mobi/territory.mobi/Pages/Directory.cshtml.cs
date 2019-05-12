@@ -42,7 +42,7 @@ namespace territory.mobi.Pages
             Section = await _context.Section.Where(s => s.CongId == Cong.CongId).ToListAsync();
             foreach (Section s in Section)
             {
-                s.Maps = await _context.Map.Where(m => m.SectionId == s.SectionId).ToListAsync();
+                s.Maps = await _context.Map.Where(m => m.CongId == Cong.CongId && m.SectionId == s.SectionId).ToListAsync();
             }
             return Page();
     }

@@ -16,36 +16,142 @@
             <input type="hidden" asp-for="Cong.CongId" />
             <div class="form-group">
                 <label asp-for="Cong.CongName" class="control-label"></label>
-                <input asp-for="Cong.CongName" class="form-control" />
+                <input id="congName" asp-for="Cong.CongName" class="form-control" />
                 <span asp-validation-for="Cong.CongName" class="text-danger"></span>
+                <span id="cngValid" class="text-danger">Name already taken, please change</span>
             </div>
             <div class="form-group">
                 <label asp-for="Cong.ServId" class="control-label"></label>
-                <input asp-for="Cong.ServId" class="form-control" />
+                <select class="form-control" asp-for="Cong.ServId" asp-items="@ViewBag.TS">
+                    <option disabled selected>Select a Territory Servant</option>
+                </select>
                 <span asp-validation-for="Cong.ServId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Cong.UpdateDatetime" class="control-label"></label>
-                <input asp-for="Cong.UpdateDatetime" class="form-control" />
-                <span asp-validation-for="Cong.UpdateDatetime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input id ="saveBtn" type="submit" value="Save" class="btn btn-default bg-primary text-white" />
             </div>
         </form>
     </div>
 </div>
-<div>
-    <h4>Assigned Users</h4>
+<div id="Users" class="border p-2 mb-2">
+    <h4>Users</h4>
+    <div class="form-group">
+        @Html.AntiForgeryToken()
+        <a id="invite" href="#" class="btn btn-primary">Invite User</a>
+    </div>
     <div>
-        @foreach (var item in Model.CongUsers)
+        @if (Model.CongUsers.Count == 0)
         {
-            <label>@item.User.Name @item.User.Surname - @item.Role.Name</label> 
-            <a asp-page="/Admin/Users/DeleteCong" asp-route-id="@item.User.Id" asp-route-claimid="@item.Claims.Id" asp-route-returl="Congregation" asp-route-cong="@Request.Query["id"]">Remove</a>
+            <label>No users configured</label>
+        }
+        else
+        {
+            @foreach (var item in Model.CongUsers)
+            {
+                <label>@item.User.FullName - @item.Role.Name</label>
+                <a asp-page="/Admin/Users/DeleteCong" asp-route-id="@item.User.Id" asp-route-claimid="@item.Claims.Id" asp-route-returl="Congregation" asp-route-cong="@Request.Query["id"]">Remove</a>
+            }
         }
     </div>
+    <hr />
+    <div>
+        @foreach (var item in Model.UnapprovedUsers)
+        {
+            <label>@item.User.FullName</label>
+            <a asp-page="/Admin/Users/AssignCong" asp-route-id="@item.User.Id" asp-route-claimid="@item.Id" asp-route-returl="Congregation" asp-route-cong="@Request.Query["id"]">Approve</a> <text>|</text>
+            <a asp-page="/Admin/Users/DeleteCong" asp-route-id="@item.User.Id" asp-route-claimid="@item.Id" asp-route-returl="Congregation" asp-route-cong="@Request.Query["id"]">Reject</a>
+         }
+    </div>
 </div>
+<div id="Maps" class="border p-2 mb-2">
+    <h4>Maps</h4>
+    <a asp-page="./Section/Index" asp-route-id="@Request.Query["id"]">Edit Sections</a> | 
+    <a asp-page="./Maps/Create" asp-route-id="@Request.Query["id"]">New Map</a></p>
+    <table class="table border-primary">
+        <tbody>
+            <tr>
+                <td colspan="5" class="bg-secondary">
+                    <h5 class="text-white">No Section</h5>
+                </td>
+            </tr>
+            @if (Model.Maps.Count == 0)
+            {
+                <tr>
+                    <td colspan="5">
+                        <div>No maps to display</div>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var item in Model.Maps)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MapKey)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MapDesc)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MapArea)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MapType)
+                        </td>
+                        <td class="">
+                            <a asp-page="./Maps/Edit" asp-route-id="@item.MapId">View</a> |
+                            <a asp-page="./Maps/Delete" asp-route-id="@item.MapId">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+            @foreach (var sec in Model.Section.OrderBy(x => x.SortOrder))
+            {
 
+                <tr>
+                    <td colspan="5" class="bg-primary">
+                        <h5 class="text-white">@Html.DisplayFor(modelItem => sec.SectionTitle)</h5>
+                    </td>
+
+                </tr>
+                @if (sec.Maps.Count == 0)
+                {
+                    <tr>
+                        <td colspan="5" class="bg-primary">
+                            <div>No maps to display</div>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in sec.Maps.OrderBy(x => x.SortOrder))
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MapKey)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MapDesc)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MapArea)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MapType)
+                            </td>
+                            <td class="text-right">
+                                <a asp-page="./Maps/Edit" asp-route-id="@item.MapId">View</a> |
+                                <a asp-page="./Maps/Delete" asp-route-id="@item.MapId">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            }
+        </tbody>
+    </table>
+</div>
 
 
 <div>
@@ -54,4 +160,72 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#cngValid').hide();
+            $('#congName').keyup(function () {
+                var cngs = jQuery.makeArray(@Html.Raw(Model.CongNames));
+                if (jQuery.inArray($('#congName').val(), cngs) == -1) {
+                    $('#cngValid').hide();
+                    $('#saveBtn').attr("disabled", false);
+                } else
+                {
+                    $('#cngValid').show();
+                    $('#saveBtn').attr("disabled", true);
+                }
+            });
+
+                $("#invite").click(function () {
+                   bootbox.prompt({
+                        title: "<h3>Enter Details of User to invite</h3>",
+                        inputType: "email",
+                        onEscape: true,
+                        backdrop: true,
+                        centerVertical: true,
+                        scrollable: true,
+                        callback: function (result) {
+                            if (result != null) {
+                                $.ajax({
+                                    url: '/Admin/Congregation/Edit?handler=InviteUser',
+                                    type: 'POST',
+                                    beforeSend: function (xhr) {
+                                        xhr.setRequestHeader("XSRF-TOKEN",
+                                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                                    },
+                                    data: {
+                                        email: result,
+                                        congId: "@Model.Cong.CongId"
+                                    }
+                                })
+                                .done(function (result) {
+                                        console.log(result);
+                                        bootbox.dialog({
+                                            title: "<h3>Invite sent</h3>",
+                                            message: "Yeay the invite was sent, they have 24 hours to register.",
+                                            onEscape: true,
+                                            backdrop: true,
+                                            centerVertical: true,
+                                            scrollable: true
+                                        });
+                                    
+                                    })
+                                .fail(function (result) {
+                                    console.log(result);
+                                    bootbox.dialog({
+                                        title: "<h3>Unable to send email</h3>",
+                                        message: "Sorry something went wrong and we couldn't send the invite",
+                                        onEscape: true,
+                                        backdrop: true,
+                                        centerVertical: true,
+                                        scrollable: true
+                                    });
+                                })
+                                
+                            };
+                        }
+                   });
+                });
+            });
+        </script>
+            }

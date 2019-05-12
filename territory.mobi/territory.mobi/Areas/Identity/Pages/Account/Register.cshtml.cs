@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using territory.mobi.Areas.Identity.Data;
 using territory.mobi.Models;
@@ -44,6 +46,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
         public AspNetUserClaims AspNetUserClaims { get; set; }
 
         public string ReturnUrl { get; set; }
+        public Token Token { get; set; }
         
         public class InputModel
         {
@@ -74,9 +77,31 @@ namespace territory.mobi.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-        public void OnGet(string returnUrl = null)
+        public void OnGet(string returnUrl = null, Guid? token = null)
         {
-            ViewData["Congs"] = new SelectList(_context.Cong, "CongName", "CongName");
+            ViewData["Email"] = "";
+            ViewData["EditEmail"] = "";
+            if (token == null)
+            {
+                ViewData["Congs"] = new SelectList(_context.Cong, "CongName", "CongName");
+            }
+            else
+            {
+                Token = _context.Token.Find(token);
+                if (Token.UpdateDateTime.Add(new System.TimeSpan(24, 0, 0)) >= DateTime.UtcNow)
+                {
+                    IList<Cong> lst = new List<Cong>();
+                    lst = _context.Cong.Where(a => a.CongId.ToString() == Token.UserCong).ToList();
+                    ViewData["Congs"] = new SelectList(lst, "CongName", "CongName",lst[0].CongName);
+                    ViewData["Email"] = Token.UserEmail;
+                    ViewData["EditEmail"] = "false";
+                }
+                else
+                {
+                    ViewData["Congs"] = new SelectList(_context.Cong, "CongName", "CongName");
+                }
+            }
+
             ReturnUrl = returnUrl;
         }
 

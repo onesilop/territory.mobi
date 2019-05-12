@@ -17,7 +17,7 @@
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         @if (Request.Query["returl"] != "")
         {
-            <a asp-page="/Admin/@Request.Query["returl"]/Edit" asp-route-id=@Request.Query["cong"]>Back to Congregation</a>
+        <a asp-page="/Admin/@Request.Query["returl"]/Edit" asp-route-id=@Request.Query["cong"]>Back to @Request.Query["returl"]</a>
         }
         else
         {

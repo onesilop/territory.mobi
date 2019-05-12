@@ -58,6 +58,7 @@ namespace territory.mobi
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
             });
+            services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
         }
 

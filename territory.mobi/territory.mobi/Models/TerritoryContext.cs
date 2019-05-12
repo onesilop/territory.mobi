@@ -30,6 +30,7 @@ namespace territory.mobi.Models
         public virtual DbSet<Map> Map { get; set; }
         public virtual DbSet<Section> Section { get; set; }
         public virtual DbSet<Token> Token { get; set; }
+        public virtual DbSet<Setting> Setting { get; set; }
 
         // Unable to generate entity type for table 'dbo.Boronia_Do_Not_Calls'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.Boronia_Map_Data'. Please see the warning messages.
@@ -147,16 +148,12 @@ namespace territory.mobi.Models
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Email).HasMaxLength(256);
-                               
+
                 entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
 
                 entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
 
                 entity.Property(e => e.UserName).HasMaxLength(256);
-
-                entity.Property(e => e.Name).HasMaxLength(100);
-
-                entity.Property(e => e.Surname).HasMaxLength(100);
             });
 
             modelBuilder.Entity<AspNetUserTokens>(entity =>
@@ -184,9 +181,7 @@ namespace territory.mobi.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.Property(e => e.PageId).HasColumnName("PageID");
-
+                
                 entity.Property(e => e.ServId)
                     .HasColumnName("ServID")
                     .HasMaxLength(50)
@@ -217,7 +212,8 @@ namespace territory.mobi.Models
 
             modelBuilder.Entity<DoNotCall>(entity =>
             {
-                entity.HasKey(e => e.DncId);
+                entity.HasKey(e => e.DncId)
+                    .HasName("PK_doNotCall");
 
                 entity.Property(e => e.DncId)
                     .HasColumnName("dncID")
@@ -261,6 +257,12 @@ namespace territory.mobi.Models
                 entity.Property(e => e.UpdateDatetime)
                     .HasColumnName("updateDatetime")
                     .HasColumnType("datetime");
+
+                entity.HasOne(d => d.Map)
+                    .WithMany(p => p.DoNotCall)
+                    .HasForeignKey(d => d.MapId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_DoNotCall_Map");
             });
 
             modelBuilder.Entity<Images>(entity =>
@@ -293,6 +295,11 @@ namespace territory.mobi.Models
                 entity.Property(e => e.Updatedatetime)
                     .HasColumnName("updatedatetime")
                     .HasColumnType("datetime");
+
+                entity.HasOne(d => d.Map)
+                    .WithMany(p => p.Images)
+                    .HasForeignKey(d => d.MapId)
+                    .HasConstraintName("FK_images_Map");
             });
 
             modelBuilder.Entity<Map>(entity =>
@@ -351,11 +358,13 @@ namespace territory.mobi.Models
 
             modelBuilder.Entity<Token>(entity =>
             {
-                entity.ToTable("token");
-
                 entity.Property(e => e.TokenId)
                     .HasColumnName("tokenId")
                     .ValueGeneratedNever();
+
+                entity.Property(e => e.UpdateDateTime)
+                    .HasColumnName("updateDateTime")
+                    .HasColumnType("datetime");
 
                 entity.Property(e => e.UserCong)
                     .HasMaxLength(50)
@@ -364,9 +373,22 @@ namespace territory.mobi.Models
                 entity.Property(e => e.UserEmail)
                     .HasMaxLength(250)
                     .IsUnicode(false);
-
-                entity.Property(e => e.UpdateDateTime).HasColumnName("updateDateTime");
             });
+
+            modelBuilder.Entity<Setting>(entity =>
+            {
+                entity.Property(e => e.SettingId).ValueGeneratedNever();
+
+                entity.Property(e => e.SettingType)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SettingValue)
+                    .IsRequired()
+                    .IsUnicode(false);
+            });
+
         }
     }
 }

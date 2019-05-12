@@ -10,28 +10,52 @@
 </head>
 <body>
 
-<h4>Select a congregation to add to @ViewData["name"]</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div class="form-group">
-                <select class="form-control" asp-for="AspNetUserClaims.ClaimValue" asp-items="ViewBag.Congs"><option disabled selected>Select a congregation</option></select>
-                <span asp-validation-for="AspNetUserClaims.ClaimValue" class="text-danger"></span>
+    @if (Request.Query["claimid"] == "")
+    {
+
+        <h4>Select a congregation to add to @ViewData["name"]</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form method="post">
+                    <div class="form-group">
+                        <select class="form-control" asp-for="AspNetUserClaims.ClaimValue" asp-items="ViewBag.Congs"><option disabled selected>Select a congregation</option></select>
+                        <span asp-validation-for="AspNetUserClaims.ClaimValue" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Add" class="btn btn-primary" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Add" class="btn btn-primary" />
+        </div>
+    }
+    else
+    {
+        <h4>Are you sure you want to add @ViewData["name"] to @ViewData["cong"]</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form method="post">
+                    <div class="form-group">
+                        <input type="submit" value="Add" class="btn btn-primary" />
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
+    }
+    <div>
+        @if (Request.Query["returl"] != "")
+        {
+            <a asp-page="/Admin/@Request.Query["returl"]/Edit" asp-route-id=@Request.Query["cong"]>Back to @Request.Query["returl"]</a>
+        }
+        else
+        {
+            <a asp-page="/Admin/Users/Edit" asp-route-id=@Request.Query["id"]>Back to @ViewData["name"]</a>
+        }
     </div>
-</div>
 
-<div>
-    <a asp-page="/Admin/Users/Edit" asp-route-id=@Request.Query["id"]>Back to @ViewData["name"]</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
 </body>
 </html>

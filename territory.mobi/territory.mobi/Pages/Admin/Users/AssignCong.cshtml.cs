@@ -18,7 +18,7 @@ namespace territory.mobi.Pages.Admin.Users.Claims
             _context = context;
         }
 
-        public IActionResult OnGet(string id, string assignType)
+        public IActionResult OnGet(string id, string assignType, string returl = "")
         {
             if (User.Identity.IsAuthenticated == false)
             {
@@ -26,14 +26,18 @@ namespace territory.mobi.Pages.Admin.Users.Claims
             }
             else
             {
-                IList<AspNetUserClaims> clm = _context.AspNetUserClaims.Where(u => u.UserId == id).ToList();
+                if (assignType == null)
+                {
+                    assignType = "Congregation";
+                }
+                IList<AspNetUserClaims> clm = _context.AspNetUserClaims.Where(u => u.UserId == id && u.ClaimType == assignType).ToList();
                 IList<Cong> cng = _context.Cong.ToList();
                 foreach (AspNetUserClaims c in clm)
                 {
                    cng.Remove(cng.Where(a => a.CongName == c.ClaimValue).FirstOrDefault());
                 }
                 ViewData["Congs"] = new SelectList(cng, "CongName", "CongName");
-                ViewData["name"] = _context.AspNetUsers.Where(u => u.Id == id).FirstOrDefault().Name + " " + _context.AspNetUsers.Where(u => u.Id == id).FirstOrDefault().Surname;
+                ViewData["name"] = _context.AspNetUsers.Where(u => u.Id == id).FirstOrDefault().FullName;
                 return Page();
             }
         }
@@ -41,14 +45,23 @@ namespace territory.mobi.Pages.Admin.Users.Claims
         [BindProperty]
         public AspNetUserClaims AspNetUserClaims { get; set; }
 
-        public async Task<IActionResult> OnPostAsync(string id, string assignType)
+        public async Task<IActionResult> OnPostAsync(string id, string assignType, int claimid = -1, string returl = "", string cong = "")
         {
             AspNetUserClaims.UserId = id;
+            if (claimid != -1)
+            {
+                AspNetUserClaims clm = _context.AspNetUserClaims.Where(a => a.Id == claimid).FirstOrDefault();
+                AspNetUserClaims.UserId = clm.UserId;
+                AspNetUserClaims.ClaimValue = clm.ClaimValue;
+                _context.AspNetUserClaims.Remove(clm);
+            }
             if (assignType == null)
             {
                 assignType = "Congregation";
             }
             AspNetUserClaims.ClaimType = assignType;
+            ModelState.Clear();
+            TryValidateModel(AspNetUserClaims);
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -57,9 +70,21 @@ namespace territory.mobi.Pages.Admin.Users.Claims
             _context.AspNetUserClaims.Add(AspNetUserClaims);
             await _context.SaveChangesAsync();
 
-            IDictionary<string, string> args = new Dictionary<string, string>();
-            args.Add("id", id);
-            return RedirectToPage("/Admin/Users/Edit", args);
+            if (cong != "") { id = cong; }
+
+            if (returl == "")
+            {
+                returl = "/Admin/Users/Edit";
+            }
+            else
+            {
+                returl = "/Admin/" + returl + "/Edit";
+            }
+            IDictionary<string, string> args = new Dictionary<string, string>
+            {
+                { "id", id }
+            };
+            return RedirectToPage(returl, args);
         }
     }
 }

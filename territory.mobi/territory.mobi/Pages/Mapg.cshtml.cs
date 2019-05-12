@@ -34,8 +34,9 @@ namespace territory.mobi.Pages
         public string ParkingHT { get; set; }
         public string NotesHT { get; set; }
         public string DncHT { get; set; }
-        public string GoogleKey { get; } = "AIzaSyBiV3s1nv26sezV7a7qdgcslxl2ayDTA-8";
+        public string GoogleKey { get; set; }
         public bool ShowMap { get; set; } = false;
+        public IList<Setting> Setting { get; set; }
 
 
 
@@ -105,6 +106,9 @@ namespace territory.mobi.Pages
             DNC = DNC.Where(d => d.MapId == Map.MapId && d.Display == 1).ToList();
 
             if (Map.MapPolygon != "") { ShowMap = true; }
+
+            Setting set  = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync();
+            GoogleKey = set.SettingValue;
 
             return Page();
         }

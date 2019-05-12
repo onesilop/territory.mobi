@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using territory.mobi.Models;
 
-namespace territory.mobi.Pages.Admin.Congregation.Maps
+namespace territory.mobi.Pages.Admin.Congregation.Sections
 {
     public class CreateModel : PageModel
     {
@@ -19,32 +19,35 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
         }
 
         [BindProperty]
-        public Map Map { get; set; }
+        public Models.Section Section { get; set; }
 
         public IActionResult OnGet(Guid id)
         {
-            if (id == null)
-            { 
-                return NotFound();
-            }
-            Map.CongId = id;    
+            Models.Section Section = new Models.Section();
+            if (id == null) { return NotFound();}
+            Section.CongId = id;
             return Page();
+
         }
 
 
 
         public async Task<IActionResult> OnPostAsync(Guid id)
         {
-            if (!ModelState.IsValid || id == null)
+            if (!ModelState.IsValid)
             {
                 return Page();
             }
-
-            Map.CongId = id;
-            _context.Map.Add(Map);
+            Section.CongId = id;
+            Section.SectionId = Guid.NewGuid();
+            _context.Section.Add(Section);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            IDictionary<string, string> args = new Dictionary<string, string>
+            {
+                { "id", Section.CongId.ToString() }
+            };
+            return RedirectToPage("./Index", args);
         }
     }
 }

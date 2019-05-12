@@ -1,0 +1,39 @@
+﻿@page
+@model territory.mobi.Pages.Admin.Congregation.Sections.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Section</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Section.SectionTitle" class="control-label"></label>
+                <input asp-for="Section.SectionTitle" class="form-control" />
+                <span asp-validation-for="Section.SectionTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Section.SortOrder" class="control-label"></label>
+                <input asp-for="Section.SortOrder" class="form-control" />
+                <span asp-validation-for="Section.SortOrder" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="/Admin/Congregation/Edit" asp-route-id="@Request.Query["id"]">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

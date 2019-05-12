@@ -32,7 +32,7 @@ namespace territory.mobi.Pages.Admin.Users.Claims
                 AspNetUserClaims = await _context.AspNetUserClaims
                 .Include(a => a.User).FirstOrDefaultAsync(m => m.Id == claimid);
 
-                ViewData["name"] = _context.AspNetUsers.Where(u => u.Id == id).FirstOrDefault().Name + " " + _context.AspNetUsers.Where(u => u.Id == id).FirstOrDefault().Surname;
+                ViewData["name"] = _context.AspNetUsers.Where(u => u.Id == id).FirstOrDefault().FullName;
                 if (AspNetUserClaims == null)
                 {
                     return NotFound();
@@ -41,7 +41,7 @@ namespace territory.mobi.Pages.Admin.Users.Claims
             }
         }
 
-        public async Task<IActionResult> OnPostAsync(string id, int claimid, string returl = "")
+        public async Task<IActionResult> OnPostAsync(string id, int claimid, string returl = "", string cong = "")
         {
 
             AspNetUserClaims = await _context.AspNetUserClaims.FindAsync(claimid);
@@ -52,8 +52,8 @@ namespace territory.mobi.Pages.Admin.Users.Claims
                 await _context.SaveChangesAsync();
             }
 
-            IDictionary<string, string> args = new Dictionary<string, string>();
-            args.Add("id", id);
+            if (cong != "") { id = cong; }
+
             if (returl == "")
             {
                 returl = "/Admin/Users/Edit";
@@ -61,6 +61,10 @@ namespace territory.mobi.Pages.Admin.Users.Claims
             {
                 returl = "/Admin/" + returl + "/Edit";
             }
+            IDictionary<string, string> args = new Dictionary<string, string>
+            {
+                { "id", id }
+            };
             return RedirectToPage(returl, args);
         }
     }

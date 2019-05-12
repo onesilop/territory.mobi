@@ -1,0 +1,46 @@
+﻿@page
+@model territory.mobi.Pages.Admin.Congregation.Sections.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Section display sections for @ViewData["Cong"]</h1>
+
+<p>
+    <a asp-page="Create" asp-route-id="@Request.Query["id"]">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Section[0].SectionTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Section[0].SortOrder)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Section)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SectionTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SortOrder)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.SectionId">View</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.SectionId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+<div>
+    <a asp-page="/Admin/Congregation/Edit" asp-route-id="@Request.Query["id"]">Back to @ViewData["Cong"]</a>
+</div>

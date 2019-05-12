@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace territory.mobi.Models
 {
     public partial class AspNetUsers
     {
+
         public AspNetUsers()
         {
             AspNetUserClaims = new HashSet<AspNetUserClaims>();
@@ -12,13 +14,10 @@ namespace territory.mobi.Models
             AspNetUserRoles = new HashSet<AspNetUserRoles>();
             AspNetUserTokens = new HashSet<AspNetUserTokens>();
         }
-
         public string Id { get; set; }
         public string UserName { get; set; }
         public string NormalizedUserName { get; set; }
         public string Email { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
         public string NormalizedEmail { get; set; }
         public bool EmailConfirmed { get; set; }
         public string PasswordHash { get; set; }
@@ -30,6 +29,11 @@ namespace territory.mobi.Models
         public DateTimeOffset? LockoutEnd { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+
+        [NotMapped]
+        public string FullName { get {return Name + " " + Surname; }}
 
         public ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         public ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }

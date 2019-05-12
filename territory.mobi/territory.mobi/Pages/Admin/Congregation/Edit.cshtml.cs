@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -27,6 +29,11 @@ namespace territory.mobi.Pages.Admin.Congregation
         public IList<AspNetUserRoles> Roles { get; set; }
         public IList<AspNetUserClaims> Claims { get; set; }
         public IList<CongUser> CongUsers { get; set; }
+        public IList<Map> Maps { get; set;}
+        public IList<Models.Section> Section { get; set; }
+        public IList<Setting> Setting { get; set; }
+        public IList<AspNetUserClaims> UnapprovedUsers { get; set; }
+        public string CongNames { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
@@ -47,24 +54,82 @@ namespace territory.mobi.Pages.Admin.Congregation
                 {
                     return NotFound();
                 }
+                List<string> ListOCongNames = new List<string>();
+                foreach (Cong c in _context.Cong.ToList())
+                {
+                    if (c != Cong) { 
+                        ListOCongNames.Add(c.CongName);
+                    }
+                }
+                CongNames = Newtonsoft.Json.JsonConvert.SerializeObject(ListOCongNames);
+                Claims = await _context.AspNetUserClaims
+                    .Include(a => a.User)
+                    .Where(c => c.ClaimValue == Cong.CongName && c.ClaimType=="Congregation").ToListAsync();
 
-                Claims = await _context.AspNetUserClaims.Where(c => c.ClaimValue == Cong.CongName).ToListAsync();
+                UnapprovedUsers = await _context.AspNetUserClaims
+                   .Include(a => a.User)
+                   .Where(c => c.ClaimValue == Cong.CongName && c.ClaimType == "TempCong").ToListAsync();
+
                 CongUsers = new List<CongUser>();
+                IList<AspNetUsers> userListTS = new List<AspNetUsers>();
                 foreach (AspNetUserClaims c in Claims)
                 {
-                    CongUser cnu = new CongUser();
-                    cnu.User = c.User;
-                    cnu.Claims = c;
-                    foreach (AspNetUserRoles r in _context.AspNetUserRoles.ToList().Where(u => u.User.Id == c.User.Id).ToList())
+                    CongUser cnu = new CongUser
+                    {
+                        User = c.User,
+                        Claims = c
+                    };
+                    userListTS.Add(c.User);
+                    foreach (AspNetUserRoles r in _context.AspNetUserRoles.Include(r => r.Role).ToList().Where(u => u.User.Id == c.User.Id).ToList())
                     {
                         cnu.Role = r.Role;
                         CongUsers.Add(cnu);
                     }
                     
                 }
+                ViewData["TS"] = new SelectList(userListTS, "Id", "FullName", Cong.ServId);
+
+                Maps = await _context.Map.OrderBy(m => m.SortOrder).Where(m => m.CongId == Cong.CongId && m.SectionId == null).ToListAsync();
+                Section = await _context.Section.Where(s => s.CongId == Cong.CongId).ToListAsync();
+                foreach (Models.Section s in Section)
+                {
+                    s.Maps = await _context.Map.Where(m => m.CongId == Cong.CongId && m.SectionId == s.SectionId).ToListAsync();
+                }
                 return Page();
             }
         }
+
+        public async Task<IActionResult> OnPostInviteUser(string email, string congid)
+        {
+            Token userInvite = new Token
+            {
+                TokenId = Guid.NewGuid(),
+                UserCong = congid,
+                UserEmail = email,
+                UpdateDateTime = DateTime.UtcNow
+            };
+            try
+                {
+                    Setting SiteAddress = _context.Setting.Where(a => a.SettingType == "SiteAddress").FirstOrDefault();
+                    var RedirectURL = SiteAddress.SettingValue.ToString() + "/Identity/Account/Register?token=" + userInvite.TokenId.ToString();
+
+                    _context.Token.Add(userInvite);
+           
+                
+                    await _context.SaveChangesAsync();
+                    Mailer mailer = new Mailer(_context);
+                    
+                    var subject = "territory.mobi Invitation";
+                    var htmlContent = "<h5>Hey there</h5></br>Please select this link to register for territory.mobi</br><a href='" + RedirectURL + "' >Register</a>";
+                    return await mailer.SendMailAsync(email, subject, htmlContent, "");
+                }
+            catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.InnerException);
+                    return new BadRequestResult();
+                }
+        }
+
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -72,7 +137,7 @@ namespace territory.mobi.Pages.Admin.Congregation
             {
                 return Page();
             }
-
+            Cong.UpdateDatetime = DateTime.UtcNow; 
             _context.Attach(Cong).State = EntityState.Modified;
 
             try
