@@ -5,28 +5,19 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<h2>Create Map</h2>
 
-<h4>Map</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form method="post">
+
+    <form method="post" enctype="multipart/form-data">
+        <div class="col-md-4">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Map.MapId" class="control-label"></label>
-                <input asp-for="Map.MapId" class="form-control" />
-                <span asp-validation-for="Map.MapId" class="text-danger"></span>
-            </div>
-            <div class="form-group d-none">
-                <label asp-for="Map.CongId" class="control-label"></label>
-                <input asp-for="Map.CongId" class="form-control" />
-                <span asp-validation-for="Map.CongId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Map.MapKey" class="control-label"></label>
-                <input asp-for="Map.MapKey" class="form-control" />
+                <input id="mapKey" asp-for="Map.MapKey" class="form-control" />
                 <span asp-validation-for="Map.MapKey" class="text-danger"></span>
+                <span id="mapKeyValid" class="text-danger" style="display:none">Map key already taken, please change</span>
             </div>
             <div class="form-group">
                 <label asp-for="Map.MapDesc" class="control-label"></label>
@@ -39,56 +30,80 @@
                 <span asp-validation-for="Map.MapArea" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Map.MapPolygon" class="control-label"></label>
-                <input asp-for="Map.MapPolygon" class="form-control" />
-                <span asp-validation-for="Map.MapPolygon" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Map.MapType" class="control-label"></label>
-                <input asp-for="Map.MapType" class="form-control" />
+                <select  asp-for="Map.MapType" asp-items="@ViewBag.MapType" class="form-control"><option selected disabled>Select A Map Type</option></select>
                 <span asp-validation-for="Map.MapType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Map.ImgId" class="control-label"></label>
-                <input asp-for="Map.ImgId" class="form-control" />
-                <span asp-validation-for="Map.ImgId" class="text-danger"></span>
+                <label asp-for="Map.SectionId" class="control-label"></label>
+                <select asp-for="Map.SectionId" class="form-control" asp-items="@ViewBag.Section">
+                    <option value="">No Section</option>
+                </select>
+                <span asp-validation-for="Map.SectionId" class="text-danger"></span>
             </div>
+            <label class="btn btn-default bg-primary text-white">
+                Select Map Image <input hidden type="file" style="display: none;" id="NewImage" name="files">
+            </label>
             <div class="form-group">
                 <label asp-for="Map.GoogleRef" class="control-label"></label>
                 <input asp-for="Map.GoogleRef" class="form-control" />
                 <span asp-validation-for="Map.GoogleRef" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Map.Notes" class="control-label"></label>
-                <input asp-for="Map.Notes" class="form-control" />
-                <span asp-validation-for="Map.Notes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Map.Parking" class="control-label"></label>
-                <input asp-for="Map.Parking" class="form-control" />
-                <span asp-validation-for="Map.Parking" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Map.SortOrder" class="control-label"></label>
                 <input asp-for="Map.SortOrder" class="form-control" />
                 <span asp-validation-for="Map.SortOrder" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-10">
             <div class="form-group">
-                <label asp-for="Map.UpdateDatetime" class="control-label"></label>
-                <input asp-for="Map.UpdateDatetime" class="form-control" />
-                <span asp-validation-for="Map.UpdateDatetime" class="text-danger"></span>
+                <label asp-for="Map.Notes" class="control-label"></label>
+                <textarea id="taNotes" asp-for="Map.Notes" class="form-control" ></textarea>
+                <span asp-validation-for="Map.Notes" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <label asp-for="Map.Parking" class="control-label"></label>
+                <textarea id="taParking" asp-for="Map.Parking" class="form-control"></textarea>
+                <span asp-validation-for="Map.Parking" class="text-danger"></span>
             </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-group">
+            <input id="saveBtn" type="submit" value="Create" class="btn btn-default bg-primary text-white" />
+        </div>
+    </form>
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="/Admin/Congregation/Edit" asp-route-id="@Request.Query["id"]">Back to Congregation</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=p2i7lwvunskci02cqotz0r5e9sacm04shhnafxbw8ru2r5y8"></script>
+    <script>
+        tinymce.init({
+            selector: '#taNotes',
+            menubar: false
+        });
+        tinymce.init({
+            selector: '#taParking',
+            menubar: false
+        });
+    </script>
+    <script type="text/javascript">
+        $('#mapKey').keyup(function () {
+            var cngs = jQuery.makeArray(@Html.Raw(Model.MapKeys));
+            console.log(cngs);
+            console.log($('#mapKey').val());
+            console.log(jQuery.inArray($('#mapKey').val()));
+            if (jQuery.inArray($('#mapKey').val(), cngs) == -1) {
+                $('#mapKeyValid').hide();
+                $('#saveBtn').attr("disabled", false);
+            } else {
+                $('#mapKeyValid').show();
+                $('#saveBtn').attr("disabled", true);
+            }
+        });
+    </script>
 }

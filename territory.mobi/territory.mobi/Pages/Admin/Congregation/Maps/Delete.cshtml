@@ -7,17 +7,11 @@
 
 <h2>Delete</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to delete map @Model.Map.MapKey ?</h3>
 <div>
-    <h4>Map</h4>
+
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Map.CongId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Map.CongId)
-        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Map.MapKey)
         </dt>
@@ -36,59 +30,11 @@
         <dd>
             @Html.DisplayFor(model => model.Map.MapArea)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Map.MapPolygon)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Map.MapPolygon)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Map.MapType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Map.MapType)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Map.ImgId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Map.ImgId)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Map.GoogleRef)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Map.GoogleRef)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Map.Notes)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Map.Notes)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Map.Parking)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Map.Parking)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Map.SortOrder)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Map.SortOrder)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Map.UpdateDatetime)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Map.UpdateDatetime)
-        </dd>
     </dl>
-    
+    Note: all do not calls, images and other associated data with this map will be removed as well.
     <form method="post">
         <input type="hidden" asp-for="Map.MapId" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-page="./Index">Back to List</a>
+        <input type="submit" value="Delete" class="btn btn-default bg-danger text-white" /> |
+        <a asp-page="/Admin/Congregation/Edit" asp-route-id="@Model.Map.CongId">Back to Congregation</a>
     </form>
 </div>

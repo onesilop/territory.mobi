@@ -37,12 +37,12 @@ namespace territory.mobi.Pages
             }
 
             Map = await _context.Map.ToListAsync();
-            Map = Map.Where(m => m.CongId == Cong.CongId && m.SectionId == null).OrderBy(m => m.SortOrder).ToList();
+            Map = Map.Where(m => m.CongId == Cong.CongId && m.SectionId == null && m.Display == true).OrderBy(m => m.SortOrder).ToList();
 
             Section = await _context.Section.Where(s => s.CongId == Cong.CongId).ToListAsync();
             foreach (Section s in Section)
             {
-                s.Maps = await _context.Map.Where(m => m.CongId == Cong.CongId && m.SectionId == s.SectionId).ToListAsync();
+                s.Maps = await _context.Map.Where(m => m.CongId == Cong.CongId && m.SectionId == s.SectionId && m.Display == true).ToListAsync();
             }
             return Page();
     }

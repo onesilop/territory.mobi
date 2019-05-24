@@ -7,16 +7,16 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="shortcut icon" href="~/images/assets/apple-touch-icon.png">
+
 </head>
-<body>
-    <div id="navy" class="navbar bg-primary setwidth-100 fixed-top mb-5">
-        <div class="h2 text-white">@ViewData["LeftTitle"]</div>
-        <div class="h2 text-white">@ViewData["RightTitle"]</div>
+<body id="erthing">
+    <nav id="dummyNavy" class="navbar navbar-default"></nav>
+    <div id="navy" class="navbar bg-primary fixed-top">
+        <div class="text-white pubTitle">@ViewData["LeftTitle"]</div>
+        <div class="text-white pubTitle">@ViewData["RightTitle"]</div>
     </div>
-
-    <partial name="_CookieConsentPartial" />
-
-    <div id="bdy" class="container align-content-center align-middle w-100 bdy">
+    <div id="bdy" class="d-block">
+        <partial name="_CookieConsentPartial" />
         @RenderBody()
     </div>
 
@@ -29,6 +29,25 @@
     <script src="~/js/sha.js"></script>
     <script src="~/js/js.cookie.js"></script>
 
+    <script type="text/javascript">
+        function scalestuff() {
+            var tHgt = $(window).height();
+            var fhHgt = tHgt * .08
+            $('#navy').css("height", fhHgt);
+            $('#dummyNavy').css("margin-bottom", 0);
+            $('#dummyNavy').css("height", fhHgt);
+       }
+        $(document).ready(function () {
+            scalestuff();
+        });
+        $(window).resize(function () {
+            scalestuff()
+        });
+
+        $(window).load(function () {
+            scalestuff()
+        });
+    </script>
 
     @RenderSection("Scripts", required: false)
 </body>

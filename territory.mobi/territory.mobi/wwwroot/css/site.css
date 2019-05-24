@@ -52,22 +52,22 @@ body {
 }
 
 .dir-sec {
-    height: 50px;
-    max-height: 50px;
+    height: 6vh;
+    max-height: 6vh;
     border-radius: 3.5px !important;
     text-align: center !important;
-    padding-top: 9px !important;
+    padding-top: 7px !important;
     padding-left: 3px !important;
 }
 
 .dir-btn {
-    width: 50px;
-    max-width: 50px;
-    height: 50px;
-    max-height: 50px;
+    width: 5.5vh;
+    max-width: 5.5vh;
+    height: 5.5vh;
+    max-height: 5.5vh;
     border-radius: 3.5px !important;
     text-align: center !important;
-    padding: 12px 0 0 0 !important;
+    padding: 7px 0 0 0 !important;
     }
 
 .sec-head {
@@ -75,26 +75,11 @@ body {
 }
 
 .MapMenuIcon {
-    min-height: 7vh;
     width: auto;
     text-decoration: none;
-    max-height: 9vh;
 }
 
-.setwidth-100 {
-    min-height: 8vh;
-    max-height: 10vh;
-    -webkit-text-size-adjust: none;
-    -ms-text-size-adjust: none;
-    -moz-text-size-adjust: none;
-    text-size-adjust: none;
+.pubTitle {
+    font-size: 4vh;
 }
 
-.bdy {
-    padding-top: 10vh;
-}
-
-#map {
-    height: 400px; /* The height is 400 pixels */
-    width: 100%; /* The width is the width of the web page */
-}

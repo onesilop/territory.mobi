@@ -39,6 +39,7 @@ namespace territory.mobi.Pages.Admin.Congregation.DoNotCalls
 
         public async Task<IActionResult> OnPostAsync(Guid? id)
         {
+            Guid mpid = DoNotCall.MapId;
             if (id == null)
             {
                 return NotFound();
@@ -52,7 +53,11 @@ namespace territory.mobi.Pages.Admin.Congregation.DoNotCalls
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToPage("./Index");
+            IDictionary<string, string> args = new Dictionary<string, string>
+            {
+                { "id", mpid.ToString()}
+            };
+            return RedirectToPage("/Admin/Congregation/Maps/Edit", args);
         }
     }
 }

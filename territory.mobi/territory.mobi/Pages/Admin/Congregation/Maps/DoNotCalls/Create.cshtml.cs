@@ -26,8 +26,14 @@ namespace territory.mobi.Pages.Admin.Congregation.DoNotCalls
         [BindProperty]
         public DoNotCall DoNotCall { get; set; }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(Guid id)
         {
+            DoNotCall.DncId = Guid.NewGuid();
+            DoNotCall.MapId = id;
+            DoNotCall.UpdateDatetime = DateTime.UtcNow;
+            DoNotCall.DateCreated = DateTime.Now;
+            DoNotCall.DateValidated = DateTime.Now;
+
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -35,8 +41,11 @@ namespace territory.mobi.Pages.Admin.Congregation.DoNotCalls
 
             _context.DoNotCall.Add(DoNotCall);
             await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
+            IDictionary<string, string> args = new Dictionary<string, string>
+            {
+                { "id", id.ToString()}
+            };
+            return RedirectToPage("/Admin/Congregation/Maps/Edit", args);
         }
     }
 }

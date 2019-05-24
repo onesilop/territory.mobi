@@ -40,6 +40,7 @@ namespace territory.mobi.Pages.Admin.Congregation.DoNotCalls
 
         public async Task<IActionResult> OnPostAsync()
         {
+            DoNotCall.UpdateDatetime = DateTime.UtcNow;
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -62,8 +63,12 @@ namespace territory.mobi.Pages.Admin.Congregation.DoNotCalls
                     throw;
                 }
             }
-
-            return RedirectToPage("./Index");
+            Guid mpid = DoNotCall.MapId;
+            IDictionary<string, string> args = new Dictionary<string, string>
+            {
+                { "id", mpid.ToString()}
+            };
+            return RedirectToPage("/Admin/Congregation/Maps/Edit", args);
         }
 
         private bool DoNotCallExists(Guid id)

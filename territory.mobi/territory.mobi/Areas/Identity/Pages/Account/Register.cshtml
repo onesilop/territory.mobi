@@ -14,12 +14,13 @@
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Input.Email"></label>
-                @if (ViewData["EditEmail"].ToString() == "false")
+                @if (Request.Query["token"].Count() > 0)
                 {
-                    <input asp-for="Input.Email" value=" @ViewData["Email"].ToString()" disabled="disabled" class="form-control" />
-                } else
+                    <input asp-for="Input.Email" disabled="disabled" class="form-control" />
+                }
+                else
                 {
-                    <input asp-for="Input.Email" value=" @ViewData["Email"].ToString()" class="form-control" />
+                    <input asp-for="Input.Email" class="form-control" />
                 }
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
@@ -45,22 +46,40 @@
             </div>
             <div class="form-group">
                 <label>Select a congregation</label>
-                @if (ViewData["EditEmail"].ToString() == "false")
+                @if (Request.Query["token"].Count() > 0)
                 {
-                    <select class="form-control" asp-for="AspNetUserClaims.ClaimValue" disabled="disabled" asp-items="ViewBag.Congs"><option disabled selected>Select a congregation</option></select>
+                    <select class="form-control" asp-for="AspNetUserClaims.ClaimValue" disabled="disabled" asp-items="ViewBag.Congs"></select>
                 }
                 else
                 {
                     <select class="form-control" asp-for="AspNetUserClaims.ClaimValue" asp-items="ViewBag.Congs"><option disabled selected>Select a congregation</option></select>
-                }
 
-                <span asp-validation-for="AspNetUserClaims.ClaimValue" class="text-danger"></span>
+                    <span asp-validation-for="AspNetUserClaims.ClaimValue" class="text-danger"></span>
+                    <label>To create a new congregation enter the name here:</label>
+                    <input id="NewCong" asp-for="Input.NewCongName" />
+                    <span asp-validation-for="Input.Surname" class="text-danger"></span>
+                    <span id="NewCongError" class="text-danger d-none">Congregation Name already exists, there cannot be a duplicate sorry.</span>
+                }
             </div>
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button id ="saveBtn" type="submit" class="btn btn-primary">Register</button>
         </form>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        $('#NewCong').keyup(function () {
+            var cngs = jQuery.makeArray(@Html.Raw(Model.Congs));
+            if (jQuery.inArray($('#NewCong').val(), cngs) == -1) {
+                $('#NewCongError').hide();
+                $('#saveBtn').attr("disabled", false);
+            } else {
+                $('#NewCongError').show();
+                $('#saveBtn').attr("disabled", true);
+            }
+        });
+    </script>
+
 }

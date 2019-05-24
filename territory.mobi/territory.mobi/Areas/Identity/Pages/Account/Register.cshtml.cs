@@ -46,8 +46,9 @@ namespace territory.mobi.Areas.Identity.Pages.Account
         public AspNetUserClaims AspNetUserClaims { get; set; }
 
         public string ReturnUrl { get; set; }
-        public Token Token { get; set; }
-        
+        public Token Token { get; set; } = new Token();
+        public string Congs { get; set; }
+         
         public class InputModel
         {
             [Required]
@@ -75,37 +76,43 @@ namespace territory.mobi.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
+            [Display(Name = "Congregation Name")]
+            public string NewCongName { get; set; }
+
         }
 
         public void OnGet(string returnUrl = null, Guid? token = null)
         {
-            ViewData["Email"] = "";
-            ViewData["EditEmail"] = "";
-            if (token == null)
-            {
-                ViewData["Congs"] = new SelectList(_context.Cong, "CongName", "CongName");
-            }
-            else
+
+            ViewData["Congs"] = new SelectList(_context.Cong, "CongName", "CongName");
+
+            if(token != null)
             {
                 Token = _context.Token.Find(token);
                 if (Token.UpdateDateTime.Add(new System.TimeSpan(24, 0, 0)) >= DateTime.UtcNow)
                 {
                     IList<Cong> lst = new List<Cong>();
+
                     lst = _context.Cong.Where(a => a.CongId.ToString() == Token.UserCong).ToList();
                     ViewData["Congs"] = new SelectList(lst, "CongName", "CongName",lst[0].CongName);
-                    ViewData["Email"] = Token.UserEmail;
-                    ViewData["EditEmail"] = "false";
-                }
-                else
-                {
-                    ViewData["Congs"] = new SelectList(_context.Cong, "CongName", "CongName");
+                    Input.Email = Token.UserEmail;
+
                 }
             }
+
+            List<string> ListOCongs = new List<string>();
+            foreach (Cong c in _context.Cong.ToList())
+            {
+                    ListOCongs.Add(c.CongName);
+            }
+            Congs = Newtonsoft.Json.JsonConvert.SerializeObject(ListOCongs);
 
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null, Guid? token = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
@@ -128,8 +135,32 @@ namespace territory.mobi.Areas.Identity.Pages.Account
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    AspNetUserClaims.UserId = user.Id;
                     AspNetUserClaims.ClaimType = "TempCong";
+                    AspNetUserClaims.UserId = user.Id;
+
+                    if (token != null)
+                    {
+                        Token = _context.Token.Find(token);
+                        if (Token.UpdateDateTime.Add(new System.TimeSpan(24, 0, 0)) >= DateTime.UtcNow)
+                        {
+                            AspNetUserClaims.ClaimType = "Congregation";
+                        }
+                    }
+
+                    if (Input.NewCongName != null)
+                    {
+                        Cong NewCong = new Cong
+                        {
+                            CongId = Guid.NewGuid(),
+                            CongName = Input.NewCongName,
+                            UpdateDatetime = DateTime.UtcNow
+                        };
+
+                        _context.Cong.Add(NewCong);
+                        AspNetUserClaims.ClaimType = "Congregation";
+                        AspNetUserClaims.ClaimValue = Input.NewCongName;
+                        
+                    }
 
                     _context.AspNetUserClaims.Add(AspNetUserClaims);
                     await _context.SaveChangesAsync();
@@ -141,7 +172,6 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-
             // If we got this far, something failed, redisplay form
             return Page();
         }

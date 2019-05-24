@@ -12,7 +12,6 @@ using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.Congregation
 {
-    [Authorize(Roles = "Admin,TerritoryServant,ServiceOverseer")]
     public class IndexModel : PageModel
     {
 
@@ -28,6 +27,7 @@ namespace territory.mobi.Pages.Admin.Congregation
 
         public async Task OnGetAsync()
         {
+            Cong = new List<Cong>();
             if (User.Identity.IsAuthenticated == false)
             {
                 Response.Redirect("/Admin/Index");
@@ -40,19 +40,20 @@ namespace territory.mobi.Pages.Admin.Congregation
                 }
                 else
                 { 
-                    int cnt = 0;               
+             
                     IEnumerable<Claim> claims = User.FindAll("Congregation");
-                    foreach (Claim c in claims)
+                    if (claims.Count() == 0)
                     {
-                        if (cnt == 0)
+                        Response.Redirect("/Admin/Users/Default");
+                    }
+                    else {
+
+                        foreach (Claim c in claims)
                         {
-                            Cong = await _context.Cong.Where(a => a.CongName == c.Value).ToListAsync();
-                        }
-                        else
-                        { 
+
                             Cong.Add(await _context.Cong.Where(a => a.CongName == c.Value).FirstOrDefaultAsync());
+
                         }
-                        cnt++;
                     }
                 }
             }

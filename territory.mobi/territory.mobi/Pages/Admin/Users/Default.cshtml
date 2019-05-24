@@ -1,0 +1,26 @@
+﻿@page
+@model territory.mobi.Pages.Admin.Users.DefaultModel
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div>
+        Hey There,<p /><p />
+
+        Thanks for registering and logging in, we are just waiting for someone to approve your registration.
+        <p />
+        While you wait here is a picture of a cat to enjoy,
+    </div>
+    <hr />
+    <img id="catme" src="@Model.CatUri">
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        
+    }
+</body>
+</html>

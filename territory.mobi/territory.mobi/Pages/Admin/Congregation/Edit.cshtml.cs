@@ -13,7 +13,6 @@ using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.Congregation
 {
-    [Authorize(Roles = "Admin,TerritoryServant,ServiceOverseer")]
     public class EditModel : PageModel
     {
         private readonly territory.mobi.Models.TerritoryContext _context;
@@ -80,12 +79,7 @@ namespace territory.mobi.Pages.Admin.Congregation
                         Claims = c
                     };
                     userListTS.Add(c.User);
-                    foreach (AspNetUserRoles r in _context.AspNetUserRoles.Include(r => r.Role).ToList().Where(u => u.User.Id == c.User.Id).ToList())
-                    {
-                        cnu.Role = r.Role;
-                        CongUsers.Add(cnu);
-                    }
-                    
+                    CongUsers.Add(cnu);
                 }
                 ViewData["TS"] = new SelectList(userListTS, "Id", "FullName", Cong.ServId);
 

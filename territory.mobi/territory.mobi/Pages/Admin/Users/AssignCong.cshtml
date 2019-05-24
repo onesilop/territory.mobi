@@ -10,7 +10,7 @@
 </head>
 <body>
 
-    @if (Request.Query["claimid"] == "")
+    @if (Request.Query["claimid"].ToString().Count() == 0)
     {
 
         <h4>Select a congregation to add to @ViewData["name"]</h4>

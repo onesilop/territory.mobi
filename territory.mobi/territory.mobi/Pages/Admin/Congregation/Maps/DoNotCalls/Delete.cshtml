@@ -13,22 +13,10 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.DoNotCall.MapId)
+            @Html.DisplayNameFor(model => model.DoNotCall.AptNo)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.DoNotCall.MapId)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.DoNotCall.DateCreated)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DoNotCall.DateCreated)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.DoNotCall.DateValidated)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DoNotCall.DateValidated)
+            @Html.DisplayFor(model => model.DoNotCall.AptNo)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.DoNotCall.StreetNo)
@@ -42,12 +30,7 @@
         <dd>
             @Html.DisplayFor(model => model.DoNotCall.StreetName)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.DoNotCall.AptNo)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DoNotCall.AptNo)
-        </dd>
+
         <dt>
             @Html.DisplayNameFor(model => model.DoNotCall.Suburb)
         </dt>
@@ -67,16 +50,22 @@
             @Html.DisplayFor(model => model.DoNotCall.Display)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.DoNotCall.UpdateDatetime)
+            @Html.DisplayNameFor(model => model.DoNotCall.DateCreated)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.DoNotCall.UpdateDatetime)
+            @Html.DisplayFor(model => model.DoNotCall.DateCreated)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DoNotCall.DateValidated)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DoNotCall.DateValidated)
         </dd>
     </dl>
     
     <form method="post">
         <input type="hidden" asp-for="DoNotCall.DncId" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-page="./Index">Back to List</a>
+        <input type="submit" value="Delete" class="btn btn-default bg-danger text-white" /> |
+        <a asp-page="/Admin/Congregation/Maps/Edit" asp-route-id="@Model.DoNotCall.MapId">Back to Map</a>
     </form>
 </div>

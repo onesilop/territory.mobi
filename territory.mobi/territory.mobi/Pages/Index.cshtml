@@ -6,18 +6,18 @@
     ViewData["LeftTitle"] = "territory.mobi";
 }
 
-<div>
+<div class="p-2">
 
 
     @foreach (var item in Model.Cong)
     {
-        <div class="d-flex bg-primary dir-sec mt-1 mb-1 w-100 justify-content-center">
+        <div class="d-flex bg-primary mt-1 mb-1 w-100 justify-content-center">
             <a class="text-white h4 pt-1 text-decoration-none" asp-page="./Directory" asp-route-CongName="@item.CongName">@Html.DisplayFor(modelItem => item.CongName)</a>
         </div>
 
     }
 
-    <div class="d-flex bg-primary dir-sec mt-1 mb-1 w-100 justify-content-center">
+    <div class="d-flex bg-secondary mt-1 mb-1 w-100 justify-content-center">
         <a class="text-white h4 pt-1 text-decoration-none" asp-page="./Admin/Index">Administration Portal</a>
     </div>
 

@@ -14,24 +14,9 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="DoNotCall.DncId" class="control-label"></label>
-                <input asp-for="DoNotCall.DncId" class="form-control" />
-                <span asp-validation-for="DoNotCall.DncId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DoNotCall.MapId" class="control-label"></label>
-                <input asp-for="DoNotCall.MapId" class="form-control" />
-                <span asp-validation-for="DoNotCall.MapId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DoNotCall.DateCreated" class="control-label"></label>
-                <input asp-for="DoNotCall.DateCreated" class="form-control" />
-                <span asp-validation-for="DoNotCall.DateCreated" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DoNotCall.DateValidated" class="control-label"></label>
-                <input asp-for="DoNotCall.DateValidated" class="form-control" />
-                <span asp-validation-for="DoNotCall.DateValidated" class="text-danger"></span>
+                <label asp-for="DoNotCall.AptNo" class="control-label"></label>
+                <input asp-for="DoNotCall.AptNo" class="form-control" />
+                <span asp-validation-for="DoNotCall.AptNo" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DoNotCall.StreetNo" class="control-label"></label>
@@ -42,11 +27,6 @@
                 <label asp-for="DoNotCall.StreetName" class="control-label"></label>
                 <input asp-for="DoNotCall.StreetName" class="form-control" />
                 <span asp-validation-for="DoNotCall.StreetName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DoNotCall.AptNo" class="control-label"></label>
-                <input asp-for="DoNotCall.AptNo" class="form-control" />
-                <span asp-validation-for="DoNotCall.AptNo" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DoNotCall.Suburb" class="control-label"></label>
@@ -64,19 +44,14 @@
                 <span asp-validation-for="DoNotCall.Display" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DoNotCall.UpdateDatetime" class="control-label"></label>
-                <input asp-for="DoNotCall.UpdateDatetime" class="form-control" />
-                <span asp-validation-for="DoNotCall.UpdateDatetime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-default bg-primary text-white" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="/Admin/Congregation/Maps/Edit" asp-route-id="@Request.Query["id"]">Back to Map</a>
 </div>
 
 @section Scripts {

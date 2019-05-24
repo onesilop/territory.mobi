@@ -43,7 +43,7 @@ namespace territory.mobi.Pages
             if (_context.Dncpword.Count(x => x.PasswordHash == pwd && x.Notinuse == 0 && x.CongId == congId ) > 0)
             {
                 string res = "";
-                IList<DoNotCall> dd = _context.DoNotCall.Where(d => d.MapId == mapId && d.Display == 1).ToList();
+                IList<DoNotCall> dd = _context.DoNotCall.Where(d => d.MapId == mapId && d.Display == true).ToList();
                 foreach (DoNotCall d in dd)
                 {
                     string tmp = "";
@@ -59,6 +59,8 @@ namespace territory.mobi.Pages
 
         public async Task<IActionResult> OnGetAsync(string CongName, string MapNo)
         {
+
+            ViewData["Page"] = "Map";
             if (MapNo == null)
             {
                 return NotFound();
@@ -87,9 +89,9 @@ namespace territory.mobi.Pages
             Image = await _context.Images.FirstOrDefaultAsync(m => m.ImgId == Map.ImgId);
 
             DNC = await _context.DoNotCall.ToListAsync();
-            DNC = DNC.Where(d => d.MapId == Map.MapId && d.Display == 1).ToList();
+            DNC = DNC.Where(d => d.MapId == Map.MapId && d.Display == true).ToList();
 
-            if (Map.MapPolygon != "") { ShowMap = true; }
+            if (Map.GoogleRef != "") { ShowMap = true; }
 
             return Page();
         }

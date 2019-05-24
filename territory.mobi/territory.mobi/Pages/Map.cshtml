@@ -8,25 +8,28 @@
     ViewData["RightTitle"] = Model.Map.MapArea;
 }
 
-<div id="imgDiv">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+
+<div id="imgDiv" class="m-0 p-0 align-middle">
 
     @if (Model.Image.ImgImage == null)
     {
-        <img id="mappic" class="img-fluid align-self-center align-middle w-100 h-100" src="@Model.Image.ImgPath" alt="@Model.Image.ImgText" />
+        <img id="mappic" class="img-fluid align-self-center align-middle d-block mx-auto w-auto h-auto" src="@Model.Image.ImgPath" alt="@Model.Image.ImgText" />
     }
     else
     {
-        <img id="mappic" class="img-fluid align-self-center align-middle w-100 h-100" src="data:image;base64,@System.Convert.ToBase64String(Model.Image.ImgImage)" alt="@Model.Image.ImgText" />
+        <img id="mappic" class="img-fluid align-self-center align-middle d-block mx-auto w-auto h-auto" src="data:image;base64,@System.Convert.ToBase64String(Model.Image.ImgImage)" alt="@Model.Image.ImgText" />
     }
 
 </div>
-<div class="d-inline-flex fixed-bottom bg-primary justify-content-center setwidth-100">
+<div id="ftr" class="d-inline-flex fixed-bottom bg-primary justify-content-center">
     <a class="footer-link align-self-center m-1" asp-page="./Directory" asp-route-CongName="@Model.Cong.CongName">
         <img class="MapMenuIcon" src="~/images/assets/TOC1.png" />
     </a>
     @if (Model.ShowMap)
     {
-        <a id="googMap" class="footer-link align-self-center m-1" asp-page="./Mapg" asp-route-CongName="@Model.Cong.CongName" asp-route-MapNo="@Model.Map.MapKey">
+        <a id="googMap" class="footer-link align-self-center m-1" src="@Model.Map.GoogleRef">
             <img class="MapMenuIcon" src="~/images/assets/Navigation.png" />
         </a>
     }
@@ -58,13 +61,38 @@
 @section Scripts {
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <script type="text/javascript">
+        function scaleMapstuff() {
+            var tHgt = $(window).height();
+            var fhHgt = tHgt * .08
+            var bHgt = tHgt - (fhHgt * 2);
+            $('.MapMenuIcon').css("height", fhHgt * .9);
+            $('#ftr').css('height', fhHgt);
+            $('#imgDiv').css('max-height', bHgt);
+            $('#mappic').css('max-height', bHgt);
+            $('#bdy').css('height', bHgt);
+            $('#mappic').css('padding-top', Math.max(0, (bHgt - parseInt($('#mappic').css('height')))) / 2);
+        }
+        $(document).ready(function () {
+            scaleMapstuff();
+        });
+        $(window).resize(function () {
+            scaleMapstuff()
+        });
+
+        $(window).load(function () {
+            scaleMapstuff()
+        });
+
+    </script>
+
     <script type="text/javascript">
             $(document).ready(function () {
-
                 $("#parking").click(function () {
                     bootbox.dialog({
                     title: "<h3>Parking</h3>",
-                        message: "@Model.Map.Parking",
+                        message: "@Html.Raw(Model.Map.Parking)",
                         onEscape: true,
                         backdrop: true,
                         centerVertical: true,
@@ -75,7 +103,7 @@
                 $("#notes").click(function () {
                     bootbox.dialog({
                     title: "<h3>Notes</h3>",
-                        message: "@Model.Map.Notes",
+                        message: "@Html.Raw(Model.Map.Notes)",
                         onEscape: true,
                         backdrop: true,
                         centerVertical: true,

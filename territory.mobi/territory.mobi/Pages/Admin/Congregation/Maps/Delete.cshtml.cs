@@ -39,20 +39,36 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
 
         public async Task<IActionResult> OnPostAsync(Guid? id)
         {
+           
             if (id == null)
             {
                 return NotFound();
             }
+            string cngid = "";
 
             Map = await _context.Map.FindAsync(id);
-
+            
             if (Map != null)
             {
+
+                cngid = Map.CongId.ToString();
+                foreach (Images i in _context.Images.Where(m => m.MapId == Map.MapId).ToList())
+                {
+                    _context.Images.Remove(i);
+                }
+                foreach (DoNotCall d in _context.DoNotCall.Where(m => m.MapId == Map.MapId).ToList())
+                {
+                    _context.DoNotCall.Remove(d);
+                }
+                await _context.SaveChangesAsync();
                 _context.Map.Remove(Map);
                 await _context.SaveChangesAsync();
             }
-
-            return RedirectToPage("./Index");
+            IDictionary<string, string> args = new Dictionary<string, string>
+            {
+                { "id", cngid}
+            };
+            return RedirectToPage("/Admin/Congregation/Edit", args);
         }
     }
 }

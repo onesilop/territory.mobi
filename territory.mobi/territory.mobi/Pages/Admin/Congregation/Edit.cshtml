@@ -18,7 +18,7 @@
                 <label asp-for="Cong.CongName" class="control-label"></label>
                 <input id="congName" asp-for="Cong.CongName" class="form-control" />
                 <span asp-validation-for="Cong.CongName" class="text-danger"></span>
-                <span id="cngValid" class="text-danger">Name already taken, please change</span>
+                <span id="cngValid" class="text-danger" style="display:none">Name already taken, please change</span>
             </div>
             <div class="form-group">
                 <label asp-for="Cong.ServId" class="control-label"></label>
@@ -34,10 +34,10 @@
     </div>
 </div>
 <div id="Users" class="border p-2 mb-2">
-    <h4>Users</h4>
     <div class="form-group">
         @Html.AntiForgeryToken()
-        <a id="invite" href="#" class="btn btn-primary">Invite User</a>
+         <h4>Users</h4>
+        <a id="invite" href="#" class="">Invite User</a>
     </div>
     <div>
         @if (Model.CongUsers.Count == 0)
@@ -48,29 +48,57 @@
         {
             @foreach (var item in Model.CongUsers)
             {
-                <label>@item.User.FullName - @item.Role.Name</label>
+                <label>@item.User.FullName</label>
                 <a asp-page="/Admin/Users/DeleteCong" asp-route-id="@item.User.Id" asp-route-claimid="@item.Claims.Id" asp-route-returl="Congregation" asp-route-cong="@Request.Query["id"]">Remove</a>
             }
         }
     </div>
     <hr />
+    <h5>New registered users needing approval</h5>
     <div>
-        @foreach (var item in Model.UnapprovedUsers)
+        @if (Model.UnapprovedUsers.Count() == 0)
         {
-            <label>@item.User.FullName</label>
-            <a asp-page="/Admin/Users/AssignCong" asp-route-id="@item.User.Id" asp-route-claimid="@item.Id" asp-route-returl="Congregation" asp-route-cong="@Request.Query["id"]">Approve</a> <text>|</text>
-            <a asp-page="/Admin/Users/DeleteCong" asp-route-id="@item.User.Id" asp-route-claimid="@item.Id" asp-route-returl="Congregation" asp-route-cong="@Request.Query["id"]">Reject</a>
-         }
+            <label>None at this time</label>
+        }
+        else
+        {
+            @foreach (var item in Model.UnapprovedUsers)
+            {
+                <label>@item.User.FullName</label>
+                <a asp-page="/Admin/Users/AssignCong" asp-route-id="@item.User.Id" asp-route-claimid="@item.Id" asp-route-returl="Congregation" asp-route-cong="@Request.Query["id"]">Approve</a> <text>|</text>
+                <a asp-page="/Admin/Users/DeleteCong" asp-route-id="@item.User.Id" asp-route-claimid="@item.Id" asp-route-returl="Congregation" asp-route-cong="@Request.Query["id"]">Reject</a>
+            }
+        }
     </div>
 </div>
 <div id="Maps" class="border p-2 mb-2">
     <h4>Maps</h4>
     <a asp-page="./Section/Index" asp-route-id="@Request.Query["id"]">Edit Sections</a> | 
-    <a asp-page="./Maps/Create" asp-route-id="@Request.Query["id"]">New Map</a></p>
+    <a asp-page="./Maps/Create" asp-route-id="@Request.Query["id"]">New Map</a><p/>
     <table class="table border-primary">
+        <thead>
+            <tr>
+                <th>
+                    Map Key
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Area
+                </th>
+                <th>
+                    Show?
+                </th>
+                <th>
+                    Type
+                </th>
+                <th></th>
+            </tr>
+        </thead>
         <tbody>
             <tr>
-                <td colspan="5" class="bg-secondary">
+                <td colspan="6" class="bg-secondary">
                     <h5 class="text-white">No Section</h5>
                 </td>
             </tr>
@@ -82,77 +110,83 @@
                     </td>
                 </tr>
             }
-            else
+              else
             {
+               
                 @foreach (var item in Model.Maps)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MapKey)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MapDesc)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MapArea)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MapType)
-                        </td>
-                        <td class="">
-                            <a asp-page="./Maps/Edit" asp-route-id="@item.MapId">View</a> |
-                            <a asp-page="./Maps/Delete" asp-route-id="@item.MapId">Delete</a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MapKey)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MapDesc)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MapArea)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Display)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MapType)
+                    </td>
+                    <td class="text-right">
+                        <a asp-page="./Maps/Edit" asp-route-id="@item.MapId">View</a> |
+                        <a asp-page="./Maps/Delete" asp-route-id="@item.MapId">Delete</a>
+                    </td>
+                </tr>
                 }
             }
-            @foreach (var sec in Model.Section.OrderBy(x => x.SortOrder))
-            {
-
-                <tr>
-                    <td colspan="5" class="bg-primary">
-                        <h5 class="text-white">@Html.DisplayFor(modelItem => sec.SectionTitle)</h5>
-                    </td>
-
-                </tr>
-                @if (sec.Maps.Count == 0)
+                @foreach (var sec in Model.Section.OrderBy(x => x.SortOrder))
                 {
+
                     <tr>
-                        <td colspan="5" class="bg-primary">
-                            <div>No maps to display</div>
+                        <td colspan="6" class="bg-primary">
+                            <h5 class="text-white">@Html.DisplayFor(modelItem => sec.SectionTitle)</h5>
                         </td>
+
                     </tr>
-                }
-                else
-                {
-                    @foreach (var item in sec.Maps.OrderBy(x => x.SortOrder))
+                    @if (sec.Maps.Count == 0)
                     {
                         <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.MapKey)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.MapDesc)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.MapArea)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.MapType)
-                            </td>
-                            <td class="text-right">
-                                <a asp-page="./Maps/Edit" asp-route-id="@item.MapId">View</a> |
-                                <a asp-page="./Maps/Delete" asp-route-id="@item.MapId">Delete</a>
+                            <td colspan="6">
+                                <div>No maps to display</div>
                             </td>
                         </tr>
                     }
+                    else
+                    {
+                        @foreach (var item in sec.Maps.OrderBy(x => x.SortOrder))
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MapKey)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MapDesc)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MapArea)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Display)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MapType)
+                                </td>
+                                <td class="text-right">
+                                    <a asp-page="./Maps/Edit" asp-route-id="@item.MapId">View</a> |
+                                    <a asp-page="./Maps/Delete" asp-route-id="@item.MapId">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+
                 }
-
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 </div>
-
 
 <div>
     <a asp-page="./Index">Back to List</a>
