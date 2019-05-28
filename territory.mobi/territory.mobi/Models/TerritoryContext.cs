@@ -31,13 +31,8 @@ namespace territory.mobi.Models
         public virtual DbSet<Section> Section { get; set; }
         public virtual DbSet<Token> Token { get; set; }
         public virtual DbSet<Setting> Setting { get; set; }
-
-        // Unable to generate entity type for table 'dbo.Boronia_Do_Not_Calls'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.Boronia_Map_Data'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.Hurstville_Do_Not_Calls'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.Preston_Do_Not_Calls'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.Preston_Map_Data'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.Hurstville_Map_Data'. Please see the warning messages.
+        public virtual DbSet<MapAssignment> MapAssignment { get; set; }
+        public virtual DbSet<MapFeature> MapFeature { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -387,6 +382,69 @@ namespace territory.mobi.Models
                 entity.Property(e => e.SettingValue)
                     .IsRequired()
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<MapAssignment>(entity =>
+            {
+                entity.HasKey(e => e.AssignId)
+                    .HasName("PK_mapAssignment");
+
+                entity.Property(e => e.AssignId)
+                    .HasColumnName("assignId")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.DateAssigned)
+                    .HasColumnName("dateAssigned")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.DateReturned)
+                    .HasColumnName("dateReturned")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.MapId).HasColumnName("mapId");
+
+                entity.Property(e => e.NonUserName)
+                    .HasColumnName("nonUserName")
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Updatedatetime)
+                    .HasColumnName("updatedatetime")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnName("userId")
+                    .HasMaxLength(450);
+            });
+
+            modelBuilder.Entity<MapFeature>(entity =>
+            {
+                entity.Property(e => e.MapFeatureId).ValueGeneratedNever();
+
+                entity.Property(e => e.Centre)
+                    .IsRequired()
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Color)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Position)
+                    .IsRequired()
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Title)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Type)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Updatedatetime)
+                    .HasColumnName("updatedatetime")
+                    .HasColumnType("datetime");
             });
 
         }

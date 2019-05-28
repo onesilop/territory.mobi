@@ -1,0 +1,186 @@
+﻿@page
+@model territory.mobi.Pages.CreateMapgModel
+
+@{
+    ViewData["Title"] = "territory.mobi";
+}
+
+<input id="addy" type="text" placeholder="Enter an Address" value="26 breen terrace ferny creek"/>
+<button id="enterAddy">Search</button>
+
+<div id="map" class="w-100" style="height: 400px"></div>
+
+
+
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+     
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleKey&libraries=drawing">
+</script>   
+ <script>
+        $(document).ready(function () {
+            $("#enterAddy").click(function () {
+                var url = "https://nominatim.openstreetmap.org/search?q=" + $('#addy').val().toString().replace(/ /g, "+") + "&format=json";
+                console.log(url);
+
+                $.getJSON(url, function (data) {
+                    
+                        console.log(data);
+                        console.log(data[0].lat);
+                        console.log(data[0].lon);
+                        initMap(data[0].lon, data[0].lat);
+                    });
+            });
+        })
+    </script>
+
+    <script>
+        //Google map script
+        function initMap(lng, lat) {
+            google.maps.visualRefresh = true;
+            var isMobile = (navigator.userAgent.toLowerCase().indexOf('android') > -1) || (navigator.userAgent.match(/(iPod|iPhone|iPad|BlackBerry|Windows Phone|iemobile)/));
+
+            if (isMobile) {
+                var viewport = document.querySelector("meta[name=viewport]");
+                viewport.setAttribute('content', 'initial-scale=1.0, user-scalable=no');
+            }
+            /*
+            var lowx = 0;
+            var highx = 0;
+            var lowy = 0;
+            var highy = 0;
+            var lats = [];
+            var lngs = [];
+
+            var latitude = "";
+            var longitude = "";
+
+            if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showCurrentLocation);
+            } else {
+            alert("Geolocation API not supported.");
+            }
+
+            function showCurrentLocation(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var coords = new google.maps.LatLng(latitude, longitude);
+
+
+            var marker = new google.maps.Marker({
+            position: coords,
+            map: map
+            });
+            };
+
+            for (var i = 0; i < locations.length; i++) {
+            if (i % 2 == 0) {
+            lats.push(locations[i].toString().replace("0.0 ",""));
+            } else {
+            lngs.push(locations[i].toString().replace("0.0 ", ""));
+            }
+            }
+
+
+
+            lats.sort();
+            lngs.sort();
+            lowx = lats[0];
+            highx = lats[lats.length - 1];
+            lowy = lngs[0];
+            highy = lngs[lngs.length - 1];
+            center_x = lowx + ((highx - lowx) / 2);
+            center_y = lowy + ((highy - lowy) / 2);
+            console.log(center_x);
+            console.log(center_y);
+            console.log(kmlLayer);
+            var uluru = kmlLayer.getDefaultViewport().getCenter() ;
+
+            //var uluru = { lat: -25.344, lng: 131.036 };
+            // The map, centered at Uluru
+            var map = new google.maps.Map(
+            document.getElementById('map'), { zoom: 4, center: uluru });
+            */
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: new google.maps.LatLng(lat, lng),
+                zoom: 16,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                disableDefaultUI: true
+            });
+
+            var drawingManager = new google.maps.drawing.DrawingManager({
+                drawingMode: google.maps.drawing.OverlayType.MARKER,
+                drawingControl: true,
+                drawingControlOptions: {
+                    position: google.maps.ControlPosition.TOP_LEFT,
+                    drawingModes: ['polygon', 'marker']
+                },
+                markerOptions: {
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 1
+                    },
+                draggable: true
+                },
+                polygonOptions: {
+                    fillColor: '#ffff00',
+                    fillOpacity: 5,
+                    strokeWeight: 3,
+                    editable: true,
+                    clickable:true
+                }
+            });
+
+            google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
+                    // assuming you want the points in a div with id="info"
+                    console.log(polygon.getPath());
+                    console.log("polygon points:");
+                    for (var i = 0; i < polygon.getPath().getLength(); i++) {
+                            console.log(polygon.getPath().getAt(i).toUrlValue(6));
+                        }
+            });
+
+            google.maps.event.addListener(drawingManager, 'markercomplete', function (marker) {
+                    // assuming you want the points in a div with id="info"
+                console.log(marker.getPosition());
+                bootbox.prompt({
+                            title: "<h3>Enter Label</h3>",
+                            inputType: "text",
+                            onEscape: true,
+                            backdrop: true,
+                            centerVertical: true,
+                            scrollable: true,
+                            callback: function (result) {
+                                if (result != null) {
+                                    marker.setLabel(result);
+                                };
+                            }
+                        });
+                });
+            drawingManager.setMap(map);
+
+            /*                             if (isMobile) {
+            var legend = document.getElementById('googft-legend');
+            var legendOpenButton = document.getElementById('googft-legend-open');
+            var legendCloseButton = document.getElementById('googft-legend-close');
+            legend.style.display = 'none';
+            legendOpenButton.style.display = 'none';
+            legendCloseButton.style.display = 'none';
+            legendOpenButton.onclick = function () {
+            legend.style.display = 'none';
+            legendOpenButton.style.display = 'none';
+            }
+            legendCloseButton.onclick = function () {
+            legend.style.display = 'none';
+            legendOpenButton.style.display = 'none';
+            }
+            }
+            */
+        };
+
+    </script>
+}
