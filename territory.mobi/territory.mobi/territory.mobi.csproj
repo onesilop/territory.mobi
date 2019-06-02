@@ -5,6 +5,7 @@
     <UserSecretsId>aspnet-territory.mobi2._2-50207160-9C81-417E-90F3-D7AA542EF2F0</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>territory.mobi</RootNamespace>
+    <TypeScriptToolsVersion>3.3</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -51,6 +52,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
+    <Folder Include="Pages\Trial\" />
   </ItemGroup>
 
 </Project>

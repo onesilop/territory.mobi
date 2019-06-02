@@ -28,8 +28,16 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
         public string MapKeys { get; set; }
         public string GoogleKey { get; set; }
         public IList<DoNotCall> DoNotCall { get; set; }
+        public IList<MapFeature> MapPolygons { get; set; }
+        public IList<MapFeature> MapMarkers { get; set; }
+        public string MapCentreLat { get; set; } = "";
+        public string MapCentreLng { get; set; } = "";
+        public int MapZoom { get; set; } = 16;
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
+            Setting set = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync();
+            GoogleKey = set.SettingValue;
+
             if (id == null)
             {
                 return NotFound();
@@ -44,7 +52,18 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
                 return NotFound();
             }
 
-            
+            MapPolygons = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Polygon").ToListAsync();
+            MapMarkers = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Marker").ToListAsync();
+            MapFeature MapCentre = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Centre").FirstOrDefaultAsync();
+
+            if (MapCentre != null)
+            {
+                dynamic Coords = Newtonsoft.Json.JsonConvert.DeserializeObject(MapCentre.Position);
+                MapCentreLat = Coords.lat;
+                MapCentreLng = Coords.lng;
+                MapZoom = MapCentre.Zoom;
+            }
+
             CurrentImage = await _context.Images.FirstOrDefaultAsync(m => m.ImgId == Map.ImgId);
             if (CurrentImage == null)
             {
@@ -62,8 +81,6 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
             }
             MapKeys = Newtonsoft.Json.JsonConvert.SerializeObject(ListOMapKeys);
 
-            Setting set = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync();
-            GoogleKey = set.SettingValue;
             DoNotCall = _context.DoNotCall.Where(d => d.MapId == Map.MapId).ToList();
             IList<Models.Section> slist = await _context.Section.Where(s => s.CongId == Map.CongId).ToListAsync();
             ViewData["Section"] = new SelectList(slist, "SectionId", "SectionTitle", Map.SectionId);

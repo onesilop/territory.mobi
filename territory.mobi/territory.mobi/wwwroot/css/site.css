@@ -54,6 +54,7 @@ body {
 .dir-sec {
     height: 6vh;
     max-height: 6vh;
+    min-height: 50px;
     border-radius: 3.5px !important;
     text-align: center !important;
     padding-top: 7px !important;
@@ -65,10 +66,12 @@ body {
     max-width: 5.5vh;
     height: 5.5vh;
     max-height: 5.5vh;
+    min-height: 50px;
+    min-width: 50px;
     border-radius: 3.5px !important;
     text-align: center !important;
     padding: 7px 0 0 0 !important;
-    }
+}
 
 .sec-head {
     border-radius: 3.5px;

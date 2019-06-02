@@ -26,6 +26,9 @@ namespace territory.mobi.Models
         [Required]
         [Display(Name = "Show on map")]
         public Boolean Display { get; set; }
+
+        public string Geocode { get; set; }
+
         public DateTime UpdateDatetime { get; set; }
 
         public virtual Map Map { get; set; }

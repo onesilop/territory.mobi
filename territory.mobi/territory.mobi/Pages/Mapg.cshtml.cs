@@ -37,6 +37,11 @@ namespace territory.mobi.Pages
         public string GoogleKey { get; set; }
         public bool ShowMap { get; set; } = false;
         public IList<Setting> Setting { get; set; }
+        public IList<MapFeature> MapPolygons { get; set; }
+        public IList<MapFeature> MapMarkers { get; set; }
+        public string MapCentreLat { get; set; } = "";
+        public string MapCentreLng { get; set; } = "";
+        public int MapZoom { get; set; } = 16;
 
 
 
@@ -59,19 +64,6 @@ namespace territory.mobi.Pages
                 return Content("false"); 
         }
 
-        public ContentResult OnGetPolygon(Guid mapId)
-        {
-            if (mapId == null)
-            {
-                return null;
-            }
-            Map =  _context.Map.FirstOrDefault(m => m.MapId == mapId);
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(Map.MapPolygon.ToString());
-            string jsonText = JsonConvert.SerializeXmlNode(doc);
-
-            return Content(jsonText);
-        }
 
         public async Task<IActionResult> OnGetAsync(string CongName, string MapNo)
         {
@@ -109,6 +101,21 @@ namespace territory.mobi.Pages
 
             Setting set  = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync();
             GoogleKey = set.SettingValue;
+
+            MapPolygons = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Polygon").ToListAsync();
+            MapMarkers = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Marker").ToListAsync();
+            MapFeature MapCentre = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Centre").FirstOrDefaultAsync();
+
+            if (MapCentre == null) {
+                return NotFound();
+            } else 
+            {
+                dynamic Coords = Newtonsoft.Json.JsonConvert.DeserializeObject(MapCentre.Position);
+                MapCentreLat = Coords.lat;
+                MapCentreLng = Coords.lng;
+                MapZoom = MapCentre.Zoom;
+            }
+
 
             return Page();
         }

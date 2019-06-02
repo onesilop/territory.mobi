@@ -5,9 +5,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Edit</h2>
-
-<h4>Map</h4>
+<h3>Edit Map View</h3>
 <hr />
 <div class="row">
     <form method="post">
@@ -63,7 +61,7 @@
                 <span asp-validation-for="Map.MapPolygon" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group d-none">
                 <label asp-for="Map.GoogleRef" class="control-label"></label>
                 <input asp-for="Map.GoogleRef" class="form-control" />
                 <span asp-validation-for="Map.GoogleRef" class="text-danger"></span>
@@ -89,7 +87,7 @@
         <div class="form-group border rounded p-3">
             @if (Model.CurrentImage == null)
             {
-            <img id="mappic" class="img-fluid w-50" src="@ViewData["catme"]" alt="Cat you next time" />
+                <img id="mappic" class="img-fluid w-50" src="@ViewData["catme"]" alt="Cat you next time" />
             }
             else if (Model.CurrentImage.ImgImage == null)
             {
@@ -107,6 +105,12 @@
                     </label><p />
                     <button id="changeMap" class="btn btn-default bg-primary text-white">Save Image</button>
                 </form>
+            </div>
+        </div>
+        <div class="form-group border rounded p-3">
+            <div id="map" style="height: 586px; width: 320px;"></div>
+            <div class="pt-3">
+                <a asp-page="CreateMapG" asp-route-id="@Request.Query["id"]" class="btn btn-default text-white bg-secondary">Edit Map View</a>
             </div>
         </div>
     </div>
@@ -208,5 +212,86 @@
                 $('#saveBtn').attr("disabled", true);
             }
         });
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleKey&libraries=drawing"></script>
+    <script>
+
+        $(document).ready(function () {
+            if ("@Model.MapCentreLng" != "" && "@Model.MapCentreLat" != "") {
+                $('#map').show();
+                initMap(@Model.MapCentreLng, @Model.MapCentreLat);
+            } else {
+                $('#map').hide();
+            };
+        });
+
+//Google map script
+    function initMap(lng, lat) {
+            google.maps.visualRefresh = true;
+            var isMobile = (navigator.userAgent.toLowerCase().indexOf('android') > -1) || (navigator.userAgent.match(/(iPod|iPhone|iPad|BlackBerry|Windows Phone|iemobile)/));
+
+            if (isMobile) {
+                var viewport = document.querySelector("meta[name=viewport]");
+                viewport.setAttribute('content', 'initial-scale=1.0, user-scalable=no');
+            }
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: new google.maps.LatLng(lat, lng),
+                zoom: @Model.MapZoom,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                disableDefaultUI: true
+            });
+
+
+    @if (Model.MapPolygons.Count > 0)
+        {
+        @foreach (var item in Model.MapPolygons)
+            {
+            <text>
+            var str = '@Html.Raw(item.Position)';
+
+            var poly = jQuery.parseJSON(str);
+
+            var PP = new google.maps.Polygon({
+                paths: poly,
+                strokeColor: '#32CD32',
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                fillColor: '#32CD32',
+                fillOpacity: 0.5,
+                clickable: true,
+                zIndex: @Html.Raw(item.ZIndex)
+            });
+
+            PP.setMap(map);
+
+        </text>
+            }
+        }
+
+       @if (Model.MapMarkers.Count > 0)
+        {
+        @foreach (var item in Model.MapMarkers)
+            {
+            <text>
+            var str = '@Html.Raw(item.Position)';
+
+            var pos = jQuery.parseJSON(str);
+
+            var PM = new google.maps.Marker({
+                position: pos,
+                label: '@Html.Raw(item.Title)',
+                clickable: true,
+                zIndex: @Html.Raw(item.ZIndex),
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 0
+                }
+            });
+            PM.setMap(map);
+
+        </text>
+            }
+        }
+    }
     </script>
 }

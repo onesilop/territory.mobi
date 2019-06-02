@@ -35,6 +35,7 @@ namespace territory.mobi.Pages
         public string NotesHT { get; set; }
         public string DncHT { get; set; }
         public bool ShowMap { get; set; } = false;
+    
 
 
 
@@ -91,7 +92,7 @@ namespace territory.mobi.Pages
             DNC = await _context.DoNotCall.ToListAsync();
             DNC = DNC.Where(d => d.MapId == Map.MapId && d.Display == true).ToList();
 
-            if (Map.GoogleRef != "") { ShowMap = true; }
+            if (await _context.MapFeature.Where(m => m.MapId == Map.MapId).CountAsync() > 0) { ShowMap = true; }
 
             return Page();
         }

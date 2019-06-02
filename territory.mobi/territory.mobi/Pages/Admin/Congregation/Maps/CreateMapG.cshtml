@@ -1,0 +1,457 @@
+﻿@page
+@model territory.mobi.Pages.CreateMapgModel
+
+@{
+    ViewData["Title"] = "territory.mobi";
+}
+<h3>Edit Google Map View</h3>
+<hr />
+        <div >
+            @if (Model.CurrentImage == null)
+            {
+            <img id="mappic" class="img-fluid w-50" src="@ViewData["catme"]" alt="Cat you next time" />
+            }
+            else if (Model.CurrentImage.ImgImage == null)
+            {
+            <img id="mappic" class="img-fluid w-50" src="@Model.CurrentImage.ImgPath" alt="@Model.CurrentImage.ImgText" />
+            }
+            else
+            {
+            <img id="mappic" class="img-fluid w-50" src="data:image;base64,@System.Convert.ToBase64String(Model.CurrentImage.ImgImage)" alt="@Model.CurrentImage.ImgText" />
+            }
+        </div>
+     <br />
+     <div>
+         @Html.AntiForgeryToken()
+         <input id="addy" type="text" class="form-control w-50" placeholder="Enter an address to centre the Map" />
+         <span id="addyNotFound" class="text-danger" style="display:none">Address not found try again.</span>
+
+         <br />
+         <button class="btn bg-secondary text-white" id="enterAddy">Centre Map</button>
+         <hr /><p />
+         <div id="map" style="height: 586px; width: 320px;"></div>
+     </div>
+     <div>
+         <hr /><p />
+         <a asp-page="/Admin/Congregation/Maps/Edit" asp-route-id="@Request.Query["id"]">Back to Map</a>
+     </div>
+
+
+
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleKey&libraries=drawing"></script>
+    <script>
+        var globalPZIndex = 0;
+        var globalMZIndex = 0;
+
+        $(document).ready(function () {
+            $("#enterAddy").click(function () {
+                var url = "https://nominatim.openstreetmap.org/search?q=" + $('#addy').val().toString().replace(/ /g, "+") + "&format=json";
+                console.log(url);
+
+                $.getJSON(url, function (data) {
+                    console.log(data);
+                    if (data[0] == null) {
+                        $('#addyNotFound').show();
+                    } else {
+                        $('#addyNotFound').hide();
+                        var Centre = new google.maps.LatLng(data[0].lat, data[0].lon);
+                        writeCentre(Centre, @Model.MapZoom);
+                        initMap(data[0].lon, data[0].lat);
+                    }
+                });
+            });
+
+            if ("@Model.MapCentreLng" != "" && "@Model.MapCentreLat" != "") {
+                initMap("@Model.MapCentreLng", "@Model.MapCentreLat");
+            };
+        });
+
+//Google map script
+    function initMap(lng, lat) {
+            google.maps.visualRefresh = true;
+            var isMobile = (navigator.userAgent.toLowerCase().indexOf('android') > -1) || (navigator.userAgent.match(/(iPod|iPhone|iPad|BlackBerry|Windows Phone|iemobile)/));
+
+            if (isMobile) {
+                var viewport = document.querySelector("meta[name=viewport]");
+                viewport.setAttribute('content', 'initial-scale=1.0, user-scalable=no');
+            }
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: new google.maps.LatLng(lat, lng),
+                zoom: @Model.MapZoom,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                disableDefaultUI: true,
+                zoomControl: true
+            });
+
+        map.addListener('dragend', function () {
+            writeCentre(map.getCenter(), map.getZoom());
+            });
+
+            map.addListener('zoom_changed', function () {
+                writeCentre(map.getCenter(), map.getZoom());
+                console.log(map.getZoom());
+            });
+
+    @if (Model.MapPolygons.Count > 0)
+        {
+        <text>globalPZIndex = @Model.MapPolygons.Count</text>
+        @foreach (var item in Model.MapPolygons)
+            {
+            <text>
+            var str = '@Html.Raw(item.Position)';
+
+            var poly = jQuery.parseJSON(str);
+
+            var PP = new google.maps.Polygon({
+                paths: poly,
+                strokeColor: '#32CD32',
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                fillColor: '#32CD32',
+                fillOpacity: 0.5,
+                clickable: true,
+                zIndex: @Html.Raw(item.ZIndex)
+            });
+
+            PP.setMap(map);
+
+            PP.addListener('click', function () {
+                var poly = this;
+                DeletePolygon(poly);
+            });
+        </text>
+            }
+        }
+
+       @if (Model.MapMarkers.Count > 0)
+        {
+        <text>globalMZIndex = @Model.MapMarkers.Count</text>
+        @foreach (var item in Model.MapMarkers)
+            {
+            <text>
+            var str = '@Html.Raw(item.Position)';
+
+            var pos = jQuery.parseJSON(str);
+
+            var PM = new google.maps.Marker({
+                position: pos,
+                label: '@Html.Raw(item.Title)',
+                clickable: true,
+                zIndex: @Html.Raw(item.ZIndex),
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 0
+                }
+            });
+            PM.setMap(map);
+
+            PM.addListener('click', function () {
+                UpdateMarker(this);
+            });
+        </text>
+            }
+        }
+
+            var drawingManager = new google.maps.drawing.DrawingManager({
+                drawingMode: null,
+                drawingControl: true,
+                drawingControlOptions: {
+                    position: google.maps.ControlPosition.TOP_LEFT,
+                    drawingModes: ['polygon', 'marker']
+                },
+                markerOptions: {
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 0
+                    },
+                    clickable: true
+                },
+                polygonOptions: {
+                    clickable: true
+                }
+            });
+
+            google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
+                // assuming you want the points in a div with id="info"
+                polygon.setOptions({
+                    zIndex: globalPZIndex,
+                    label: globalPZIndex
+                });
+                globalPZIndex++;
+                writePolygon(polygon);
+                polygon.addListener('click', function () {
+                    var poly = this;
+                    DeletePolygon(poly);
+                });
+            });
+
+            google.maps.event.addListener(drawingManager, 'markercomplete', function (marker) {
+                marker.setZIndex(globalMZIndex);
+                globalMZIndex++;
+                MarkerLabel(marker);
+                marker.addListener('click', function () {
+                    UpdateMarker(this);
+                });
+            });
+
+            drawingManager.setMap(map);
+        }
+
+    function MarkerLabel(marker) {
+        console.log(marker.getPosition());
+        bootbox.prompt({
+            title: "<h3>Enter Label</h3>",
+            inputType: "text",
+            value: marker.getLabel(),
+            onEscape: true,
+            backdrop: true,
+            centerVertical: true,
+            scrollable: true,
+            callback: function (result) {
+                if (result != null) {
+                    marker.setLabel(result);
+                    writeMarker(marker);
+                } else {
+                    marker.setMap(null);
+                };
+            }
+        });
+    }
+
+    function writePolygon(polygon) {
+        var path = polygon.getPath()
+        var coordinates = [];
+
+        for (var i = 0; i < path.length; i++) {
+            coordinates.push({
+                lat: path.getAt(i).lat(),
+                lng: path.getAt(i).lng()
+            });
+        }
+
+        console.log(JSON.stringify(coordinates))
+
+        $.ajax({
+                                    url: '/Admin/Congregation/Maps/CreateMapG?handler=Polygon',
+                                    type: 'POST',
+                                    beforeSend: function (xhr) {
+                                        xhr.setRequestHeader("XSRF-TOKEN",
+                                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                                    },
+                                    data: {
+                                        id: "@Request.Query["id"]",
+                                        position: JSON.stringify(coordinates),
+                                        color:  '#32CD32',
+                                        opacity: 0.5,
+                                        zIndex: polygon.zIndex
+                                    }
+                                })
+                                .done(function (result) {
+                                    console.log(result);
+                                    })
+                                .fail(function (result) {
+                                    console.log(result);
+                                    bootbox.dialog({
+                                        title: "<h3>Unable to Save</h3>",
+                                        message: "Sorry something went wrong and we couldn't save the polygon. Please try again and we'll try again.",
+                                        onEscape: true,
+                                        backdrop: true,
+                                        centerVertical: true,
+                                        scrollable: true
+                                    });
+                                    polygon.setMap(null);
+                                })
+    }
+
+    function writeMarker(marker) {
+        $.ajax({
+            url: '/Admin/Congregation/Maps/CreateMapG?handler=Label',
+            type: 'POST',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: {
+                id: "@Request.Query["id"]",
+                position: JSON.stringify(marker.getPosition()),
+                zIndex: marker.getZIndex(),
+                title: marker.getLabel()
+            }
+        })
+            .done(function (result) {
+                console.log(result);
+            })
+            .fail(function (result) {
+                console.log(result);
+                bootbox.dialog({
+                    title: "<h3>Unable to Save</h3>",
+                    message: "Sorry something went wrong and we couldn't save the marker. Please try again and we'll try again.",
+                    onEscape: true,
+                    backdrop: true,
+                    centerVertical: true,
+                    scrollable: true
+                });
+                marker.setMap(null);
+            });
+    };
+
+    function writeCentre(Centre, Zoom) {
+        console.log(Centre);
+        $.ajax({
+            url: '/Admin/Congregation/Maps/CreateMapG?handler=MapCentre',
+            type: 'POST',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: {
+                id: "@Request.Query["id"]",
+                position: JSON.stringify(Centre),
+                zoom: Zoom
+            }
+        })
+            .done(function (result) {
+                console.log(result);
+            })
+            .fail(function (result) {
+                console.log(result);
+                bootbox.dialog({
+                    title: "<h3>Unable to Save</h3>",
+                    message: "Sorry something went wrong and we couldn't save the centre of the map. Please search again and we'll try again.",
+                    onEscape: true,
+                    backdrop: true,
+                    centerVertical: true,
+                    scrollable: true
+                });
+            });
+
+        }
+
+    function DeletePolygon(polygon) {
+        bootbox.dialog({
+                title: "<h3>Delete</h3>",
+                message: "Would you like to delete this shape",
+                onEscape: true,
+                backdrop: true,
+                centerVertical: true,
+                scrollable: true,
+                buttons: {
+                    cancel: {
+                        label: "Cancel",
+                        className: 'btn-info',
+                        callback: function () {
+                            console.log('Custom cancel clicked');
+                        }
+                    },
+                    noclose: {
+                        label: "Delete",
+                        className: 'btn-danger',
+                        callback: function () {
+                            $.ajax({
+                                url: '/Admin/Congregation/Maps/CreateMapG?handler=DeletePolygon',
+                                type: 'POST',
+                                beforeSend: function (xhr) {
+                                    xhr.setRequestHeader("XSRF-TOKEN",
+                                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                                },
+                                data: {
+                                    id: "@Request.Query["id"]",
+                                    zIndex: polygon.zIndex
+                                    }
+                            })
+                            .done(function (result) {
+                                console.log(result);
+                                polygon.setMap(null);
+                                return true;
+                                })
+                            .fail(function (result) {
+                                console.log(result);
+                                bootbox.dialog({
+                                    title: "<h3>Unable to Delete</h3>",
+                                    message: "Sorry something went wrong and we couldn't delete. Please try again.",
+                                    onEscape: true,
+                                    backdrop: true,
+                                    centerVertical: true,
+                                    scrollable: true
+                                });
+                                return false;
+                            })
+                        }
+                    }
+                }
+            });
+        }
+
+    function UpdateMarker(marker) {
+        bootbox.dialog({
+                title: "<h3>Edit</h3>",
+                message: "Update or Delete this Label",
+                onEscape: true,
+                backdrop: true,
+                centerVertical: true,
+                scrollable: true,
+                buttons: {
+                   cancel: {
+                        label: "Cancel",
+                        className: 'btn-info',
+                        callback: function () {
+                            console.log('Custom cancel clicked');
+                        }
+                    }, Update: {
+                        label: "Update",
+                        className: 'btn-info',
+                        callback: function () {
+                            console.log('Custom update clicked');
+                            MarkerLabel(marker);
+                        }
+                    },
+                    noclose: {
+                        label: "Delete",
+                        className: 'btn-danger',
+                        callback: function () {
+                            $.ajax({
+                                url: '/Admin/Congregation/Maps/CreateMapG?handler=DeleteLabel',
+                                type: 'POST',
+                                beforeSend: function (xhr) {
+                                    xhr.setRequestHeader("XSRF-TOKEN",
+                                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                                },
+                                data: {
+                                    id: "@Request.Query["id"]",
+                                    zIndex: marker.getZIndex()
+                                    }
+                            })
+                            .done(function (result) {
+                                console.log(result);
+                                marker.setMap(null);
+                                return true;
+                                })
+                            .fail(function (result) {
+                                console.log(result);
+                                bootbox.dialog({
+                                    title: "<h3>Unable to Delete</h3>",
+                                    message: "Sorry something went wrong and we couldn't delete. Please try again.",
+                                    onEscape: true,
+                                    backdrop: true,
+                                    centerVertical: true,
+                                    scrollable: true
+                                });
+                                return false;
+                            })
+                        }
+                    }
+                }
+            });
+        }
+
+       
+
+
+    </script>
+}

@@ -253,11 +253,16 @@ namespace territory.mobi.Models
                     .HasColumnName("updateDatetime")
                     .HasColumnType("datetime");
 
+                entity.Property(e => e.Geocode)
+                    .HasColumnName("geocode")
+                    .IsUnicode(false);
+
                 entity.HasOne(d => d.Map)
                     .WithMany(p => p.DoNotCall)
                     .HasForeignKey(d => d.MapId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_DoNotCall_Map");
+
             });
 
             modelBuilder.Entity<Images>(entity =>
@@ -421,9 +426,13 @@ namespace territory.mobi.Models
             {
                 entity.Property(e => e.MapFeatureId).ValueGeneratedNever();
 
-                entity.Property(e => e.Centre)
-                    .IsRequired()
-                    .IsUnicode(false);
+                entity.Property(e => e.ZIndex)
+                    .HasColumnName("zIndex")
+                    .IsRequired();
+
+                entity.Property(e => e.Zoom)
+                   .HasColumnName("zoom")
+                   .IsRequired();
 
                 entity.Property(e => e.Color)
                     .HasMaxLength(10)
