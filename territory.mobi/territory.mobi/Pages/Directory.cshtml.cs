@@ -29,7 +29,7 @@ namespace territory.mobi.Pages
                 return NotFound();
             }
 
-            Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongName == CongName);
+            Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongName.ToUpper() == CongName.ToUpper());
 
             if (Cong == null)
             {
