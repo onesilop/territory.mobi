@@ -29,6 +29,8 @@ namespace territory.mobi.Pages
                 return NotFound();
             }
 
+            CongName = CongName.Replace("/", "");
+
             Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongName.ToUpper() == CongName.ToUpper());
 
             if (Cong == null)

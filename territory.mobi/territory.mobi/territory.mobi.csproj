@@ -9,9 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\Admin\Settings - Copy\**" />
     <Compile Remove="wwwroot\images\map_images\**" />
+    <Content Remove="Pages\Admin\Settings - Copy\**" />
     <Content Remove="wwwroot\images\map_images\**" />
+    <EmbeddedResource Remove="Pages\Admin\Settings - Copy\**" />
     <EmbeddedResource Remove="wwwroot\images\map_images\**" />
+    <None Remove="Pages\Admin\Settings - Copy\**" />
     <None Remove="wwwroot\images\map_images\**" />
   </ItemGroup>
 

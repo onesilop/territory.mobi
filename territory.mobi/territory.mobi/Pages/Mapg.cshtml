@@ -18,13 +18,13 @@
         <img class="MapMenuIcon" src="~/images/assets/mapnav.png" />
     </a>
 
-    @if (Model.Map.Parking != "")
+    @if (Model.Map.Parking != "" && Model.Map.Parking != null)
     {
         <a id="parking" class="footer-link align-self-center m-1" href="#">
             <img class="MapMenuIcon" src="~/images/assets/Parking.png" />
         </a>
     }
-    @if (Model.Map.Notes != "")
+    @if (Model.Map.Notes != "" && Model.Map.Notes != null)
     {
         <a id="notes" class="footer-link align-self-center m-1" href="#">
             <img class="MapMenuIcon" src="~/images/assets/Notes.png" />

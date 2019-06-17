@@ -21,7 +21,7 @@
            
                 @foreach (var map in sec.Maps.OrderBy(x => x.SortOrder))
                 {
-                    <a class="btn btn-primary btn-med dir-btn mb-1 h4" asp-page="./Map" asp-route-CongName="@Model.Cong.CongName" asp-route-MapNo="@map.MapKey"><h4 class="text-white">@Html.DisplayFor(modelItem => map.MapKey)</h4></a>
+                    <a class="btn btn-primary btn-med dir-btn mb-1 h4" asp-page="./Map" asp-route-CongName="@Model.Cong.CongName" asp-route-MapNo="@map.MapKey"><h4 class="text-white text-center align-middle">@Html.DisplayFor(modelItem => map.MapKey)</h4></a>
                 }
         </div>
         }

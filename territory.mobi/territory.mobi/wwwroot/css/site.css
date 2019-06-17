@@ -69,8 +69,7 @@ body {
     min-height: 50px;
     min-width: 50px;
     border-radius: 3.5px !important;
-    text-align: center !important;
-    padding: 7px 0 0 0 !important;
+    padding-top: 1.7vh;
 }
 
 .sec-head {
