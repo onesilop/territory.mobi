@@ -29,13 +29,13 @@ namespace territory.mobi.Pages
                 return NotFound();
             }
 
-            CongName = CongName.Replace("/", "");
-
+            CongName = CongName.Split("/")[0];
+                        
             Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongName.ToUpper() == CongName.ToUpper());
 
             if (Cong == null)
             {
-                return NotFound();
+                return Redirect("Index");
             }
 
             Map = await _context.Map.ToListAsync();
