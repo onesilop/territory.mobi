@@ -93,12 +93,12 @@ namespace territory.mobi.Pages.Admin.Congregation
             }
         }
 
-        public async Task<IActionResult> OnPostInviteUser(string email, string congid)
+        public async Task<IActionResult> OnPostInviteUser(string email, Guid congid)
         {
             Token userInvite = new Token
             {
                 TokenId = Guid.NewGuid(),
-                UserCong = congid,
+                UserCong = congid.ToString(),
                 UserEmail = email,
                 UpdateDateTime = DateTime.UtcNow
             };
@@ -108,14 +108,16 @@ namespace territory.mobi.Pages.Admin.Congregation
                     var RedirectURL = SiteAddress.SettingValue.ToString() + "/Identity/Account/Register?token=" + userInvite.TokenId.ToString();
 
                     _context.Token.Add(userInvite);
-           
-                
+
+                    Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongId == congid);
+
+
                     await _context.SaveChangesAsync();
                     Mailer mailer = new Mailer(_context);
-                    
-                    var subject = "territory.mobi Invitation";
-                    var htmlContent = "<h5>Hey there</h5></br>Please select this link to register for territory.mobi</br><a href='" + RedirectURL + "' >Register</a>";
-                    return await mailer.SendMailAsync(email, subject, htmlContent, "");
+                    return await mailer.SendUserInviteMail(email, RedirectURL, Cong.CongName.ToString());
+                    //var subject = "territory.mobi Invitation";
+                    //var htmlContent = "<h5>Hey there</h5></br>Please select this link to register for territory.mobi</br><a href='" + RedirectURL + "' >Register</a>";
+                    //return await mailer.SendMailAsync(email, subject, htmlContent, "");
                 }
             catch (Exception ex)
                 {

@@ -97,6 +97,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
 
                     lst = _context.Cong.Where(a => a.CongId.ToString() == Token.UserCong).ToList();
                     ViewData["Congs"] = new SelectList(lst, "CongName", "CongName",lst[0].CongName);
+                    Input = new InputModel();
                     Input.Email = Token.UserEmail;
 
                 }
