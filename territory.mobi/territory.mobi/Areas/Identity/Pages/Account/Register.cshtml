@@ -56,8 +56,8 @@
 
                     <span asp-validation-for="AspNetUserClaims.ClaimValue" class="text-danger"></span>
                     <label>To create a new congregation enter the name here:</label>
-                    <input id="NewCong" asp-for="Input.NewCongName" />
-                    <span asp-validation-for="Input.Surname" class="text-danger"></span>
+                    <input id="NewCong" asp-for="Input.NewCongName" class="form-control"/>
+                    <span asp-validation-for="Input.NewCongName" class="text-danger"></span>
                     <span id="NewCongError" class="text-danger d-none">Congregation Name already exists, there cannot be a duplicate sorry.</span>
                 }
             </div>
@@ -71,12 +71,12 @@
 
     <script type="text/javascript">
         $('#NewCong').keyup(function () {
-            var cngs = jQuery.makeArray(@Html.Raw(Model.Congs));
-            if (jQuery.inArray($('#NewCong').val(), cngs) == -1) {
-                $('#NewCongError').hide();
+            var cngs = jQuery.makeArray(@Html.Raw(Model.Congs.ToUpper()));
+            if (jQuery.inArray($('#NewCong').val().toUpperCase(), cngs) == -1) {
+                $('#NewCongError').addClass("d-none");
                 $('#saveBtn').attr("disabled", false);
             } else {
-                $('#NewCongError').show();
+                $('#NewCongError').removeClass("d-none");
                 $('#saveBtn').attr("disabled", true);
             }
         });

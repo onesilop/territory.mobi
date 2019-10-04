@@ -35,8 +35,13 @@ namespace territory.mobi.Pages
         public string NotesHT { get; set; }
         public string DncHT { get; set; }
         public bool ShowMap { get; set; } = false;
-    
-
+        public string GoogleKey { get; set; }
+        public IList<Setting> Setting { get; set; }
+        public IList<MapFeature> MapPolygons { get; set; }
+        public IList<MapFeature> MapMarkers { get; set; }
+        public string MapCentreLat { get; set; } = "";
+        public string MapCentreLng { get; set; } = "";
+        public int MapZoom { get; set; } = 16;
 
 
         public ContentResult OnGetPwdCheck(string pwd,Guid congId, Guid mapId)
@@ -93,6 +98,27 @@ namespace territory.mobi.Pages
             DNC = DNC.Where(d => d.MapId == Map.MapId && d.Display == true).ToList();
 
             if (await _context.MapFeature.Where(m => m.MapId == Map.MapId).CountAsync() > 0) { ShowMap = true; }
+
+            if (Map.MapPolygon != "") { ShowMap = true; }
+
+            Setting set = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync();
+            GoogleKey = set.SettingValue;
+
+            MapPolygons = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Polygon").ToListAsync();
+            MapMarkers = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Marker").ToListAsync();
+            MapFeature MapCentre = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Centre").FirstOrDefaultAsync();
+
+            if (MapCentre == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                dynamic Coords = Newtonsoft.Json.JsonConvert.DeserializeObject(MapCentre.Position);
+                MapCentreLat = Coords.lat;
+                MapCentreLng = Coords.lng;
+                MapZoom = MapCentre.Zoom;
+            }
 
             return Page();
         }

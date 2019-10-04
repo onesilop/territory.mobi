@@ -8,7 +8,7 @@
     ViewData["RightTitle"] = Model.Map.MapArea;
 }
 
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 
 <div id="imgDiv" class="m-0 p-0 align-middle">
@@ -21,15 +21,19 @@
     {
         <img id="mappic" class="img-fluid align-self-center align-middle d-block mx-auto w-auto h-auto" src="data:image;base64,@System.Convert.ToBase64String(Model.Image.ImgImage)" alt="@Model.Image.ImgText" />
     }
-
 </div>
-<div id="ftr" class="d-inline-flex fixed-bottom bg-primary justify-content-center">
+
+    <div id="map" class="d-none" style="height: 102%; width: 102%;"></div>
+    <div id="ftr" class="d-inline-flex fixed-bottom bg-primary justify-content-center">
     <a class="footer-link align-self-center m-1" asp-page="./Directory" asp-route-CongName="@Model.Cong.CongName">
         <img class="MapMenuIcon" src="~/images/assets/TOC1.png" />
     </a>
+    <a id="imgMap" class="footer-link align-self-center m-1 d-none" href="#">
+        <img class="MapMenuIcon" src="~/images/assets/mapnav.png" />
+    </a>
     @if (Model.ShowMap)
     {
-        <a id="googMap" class="footer-link align-self-center m-1" asp-page="./Mapg"  asp-route-CongName="@Model.Cong.CongName" asp-route-MapNo="@Model.Map.MapKey">
+        <a id="googMap" class="footer-link align-self-center m-1" href="#">
             <img class="MapMenuIcon" src="~/images/assets/Navigation.png" />
         </a>
     }
@@ -88,7 +92,22 @@
     </script>
 
     <script type="text/javascript">
-            $(document).ready(function () {
+        $(document).ready(function () {
+            
+            $("#googMap").click(function () {
+                $("#imgMap").removeClass("d-none");
+                $("#map").removeClass("d-none");
+                $("#googMap").addClass("d-none");
+                $("#imgDiv").addClass("d-none");
+                initMap(@Model.MapCentreLng, @Model.MapCentreLat);
+            });
+            $("#imgMap").click(function () {
+                $("#googMap").removeClass("d-none");
+                $("#imgDiv").removeClass("d-none");
+                $("#imgMap").addClass("d-none");
+                $("#map").addClass("d-none");
+            });
+
                 $("#parking").click(function () {
                     bootbox.dialog({
                     title: "<h3>Parking</h3>",
@@ -167,5 +186,75 @@
                 })
             };
 
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleKey&libraries=drawing"></script>
+    <script>
+//Google map script
+    function initMap(lng, lat) {
+            google.maps.visualRefresh = true;
+            var isMobile = (navigator.userAgent.toLowerCase().indexOf('android') > -1) || (navigator.userAgent.match(/(iPod|iPhone|iPad|BlackBerry|Windows Phone|iemobile)/));
+
+            if (isMobile) {
+                var viewport = document.querySelector("meta[name=viewport]");
+                viewport.setAttribute('content', 'initial-scale=1.0, user-scalable=no');
+            }
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: new google.maps.LatLng(lat, lng),
+                zoom: @Model.MapZoom,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                disableDefaultUI: true
+            });
+
+    @if (Model.MapPolygons.Count > 0)
+        {
+        @foreach (var item in Model.MapPolygons)
+            {
+            <text>
+            var str = '@Html.Raw(item.Position)';
+
+            var poly = jQuery.parseJSON(str);
+
+            var PP = new google.maps.Polygon({
+                paths: poly,
+                strokeColor: '#32CD32',
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                fillColor: '#32CD32',
+                fillOpacity: 0.5,
+                clickable: true,
+                zIndex: @Html.Raw(item.ZIndex)
+            });
+
+            PP.setMap(map);
+
+        </text>
+            }
+        }
+
+       @if (Model.MapMarkers.Count > 0)
+        {
+        @foreach (var item in Model.MapMarkers)
+            {
+            <text>
+            var str = '@Html.Raw(item.Position)';
+
+            var pos = jQuery.parseJSON(str);
+
+            var PM = new google.maps.Marker({
+                position: pos,
+                label: '@Html.Raw(item.Title)',
+                clickable: true,
+                zIndex: @Html.Raw(item.ZIndex),
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 0
+                }
+            });
+            PM.setMap(map);
+
+        </text>
+            }
+        }
+    }
     </script>
 }

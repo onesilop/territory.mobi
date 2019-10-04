@@ -150,14 +150,17 @@ namespace territory.mobi.Areas.Identity.Pages.Account
 
                     if (Input.NewCongName != null)
                     {
-                        Cong NewCong = new Cong
-                        {
-                            CongId = Guid.NewGuid(),
-                            CongName = Input.NewCongName,
-                            UpdateDatetime = DateTime.UtcNow
-                        };
+                        if (_context.Cong.Count(a => a.CongName.ToUpper() == Input.NewCongName.ToUpper()) == 0)
+                            { 
+                            Cong NewCong = new Cong
+                            {
+                                CongId = Guid.NewGuid(),
+                                CongName = Input.NewCongName,
+                                UpdateDatetime = DateTime.UtcNow
+                            };
 
-                        _context.Cong.Add(NewCong);
+                            _context.Cong.Add(NewCong);
+                        }
                         AspNetUserClaims.ClaimType = "Congregation";
                         AspNetUserClaims.ClaimValue = Input.NewCongName;
                         
