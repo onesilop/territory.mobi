@@ -108,11 +108,7 @@ namespace territory.mobi.Pages
             MapMarkers = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Marker").ToListAsync();
             MapFeature MapCentre = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Centre").FirstOrDefaultAsync();
 
-            if (MapCentre == null)
-            {
-                return NotFound();
-            }
-            else
+            if (MapCentre != null)
             {
                 dynamic Coords = Newtonsoft.Json.JsonConvert.DeserializeObject(MapCentre.Position);
                 MapCentreLat = Coords.lat;

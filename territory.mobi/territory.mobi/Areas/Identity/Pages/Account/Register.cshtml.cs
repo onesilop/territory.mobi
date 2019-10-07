@@ -23,21 +23,20 @@ namespace territory.mobi.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly Mailer _emailSender;
         private readonly territory.mobi.Models.TerritoryContext _context;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender,
             TerritoryContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
             _context = context;
+            _emailSender = new Mailer(_context);
         }
 
         [BindProperty]
@@ -131,8 +130,8 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                         values: new { userId = user.Id, code = code },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await _emailSender.SendMailAsync(Input.Email, "Confirm your email",
+                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.",null);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
@@ -160,6 +159,8 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                             };
 
                             _context.Cong.Add(NewCong);
+                            await _emailSender.SendMailAsync(Input.Email, "New Congreation "+ Input.NewCongName+" Created",
+                               $"Your new congregation " + Input.NewCongName + " has been created. When you log into the administration portal you will be able to add maps and administer do not calls. " , null);
                         }
                         AspNetUserClaims.ClaimType = "Congregation";
                         AspNetUserClaims.ClaimValue = Input.NewCongName;

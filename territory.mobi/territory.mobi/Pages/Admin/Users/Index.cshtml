@@ -9,52 +9,123 @@
     <title>Index</title>
 </head>
 <body>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.AspNetUsers[0].Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AspNetUsers[0].Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AspNetUsers[0].Surname)
-            </th>
-          <th>
-                @Html.DisplayNameFor(model => model.AspNetUsers[0].PhoneNumber)
-            </th>
-             <th>
-                @Html.DisplayNameFor(model => model.AspNetUsers[0].LockoutEnabled)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.AspNetUsers) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Surname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LockoutEnabled)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">View</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    @if (TempData[IndexModel.MessageKey] is string message)
+    {
+        <div id="successMessage" class="alert alert-success">@message</div>
+    }
+    @if (TempData[IndexModel.ErrorKey] is string Errmessage)
+    {
+        <div id="successMessage" class="alert alert-danger">@Errmessage</div>
+    }
+    <form method="post">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        SendTo
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AspNetUsers[0].Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AspNetUsers[0].Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AspNetUsers[0].Surname)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AspNetUsers[0].PhoneNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AspNetUsers[0].LockoutEnabled)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.AspNetUsers)
+                {
+                    <tr>
+                        <td>
+                            <input id="chk" name="AreChecked" type="checkbox" value="@item.Email" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Surname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhoneNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LockoutEnabled)
+                        </td>
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@item.Id">View</a> |
+                            <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="form-group">
+            <div id="notif" class="d-none">
+                <div>
+                    <label class="control-label">Subject</label>
+                    <input asp-for="Subject" class="form-control" />
+                </div>
+                <div>
+                    <label class="control-label">Body</label>
+                    <textarea id="taBody" asp-for="Body"></textarea>
+                </div>
+                <div>
+                    <br /> <input type="submit" value="Send Notification" class="btn btn-default bg-primary text-white" />
+                </div>
+            </div>
+        </div>
+    </form>
+
+    @section Scripts
+    {
+
+        <script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=p2i7lwvunskci02cqotz0r5e9sacm04shhnafxbw8ru2r5y8"></script>
+        <script>
+            tinymce.init({
+                selector: '#taBody',
+                menubar: false
+            });
+        </script>
+
+        <script type="text/javascript">
+            var chks = 0;
+
+            $(function () {
+                // setTimeout() function will be fired after page is loaded
+                // it will wait for 5 sec. and then will fire
+                // $("#successMessage").hide() function
+                setTimeout(function () {
+                    $("#successMessage").addClass('d-none');
+                }, 5000);
+            });
+            $(document).ready(function () {
+                $(":checkbox").click(function () {
+                    if (this.checked) {
+                        $("#notif").removeClass("d-none");
+                        chks = chks + 1;
+                    }
+                    else {
+                        chks = chks - 1;
+                        if (chks == 0)
+                            $("#notif").addClass("d-none");
+                    }
+                });
+            });
+        </script>
+    }
 </body>
 </html>
