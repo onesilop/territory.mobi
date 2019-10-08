@@ -5,200 +5,252 @@
     ViewData["Title"] = "Edit";
 }
 
-<h3>Edit Map View</h3>
+<h3>Map Details</h3>
 <hr />
-<div class="row">
-    <form method="post">
-        <div class="col-md-5">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Map.MapId" />
-            <input type="hidden" asp-for="Map.CongId" />
-            <input type="hidden" asp-for="Map.ImgId" />
-            <input type="hidden" asp-for="Map.UpdateDatetime" />
-            <div class="form-group">
-                <label asp-for="Map.MapKey" class="control-label"></label>
-                <input id="mapKey" asp-for="Map.MapKey" class="form-control" />
-                <span asp-validation-for="Map.MapKey" class="text-danger"></span>
-                <span id="mapKeyValid" class="text-danger" style="display:none">Map key already taken, please change</span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Map.Display" class="control-label"></label>
-                <input asp-for="Map.Display" class="form-check-inline" />
-                <span asp-validation-for="Map.Display" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Map.SectionId" class="control-label"></label>
-                <select asp-for="Map.SectionId" class="form-control" asp-items="@ViewBag.Section">
-                    <option value="">No Section</option>
-                </select>
-                <span asp-validation-for="Map.SectionId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Map.MapDesc" class="control-label"></label>
-                <input asp-for="Map.MapDesc" class="form-control" />
-                <span asp-validation-for="Map.MapDesc" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Map.MapArea" class="control-label"></label>
-                <input asp-for="Map.MapArea" class="form-control" />
-                <span asp-validation-for="Map.MapArea" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Map.SortOrder" class="control-label"></label>
-                <input asp-for="Map.SortOrder" class="form-control" />
-                <span asp-validation-for="Map.SortOrder" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Map.MapType" class="control-label"></label>
-                <input asp-for="Map.MapType" class="form-control" />
-                <span asp-validation-for="Map.MapType" class="text-danger"></span>
-            </div>
+<div class="panel-group" id="accordion">
+    <div class="panel border pt-2 mb-2">
+        <div class="panel-heading">
+            <h5 class="panel-title pl-2">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                    Basic Information
+                </a>
+            </h5>
+        </div>
+        <div id="collapse1" class="panel-collapse collapse show border-top mb-2">
+            <form method="post">
+
+                <div class="col-md-6">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Map.MapId" />
+                    <input type="hidden" asp-for="Map.CongId" />
+                    <input type="hidden" asp-for="Map.ImgId" />
+                    <input type="hidden" asp-for="Map.UpdateDatetime" />
+                    <div class="form-group">
+                        <label asp-for="Map.MapKey" class="control-label"></label>
+                        <input id="mapKey" asp-for="Map.MapKey" class="form-control" />
+                        <span asp-validation-for="Map.MapKey" class="text-danger"></span>
+                        <span id="mapKeyValid" class="text-danger" style="display:none">Map key already taken, please change</span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Map.Display" class="control-label"></label>
+                        <input asp-for="Map.Display" class="form-check-inline" />
+                        <span asp-validation-for="Map.Display" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Map.SectionId" class="control-label"></label>
+                        <select asp-for="Map.SectionId" class="form-control" asp-items="@ViewBag.Section">
+                            <option value="">No Section</option>
+                        </select>
+                        <span asp-validation-for="Map.SectionId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Map.MapDesc" class="control-label"></label>
+                        <input asp-for="Map.MapDesc" class="form-control" />
+                        <span asp-validation-for="Map.MapDesc" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Map.MapArea" class="control-label"></label>
+                        <input asp-for="Map.MapArea" class="form-control" />
+                        <span asp-validation-for="Map.MapArea" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Map.SortOrder" class="control-label"></label>
+                        <input asp-for="Map.SortOrder" class="form-control" />
+                        <span asp-validation-for="Map.SortOrder" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Map.MapType" class="control-label"></label>
+                        <input asp-for="Map.MapType" class="form-control" />
+                        <span asp-validation-for="Map.MapType" class="text-danger"></span>
+                    </div>
 
 
-            <div class="form-group d-none">
-                <label asp-for="Map.MapPolygon" class="control-label"></label>
-                <input asp-for="Map.MapPolygon" class="form-control" />
-                <span asp-validation-for="Map.MapPolygon" class="text-danger"></span>
-            </div>
+                    <div class="form-group d-none">
+                        <label asp-for="Map.MapPolygon" class="control-label"></label>
+                        <input asp-for="Map.MapPolygon" class="form-control" />
+                        <span asp-validation-for="Map.MapPolygon" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group d-none">
-                <label asp-for="Map.GoogleRef" class="control-label"></label>
-                <input asp-for="Map.GoogleRef" class="form-control" />
-                <span asp-validation-for="Map.GoogleRef" class="text-danger"></span>
+                    <div class="form-group d-none">
+                        <label asp-for="Map.GoogleRef" class="control-label"></label>
+                        <input asp-for="Map.GoogleRef" class="form-control" />
+                        <span asp-validation-for="Map.GoogleRef" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <label asp-for="Map.Notes" class="control-label"></label>
+                        <textarea id="taNotes" asp-for="Map.Notes"></textarea>
+                        <span asp-validation-for="Map.Notes" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Map.Parking" class="control-label"></label>
+                        <textarea id="taParking" asp-for="Map.Parking" class="form-control"></textarea>
+                        <span asp-validation-for="Map.Parking" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input id="saveBtn" type="submit" value="Save" class="btn btn-default bg-primary text-white" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="panel  border pt-2 mb-2">
+        <div class="panel-heading">
+            <h5 class="panel-title pl-2">
+                <a class="h5" data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                    Map Image
+                </a>
+            </h5>
+        </div>
+        <div id="collapse2" class="panel-collapse collapse">
+            <div class="col-md-10">
+                <div class="form-group p-2">
+                    @if (Model.CurrentImage == null)
+                    {
+                        <img id="mappic" class="img-fluid w-50" src="@ViewData["catme"]" alt="Cat you next time" />
+                    }
+                    else if (Model.CurrentImage.ImgImage == null)
+                    {
+                        <img id="mappic" class="img-fluid w-50" src="@Model.CurrentImage.ImgPath" alt="@Model.CurrentImage.ImgText" />
+                    }
+                    else
+                    {
+                        <img id="mappic" class="img-fluid w-50" src="data:image;base64,@System.Convert.ToBase64String(Model.CurrentImage.ImgImage)" alt="@Model.CurrentImage.ImgText" />
+                    }
+                    <div class="form-group mt-1">
+                        <form asp-page-handler="UploadImage" method="post" enctype="multipart/form-data">
+                            <input type="hidden" asp-for="Map.MapId" name="id" />
+                            <div>
+                                <label class="btn btn-default bg-primary text-white mt-2">
+                                    Find New Image <input hidden type="file" style="display: none;" id="NewImage" name="files">
+                                </label>
+                                <button id="changeMap" class="btn btn-default bg-primary text-white ml-2">Save Image</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-md-10">
-            <div class="form-group">
-                <label asp-for="Map.Notes" class="control-label"></label>
-                <textarea id="taNotes" asp-for="Map.Notes"></textarea>
-                <span asp-validation-for="Map.Notes" class="text-danger"></span>
+    </div>
+        <div class="panel  border pt-2 mb-2">
+            <div class="panel-heading">
+                <h5 class="panel-title pl-2">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                        Google Map
+                    </a>
+                </h5>
             </div>
-            <div class="form-group">
-                <label asp-for="Map.Parking" class="control-label"></label>
-                <textarea id="taParking" asp-for="Map.Parking" class="form-control"></textarea>
-                <span asp-validation-for="Map.Parking" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input id="saveBtn" type="submit" value="Save" class="btn btn-default bg-primary text-white" />
-            </div>
-        </div>
-    </form>
-    <div class="col-md-10">
-        <div class="form-group border rounded p-3">
-            @if (Model.CurrentImage == null)
-            {
-                <img id="mappic" class="img-fluid w-50" src="@ViewData["catme"]" alt="Cat you next time" />
-            }
-            else if (Model.CurrentImage.ImgImage == null)
-            {
-                <img id="mappic" class="img-fluid w-50" src="@Model.CurrentImage.ImgPath" alt="@Model.CurrentImage.ImgText" />
-            }
-            else
-            {
-                <img id="mappic" class="img-fluid w-50" src="data:image;base64,@System.Convert.ToBase64String(Model.CurrentImage.ImgImage)" alt="@Model.CurrentImage.ImgText" />
-            }
-            <div class="form-group mt-1">
-                <form asp-page-handler="UploadImage" method="post" enctype="multipart/form-data">
-                    <input type="hidden" asp-for="Map.MapId" name="id" />
-                    <label class="btn btn-default bg-primary text-white">
-                        Find New Image <input hidden type="file" style="display: none;" id="NewImage" name="files">
-                    </label><p />
-                    <button id="changeMap" class="btn btn-default bg-primary text-white">Save Image</button>
-                </form>
+            <div id="collapse3" class="panel-collapse collapse">
+                <div class="form-group border rounded p-3">
+                    <div id="map" style="height: 586px; width: 100%;"></div>
+                    <div class="pt-3">
+                        <a asp-page="CreateMapG" asp-route-id="@Request.Query["id"]" class="btn btn-default text-white bg-secondary">Edit Google View</a>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group border rounded p-3">
-            <div id="map" style="height: 586px; width: 320px;"></div>
-            <div class="pt-3">
-                <a asp-page="CreateMapG" asp-route-id="@Request.Query["id"]" class="btn btn-default text-white bg-secondary">Edit Map View</a>
+    
+    <div class="panel border pt-2 mb-2">
+        <div class="panel-heading">
+            <h5 class="panel-title pl-2">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">
+                    Do Not Calls
+                </a>
+            </h5>
+        </div>
+        <div id="collapse4" class="panel-collapse collapse">
+            <div class="form-group border rounded p-3">
+                <p>
+                    <a asp-page="./DoNotCalls/Create" asp-route-id="@Request.Query["id"]">Create New</a>
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DoNotCall[0].AptNo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DoNotCall[0].StreetNo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DoNotCall[0].StreetName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DoNotCall[0].Suburb)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DoNotCall[0].Display)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DoNotCall[0].DateCreated)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DoNotCall[0].DateValidated)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.DoNotCall)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AptNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StreetNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StreetName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Suburb)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Display)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateCreated)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateValidated)
+                                </td>
+                                <td>
+                                    <a asp-page="./DoNotCalls/Edit" asp-route-id="@item.DncId">Edit</a> |
+                                    <a asp-page="./DoNotCalls/Delete" asp-route-id="@item.DncId">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
-<div class="form-group border rounded p-3">
-    <h3>Do Not Calls</h3>
-    <p>
-        <a asp-page="./DoNotCalls/Create" asp-route-id="@Request.Query["id"]">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.DoNotCall[0].AptNo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DoNotCall[0].StreetNo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DoNotCall[0].StreetName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DoNotCall[0].Suburb)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DoNotCall[0].Display)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DoNotCall[0].DateCreated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DoNotCall[0].DateValidated)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.DoNotCall)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AptNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StreetNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StreetName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Suburb)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Display)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateCreated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateValidated)
-                    </td>
-                    <td>
-                        <a asp-page="./DoNotCalls/Edit" asp-route-id="@item.DncId">Edit</a> |
-                        <a asp-page="./DoNotCalls/Delete" asp-route-id="@item.DncId">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-<div>
-    <a asp-page="/Admin/Congregation/Edit" asp-route-id="@Model.Map.CongId">Back to List</a>
-</div>
+            <div>
+                <a asp-page="/Admin/Congregation/Edit" asp-route-id="@Model.Map.CongId">Back to List</a>
+            </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=p2i7lwvunskci02cqotz0r5e9sacm04shhnafxbw8ru2r5y8"></script>
-    <script>
-        tinymce.init({
-            selector: '#taNotes',
-            menubar: false
-        });
-        tinymce.init({
-            selector: '#taParking',
-            menubar: false
-        });
-    </script>
-    <script type="text/javascript">
+            @section Scripts {
+                @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+                <script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=p2i7lwvunskci02cqotz0r5e9sacm04shhnafxbw8ru2r5y8"></script>
+                <script>
+                    tinymce.init({
+                        selector: '#taNotes',
+                        menubar: false,
+                        plugins: "lists",
+                        toolbar: 'undo redo | styleselect | bold italic | link image | alignleft aligncenter alignright alignjustify| outdent indent| numlist bullist |'
+                    });
+                    tinymce.init({
+                        selector: '#taParking',
+                        menubar: false,
+                        plugins: "lists",
+                        toolbar: 'undo redo | styleselect | bold italic | link image | alignleft aligncenter alignright alignjustify| outdent indent| numlist bullist |'
+
+                    });
+                </script>
+                <script type="text/javascript">
         $('#mapKey').keyup(function () {
             var cngs = jQuery.makeArray(@Html.Raw(Model.MapKeys));
             console.log(cngs);
@@ -212,9 +264,9 @@
                 $('#saveBtn').attr("disabled", true);
             }
         });
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleKey&libraries=drawing"></script>
-    <script>
+                </script>
+                <script src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleKey&libraries=drawing"></script>
+                <script>
 
         $(document).ready(function () {
             if ("@Model.MapCentreLng" != "" && "@Model.MapCentreLat" != "") {
@@ -293,5 +345,5 @@
             }
         }
     }
-    </script>
-}
+                </script>
+            }

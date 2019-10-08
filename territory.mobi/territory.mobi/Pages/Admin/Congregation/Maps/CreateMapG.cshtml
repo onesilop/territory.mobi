@@ -29,11 +29,14 @@
          <br />
          <button class="btn bg-secondary text-white" id="enterAddy">Centre Map</button>
          <hr /><p />
-         <div id="map" style="height: 586px; width: 320px;"></div>
+         <div id="map" style="height: 586px; width: 100%;"></div>
+         <a href="#" id="mWidth">View at Mobile Width</a>
+         <a href="#" id="fWidth" class="d-none">View at full Width</a>
      </div>
      <div>
          <hr /><p />
          <a asp-page="/Admin/Congregation/Maps/Edit" asp-route-id="@Request.Query["id"]">Back to Map</a>
+      
      </div>
 
 
@@ -50,6 +53,16 @@
         var globalMZIndex = 0;
 
         $(document).ready(function () {
+            $("#mWidth").click(function () {
+                $("#map").width = "387px";
+                $("#mWidth").addClass("d-none");
+                $("#fWidth").RemoveClass("d-none");
+            });
+            $("#fWidth").click(function () {
+                $("#map").width = "100%";
+                $("#mWidth").RemoveClass("d-none");
+                $("#fWidth").AddClass("d-none");
+            });
             $("#enterAddy").click(function () {
                 var url = "https://nominatim.openstreetmap.org/search?q=" + $('#addy').val().toString().replace(/ /g, "+") + "&format=json";
                 console.log(url);

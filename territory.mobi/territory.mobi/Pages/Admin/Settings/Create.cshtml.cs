@@ -18,14 +18,17 @@ namespace territory.mobi.Pages.Admin.Settings
             _context = context;
         }
 
-        public IActionResult OnGet()
-        {
-            return Page();
-        }
-
         [BindProperty]
         public Setting Setting { get; set; }
 
+        public IActionResult OnGet()
+        {
+            Setting = new Setting();
+            Setting.SettingId = Guid.NewGuid();
+            return Page();
+        }
+
+        
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
