@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -114,6 +116,16 @@ namespace territory.mobi
         private bool MapExists(Guid id)
         {
             return _context.Map.Any(e => e.MapId == id);
+        }
+
+        public string GetCoords(string address)
+        {
+            var url = "https://nominatim.openstreetmap.org/search?q=" + address.Replace(" ", "+") + "&format=json";
+            var client = new WebClient();
+
+            var response = client.DownloadString(url);
+            return response;
+
         }
     }
 }

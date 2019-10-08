@@ -20,6 +20,10 @@ namespace territory.mobi.Pages.Admin.Congregation
             _context = context;
         }
 
+
+        [BindProperty]
+        public Cong Cong { get; set; }
+
         public IActionResult OnGet()
         {
             if (User.Identity.IsAuthenticated == false)
@@ -28,13 +32,13 @@ namespace territory.mobi.Pages.Admin.Congregation
             }
             else
             {
+                Cong = new Cong();
+                Cong.CongId = Guid.NewGuid();
                 return Page();
             }
 
         }
 
-        [BindProperty]
-        public Cong Cong { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {

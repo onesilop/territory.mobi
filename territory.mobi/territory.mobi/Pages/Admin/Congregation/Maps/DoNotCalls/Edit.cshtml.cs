@@ -29,7 +29,7 @@ namespace territory.mobi.Pages.Admin.Congregation.DoNotCalls
                 return NotFound();
             }
 
-            DoNotCall = await _context.DoNotCall.FirstOrDefaultAsync(m => m.DncId == id);
+            DoNotCall = await _context.DoNotCall.Include(m => m.Map).FirstOrDefaultAsync(m => m.DncId == id);
 
             if (DoNotCall == null)
             {

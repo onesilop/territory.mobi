@@ -5,12 +5,17 @@
     ViewData["LeftTitle"] = "territori.mobi";
 }
 
-<div class="p-2">
-    
-    @foreach (var item in Model.Cong)
-    {
-        <div class="d-flex bg-primary mt-1 mb-1 w-100 justify-content-center">
-            <a class="text-white h4 pt-1 text-decoration-none" asp-page="./Edit" asp-route-id="@item.CongId">@Html.DisplayFor(modelItem => item.CongName)</a>
-        </div>
-     }
-</div>
+    <div class="p-2">
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-page="./Create">Create new Congregation</a>
+            <p/>
+        }
+
+        @foreach (var item in Model.Cong)
+        {
+            <div class="d-flex bg-primary mt-1 mb-1 w-100 justify-content-center">
+                <a class="text-white h4 pt-1 text-decoration-none" asp-page="./Edit" asp-route-id="@item.CongId">@Html.DisplayFor(modelItem => item.CongName)</a>
+            </div>
+        }
+    </div>
