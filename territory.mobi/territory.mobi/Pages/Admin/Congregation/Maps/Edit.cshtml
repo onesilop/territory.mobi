@@ -125,7 +125,7 @@
                                 <label class="btn btn-default bg-primary text-white mt-2">
                                     Find New Image <input hidden type="file" style="display: none;" id="NewImage" name="files">
                                 </label>
-                                <button id="changeMap" class="btn btn-default bg-primary text-white ml-2">Save Image</button>
+                                <button id="changeMap" class="d-none">Save Image</button>
                             </div>
                         </form>
                     </div>
@@ -259,6 +259,12 @@
                 $('#saveBtn').attr("disabled", true);
             }
         });
+                    $("#NewImage").on("change", function () {
+                        if ($(this).val()) {
+                            $("#changeMap").click();
+                        }
+                    });
+
                 </script>
                 <script src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleKey&libraries=drawing"></script>
                 <script>
