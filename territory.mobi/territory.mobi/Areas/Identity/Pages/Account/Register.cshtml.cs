@@ -96,8 +96,10 @@ namespace territory.mobi.Areas.Identity.Pages.Account
 
                     lst = _context.Cong.Where(a => a.CongId.ToString() == Token.UserCong).ToList();
                     ViewData["Congs"] = new SelectList(lst, "CongName", "CongName",lst[0].CongName);
-                    Input = new InputModel();
-                    Input.Email = Token.UserEmail;
+                    Input = new InputModel
+                    {
+                        Email = Token.UserEmail
+                    };
 
                 }
             }
@@ -127,7 +129,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
-                        values: new { userId = user.Id, code = code },
+                        values: new { userId = user.Id, code },
                         protocol: Request.Scheme);
 
                     await _emailSender.SendMailAsync(Input.Email, "Confirm your email",

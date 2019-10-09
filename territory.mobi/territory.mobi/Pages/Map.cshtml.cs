@@ -39,9 +39,10 @@ namespace territory.mobi.Pages
         public IList<Setting> Setting { get; set; }
         public IList<MapFeature> MapPolygons { get; set; }
         public IList<MapFeature> MapMarkers { get; set; }
-        public string MapCentreLat { get; set; } = "";
-        public string MapCentreLng { get; set; } = "";
+        public string MapCentreLat { get; set; } = "0";
+        public string MapCentreLng { get; set; } = "0";
         public int MapZoom { get; set; } = 16;
+        public string CookieID { get; set; } = "territory.mobi.dnclogin.";
 
 
         public ContentResult OnGetPwdCheck(string pwd,Guid congId, Guid mapId)
@@ -55,7 +56,7 @@ namespace territory.mobi.Pages
                     string tmp = "";
                     if (d.AptNo != "") { tmp = d.AptNo + "/ "; }
                     tmp = tmp + d.StreetNo + " " + d.StreetName+"</br>";
-                    res = res + tmp;
+                    res += tmp;
                 }
                 return Content(res);
             }
@@ -82,7 +83,7 @@ namespace territory.mobi.Pages
             {
                 return NotFound();
             }
-
+            CookieID += CongName;
             Map = await _context.Map.FirstOrDefaultAsync(m => m.MapKey == MapNo && m.CongId == Cong.CongId);
             if (Map == null)
             {

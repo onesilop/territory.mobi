@@ -52,9 +52,9 @@
     }
     @if (Model.DNC.Count() > 0 && Model.Map.Notes != null)
     {
-        <div class="footer-link align-self-center m-1" id="dnc" href="#">
+        <a class="footer-link align-self-center m-1" id="dnc" href="#">
             <img class="MapMenuIcon" src="~/images/assets/DNC.png" />
-        </div>
+        </a>
     }
 </div>
 <form id="pwrdInput" method="post" class="invisible">
@@ -78,29 +78,30 @@
             $('#bdy').css('height', bHgt);
             $('#mappic').css('padding-top', Math.max(0, (bHgt - parseInt($('#mappic').css('height')))) / 2);
         }
+
+        $(window).on('resize',function () {
+            scaleMapstuff()
+        });
+
+        $(window).on('load',function () {
+            scaleMapstuff()
+        });
+
         $(document).ready(function () {
+
             scaleMapstuff();
-        });
-        $(window).resize(function () {
-            scaleMapstuff()
-        });
 
-        $(window).load(function () {
-            scaleMapstuff()
-        });
+            if ('@Model.ShowMap' == 'True')
+            {
+                $("#googMap").click(function () {
+                    $("#imgMap").removeClass("d-none");
+                    $("#map").removeClass("d-none");
+                    $("#googMap").addClass("d-none");
+                    $("#imgDiv").addClass("d-none");
+                    initMap(@Model.MapCentreLng, @Model.MapCentreLat);
+                });
+            }
 
-    </script>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            
-            $("#googMap").click(function () {
-                $("#imgMap").removeClass("d-none");
-                $("#map").removeClass("d-none");
-                $("#googMap").addClass("d-none");
-                $("#imgDiv").addClass("d-none");
-                initMap(@Model.MapCentreLng, @Model.MapCentreLat);
-            });
             $("#imgMap").click(function () {
                 $("#googMap").removeClass("d-none");
                 $("#imgDiv").removeClass("d-none");
@@ -108,51 +109,52 @@
                 $("#map").addClass("d-none");
             });
 
-                $("#parking").click(function () {
-                    bootbox.dialog({
-                    title: "<h3>Parking</h3>",
-                        message: "@Html.Raw(Model.Map.Parking)",
-                        onEscape: true,
-                        backdrop: true,
-                        centerVertical: true,
-                        scrollable: true
-                                });
-                    });
-
-                $("#notes").click(function () {
-                    bootbox.dialog({
-                    title: "<h3>Notes</h3>",
-                        message: "@Html.Raw(Model.Map.Notes)",
-                        onEscape: true,
-                        backdrop: true,
-                        centerVertical: true,
-                        scrollable: true
-                                });
-                    });
-
-                $("#dnc").click(function () {
-                    var pass = "";
-                    pass = Cookies.get("territory.mobi.dnclogin");
-                    console.log(pass);
-                    if (typeof pass === 'undefined') {
-                        bootbox.prompt({
-                            title: "<h3>Enter password</h3>",
-                            inputType: "password",
-                            onEscape: true,
-                            backdrop: true,
-                            centerVertical: true,
-                            scrollable: true,
-                            callback: function (result) {
-                                if (result != null) { checkpassword(sha1(result)) };
-                            }
-                        });
-                    } else {
-                        checkpassword(pass);
-                    };
-
+            $("#parking").click(function () {
+                bootbox.dialog({
+                title: "<h3>Parking</h3>",
+                    message: "@Html.Raw(Model.Map.Parking)",
+                    onEscape: true,
+                    backdrop: true,
+                    centerVertical: true,
+                    scrollable: true
+                            });
                 });
+
+            $("#notes").click(function () {
+                bootbox.dialog({
+                title: "<h3>Notes</h3>",
+                    message: "@Html.Raw(Model.Map.Notes)",
+                    onEscape: true,
+                    backdrop: true,
+                    centerVertical: true,
+                    scrollable: true
+                            });
+                });
+
+            $("#dnc").click(function () {
+                var pass = "";
+                pass = Cookies.get("@Model.CookieID");
+                console.log(pass);
+                if (typeof pass === 'undefined') {
+                    bootbox.prompt({
+                        title: "<h3>Enter password</h3>",
+                        inputType: "password",
+                        onEscape: true,
+                        backdrop: true,
+                        centerVertical: true,
+                        scrollable: true,
+                        callback: function (result) {
+                            if (result != null) { checkpassword(sha1(result)) };
+                        }
+                    });
+                } else {
+                    checkpassword(pass);
+                };
+
             });
-                    function checkpassword(pass) {
+        });
+
+        function checkpassword(pass) {
             $.ajax({
                 url: '/Map?handler=PwdCheck',
                 data: {
@@ -163,7 +165,7 @@
                 .done(function (result) {
                     console.log(result);
                     if (result == "false") {
-                        Cookies.remove("territory.mobi.dnclogin");
+                        Cookies.remove("@Model.CookieID");
                         bootbox.dialog({
                             title: "<h3>Do Not Calls</h3>",
                             message: "Password incorrect",
@@ -173,7 +175,7 @@
                             scrollable: true
                         });
                     } else {
-                        Cookies.set("territory.mobi.dnclogin", pass,1);
+                        Cookies.set("@Model.CookieID", pass,1);
                         bootbox.dialog({
                             title: "<h3>Do Not Calls</h3>",
                             message: result,
@@ -222,8 +224,7 @@
                 fillColor: '#32CD32',
                 fillOpacity: 0.5,
                 clickable: true,
-                zIndex: @Html.Raw(item.ZIndex)
-            });
+                zIndex: @Html.Raw(item.ZIndex)});
 
             PP.setMap(map);
 
