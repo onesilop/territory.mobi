@@ -85,6 +85,21 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
             IList<Models.Section> slist = await _context.Section.Where(s => s.CongId == Map.CongId).ToListAsync();
             ViewData["Section"] = new SelectList(slist, "SectionId", "SectionTitle", Map.SectionId);
 
+            string pId = "Map/Edit";
+            ViewData["PageName"] = "Map";
+            ViewData["PageHelpID"] = pId;
+            if (_context.PageHelp.Count(p => p.PageId == pId) > 0)
+            {
+                IList<PageHelpText> phl = await _context.PageHelp.Where(p => p.PageId == pId).ToListAsync();
+                foreach (PageHelpText ph in phl)
+                {
+                    if (ph.HtmlHelp != null)
+                    {
+                        ViewData[string.Concat("PageHelp", (ph.SectionId ?? ""))] = ph.HtmlHelp;
+                    }
+                }
+            }
+
             return Page();
         }
 
@@ -97,6 +112,9 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
 
             Map.UpdateDatetime = DateTime.UtcNow;
             _context.Attach(Map).State = EntityState.Modified;
+
+            Map.Notes = Map.Notes.ToString().Replace("\r\n", "<br>").Replace("\r", "<br>").Replace("\n", "<br>");
+            Map.Parking = Map.Parking.ToString().Replace("\r\n", "<br>").Replace("\r", "<br>").Replace("\n", "<br>");
 
             try
             {

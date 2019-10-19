@@ -33,6 +33,7 @@ namespace territory.mobi.Models
         public virtual DbSet<Setting> Setting { get; set; }
         public virtual DbSet<MapAssignment> MapAssignment { get; set; }
         public virtual DbSet<MapFeature> MapFeature { get; set; }
+        public virtual DbSet<PageHelpText> PageHelp { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -454,6 +455,30 @@ namespace territory.mobi.Models
                 entity.Property(e => e.Updatedatetime)
                     .HasColumnName("updatedatetime")
                     .HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<PageHelpText>(entity =>
+            {
+                entity.HasKey(e => new { e.PageId, e.SectionId })
+                    .HasName("PK_pageHelp");
+
+                entity.ToTable("pageHelp");
+
+                entity.Property(e => e.PageId)
+                    .HasColumnName("pageId")
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.SectionId)
+                    .HasColumnName("sectionID")
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.HtmlHelp)
+                    .IsRequired()
+                    .HasColumnName("htmlHelp");
             });
 
         }

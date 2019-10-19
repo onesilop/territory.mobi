@@ -89,6 +89,21 @@ namespace territory.mobi.Pages.Admin.Congregation
                 {
                     s.Maps = await _context.Map.Where(m => m.CongId == Cong.CongId && m.SectionId == s.SectionId).ToListAsync();
                 }
+
+                string pId = "Congregation/Edit";
+                ViewData["PageName"] = "Congregation";
+                ViewData["PageHelpID"] = pId;
+                if (_context.PageHelp.Count(p => p.PageId == pId) > 0)
+                {
+                    IList<PageHelpText> phl = await _context.PageHelp.Where(p => p.PageId == pId).ToListAsync();
+                    foreach (PageHelpText ph in phl)
+                    {
+                        if (ph.HtmlHelp != null)
+                        {
+                            ViewData[string.Concat("PageHelp", (ph.SectionId ?? ""))] = ph.HtmlHelp;
+                        }
+                    }
+                }
                 return Page();
             }
         }

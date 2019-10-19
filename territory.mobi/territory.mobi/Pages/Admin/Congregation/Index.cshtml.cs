@@ -56,6 +56,20 @@ namespace territory.mobi.Pages.Admin.Congregation
                         }
                     }
                 }
+                string pId = "Congregation/List";
+                ViewData["PageName"] = "Congregations";
+                ViewData["PageHelpID"] = pId;
+                if (_context.PageHelp.Count(p => p.PageId == pId) > 0)
+                {
+                    IList<PageHelpText> phl = await _context.PageHelp.Where(p => p.PageId == pId).ToListAsync();
+                    foreach (PageHelpText ph in phl)
+                    { 
+                    if (ph.HtmlHelp != null)
+                        {
+                            ViewData[string.Concat("PageHelp",(ph.SectionId ?? ""))] = ph.HtmlHelp;
+                        }
+                    }
+                }
             }
         }
     }

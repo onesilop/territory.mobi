@@ -47,7 +47,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
         public string ReturnUrl { get; set; }
         public Token Token { get; set; } = new Token();
         public string Congs { get; set; }
-         
+
         public class InputModel
         {
             [Required]
@@ -87,7 +87,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
 
             ViewData["Congs"] = new SelectList(_context.Cong, "CongName", "CongName");
 
-            if(token != null)
+            if (token != null)
             {
                 Token = _context.Token.Find(token);
                 if (Token.UpdateDateTime.Add(new System.TimeSpan(24, 0, 0)) >= DateTime.UtcNow)
@@ -95,7 +95,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                     IList<Cong> lst = new List<Cong>();
 
                     lst = _context.Cong.Where(a => a.CongId.ToString() == Token.UserCong).ToList();
-                    ViewData["Congs"] = new SelectList(lst, "CongName", "CongName",lst[0].CongName);
+                    ViewData["Congs"] = new SelectList(lst, "CongName", "CongName", lst[0].CongName);
                     Input = new InputModel
                     {
                         Email = Token.UserEmail
@@ -107,10 +107,10 @@ namespace territory.mobi.Areas.Identity.Pages.Account
             List<string> ListOCongs = new List<string>();
             foreach (Cong c in _context.Cong.ToList())
             {
-                    ListOCongs.Add(c.CongName);
+                ListOCongs.Add(c.CongName);
             }
             Congs = Newtonsoft.Json.JsonConvert.SerializeObject(ListOCongs);
-
+            
             ReturnUrl = returnUrl;
         }
 
@@ -129,11 +129,11 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
-                        values: new { userId = user.Id, code },
+                        values: (area: "Identity", userId: user.Id, code: code),
                         protocol: Request.Scheme);
 
                     await _emailSender.SendMailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.",null);
+                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.", null);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
@@ -152,7 +152,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                     if (Input.NewCongName != null)
                     {
                         if (_context.Cong.Count(a => a.CongName.ToUpper() == Input.NewCongName.ToUpper()) == 0)
-                            { 
+                        {
                             Cong NewCong = new Cong
                             {
                                 CongId = Guid.NewGuid(),
@@ -161,12 +161,12 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                             };
 
                             _context.Cong.Add(NewCong);
-                            await _emailSender.SendMailAsync(Input.Email, "New Congreation "+ Input.NewCongName+" Created",
-                               $"Your new congregation " + Input.NewCongName + " has been created. When you log into the administration portal you will be able to add maps and administer do not calls. " , null);
+                            await _emailSender.SendMailAsync(Input.Email, "New Congreation " + Input.NewCongName + " Created",
+                               $"Your new congregation " + Input.NewCongName + " has been created. When you log into the administration portal you will be able to add maps and administer do not calls. ", null);
                         }
                         AspNetUserClaims.ClaimType = "Congregation";
                         AspNetUserClaims.ClaimValue = Input.NewCongName;
-                        
+
                     }
 
                     _context.AspNetUserClaims.Add(AspNetUserClaims);
@@ -179,7 +179,16 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-            // If we got this far, something failed, redisplay form
+            // If we got this far, something failed, redisplay form with the lists populated like get.
+            ViewData["Congs"] = new SelectList(_context.Cong, "CongName", "CongName");
+
+            List<string> ListOCongs = new List<string>();
+            foreach (Cong c in _context.Cong.ToList())
+            {
+                ListOCongs.Add(c.CongName);
+            }
+            Congs = Newtonsoft.Json.JsonConvert.SerializeObject(ListOCongs);
+
             return Page();
         }
     }

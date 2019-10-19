@@ -9,12 +9,26 @@
 <hr />
     <div class="panel-group" id="accordion">
         <div class="panel border pt-2 mb-2">
-            <div class="panel-heading">
-                <h5 class="panel-title pl-2">
+            <div class="panel-heading d-flex">
+                <h5 class="panel-title pl-2 d-inline">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
                         Basic Information
                     </a>
                 </h5>
+                @if (ViewData.ContainsKey("PageHelpID"))
+                {
+                    <div class="text-right d-inline ml-auto mr-1">
+                        @if (ViewData.ContainsKey("PageHelpBasic"))
+                        {
+                            <a href="#" id="BasicSectionHelp" class="btn-link">Help</a>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            @Html.Raw("|")
+                            <a  target="_blank" asp-page="/Admin/PageHelp/Edit" asp-route-id="@ViewData["PageHelpID"]" asp-route-ReturnURL="@Request.Path.ToString()" asp-route-ReturnQ="@Request.QueryString.ToString().Replace("?","")" asp-route-section="Basic" class="btn-link">Edit Help</a>
+                        }
+                    </div>
+                }
             </div>
             <div id="collapse1" class="panel-collapse collapse show border-top mb-2">
                 <div class="col-md-4">
@@ -42,12 +56,26 @@
             </div>
         </div>
         <div class="panel  border pt-2 mb-2">
-            <div class="panel-heading">
-                <h5 class="panel-title pl-2">
+            <div class="panel-heading d-flex">
+                <h5 class="panel-title pl-2 d-inline">
                     <a class="h5" data-toggle="collapse" data-parent="#accordion" href="#collapse2">
                         Users
                     </a>
                 </h5>
+                @if (ViewData.ContainsKey("PageHelpID"))
+                {
+                    <div class="text-right d-inline ml-auto mr-1">
+                        @if (ViewData.ContainsKey("PageHelpUsers"))
+                        {
+                            <a href="#" id="UsersSectionHelp" class="btn-link">Help</a>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            @Html.Raw("|")
+                            <a target="_blank" asp-page="/Admin/PageHelp/Edit" asp-route-id="@ViewData["PageHelpID"]" asp-route-ReturnURL="@Request.Path.ToString()" asp-route-ReturnQ="@Request.QueryString.ToString().Replace("?","")" asp-route-section="Users" class="btn-link">Edit Help</a>
+                        }
+                    </div>
+                }
             </div>
             <div id="collapse2" class="panel-collapse collapse border-top mb-2">
                 <div class="p-2">
@@ -93,13 +121,27 @@
         </div>
 
             <div id="Maps" class="panel  border pt-2 mb-2">
-            <div class="panel-heading">
-                <h5 class="panel-title pl-2">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
-                        Maps
-                    </a>
-                </h5>
-            </div>
+                <div class="panel-heading d-flex">
+                    <h5 class="panel-title pl-2 d-inline">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                            Maps
+                        </a>
+                    </h5>
+                    @if (ViewData.ContainsKey("PageHelpID"))
+                    {
+                        <div class="text-right d-inline ml-auto mr-1">
+                            @if (ViewData.ContainsKey("PageHelpMaps"))
+                            {
+                                <a href="#" id="MapsSectionHelp" class="btn-link">Help</a>
+                            }
+                            @if (User.IsInRole("Admin"))
+                            {
+                                @Html.Raw("|")
+                                <a target="_blank" asp-page="/Admin/PageHelp/Edit" asp-route-id="@ViewData["PageHelpID"]" asp-route-ReturnURL="@Request.Path.ToString()" asp-route-ReturnQ="@Request.QueryString.ToString().Replace("?","")" asp-route-section="Maps" class="btn-link">Edit Help</a>
+                            }
+                        </div>
+                    }
+                </div>
             <div id="collapse3" class="panel-collapse collapse  border-top mb-2">
                 <div class="p-2">
                     <a asp-page="./Section/Index" asp-route-id="@Request.Query["id"]">Edit Sections</a> |
@@ -240,6 +282,39 @@
                     $('#cngValid').show();
                     $('#saveBtn').attr("disabled", true);
                 }
+            });
+
+            $("#BasicSectionHelp").click(function () {
+                bootbox.dialog({
+                    title: "<h3>Basic Section</h3>",
+                    message:"@Html.Raw(ViewData["PageHelpBasic"])",
+                    onEscape: true,
+                    backdrop: true,
+                    centerVertical: true,
+                    scrollable: true
+                });
+            });
+
+            $("#UsersSectionHelp").click(function () {
+                bootbox.dialog({
+                    title: "<h3>Users Section</h3>",
+                    message:"@Html.Raw(ViewData["PageHelpUsers"])",
+                    onEscape: true,
+                    backdrop: true,
+                    centerVertical: true,
+                    scrollable: true
+                });
+            });
+
+            $("#MapsSectionHelp").click(function () {
+                bootbox.dialog({
+                    title: "<h3>Maps Section</h3>",
+                    message:"@Html.Raw(ViewData["PageHelpMaps"])",
+                    onEscape: true,
+                    backdrop: true,
+                    centerVertical: true,
+                    scrollable: true
+                });
             });
 
                 $("#invite").click(function () {

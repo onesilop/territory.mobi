@@ -1,0 +1,43 @@
+﻿@page
+@model territory.mobi.Pages.Admin.PageHelp.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h4>Page Help</h4>
+
+    <div class="col-md-10">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PageHelp.PageId" />
+            <div class="form-group">
+                <label class="control-label">@ViewData["HelpFor"]</label>
+                <textarea id="taPageHelp" asp-for="PageHelp.HtmlHelp" class="" ></textarea>
+                <span asp-validation-for="PageHelp.HtmlHelp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @if (Request.Query["ReturnURL"] != "")
+                {
+                    <a href="@ViewData["ReturnURL"]">Back</a>
+                }
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=p2i7lwvunskci02cqotz0r5e9sacm04shhnafxbw8ru2r5y8"></script>
+<script>
+    tinymce.init({
+        selector: '#taPageHelp',
+        menubar: false,
+        plugins: "lists",
+        toolbar: 'undo redo | styleselect | bold italic | link image | alignleft aligncenter alignright alignjustify| outdent indent| numlist bullist |'
+    });
+</script>
+
+

@@ -58,7 +58,7 @@ namespace territory.mobi.Pages.Admin.Users
             {
                 try
                 {
-                   await ml.SendMailAsync(e, Subject, Body,null);
+                   await ml.SendMailAsync(e, Subject, Body.ToString().Replace("\r\n", "<br>").Replace("\r", "<br>").Replace("\n", "<br>"), null);
                 }
                 catch
                 {

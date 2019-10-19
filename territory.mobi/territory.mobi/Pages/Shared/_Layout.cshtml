@@ -18,7 +18,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse flex-sm-row-reverse">
-                    <hr class="bg-white"/>
+                    <hr class="bg-white" />
                     <ul class="nav navbar-nav ml-auto flex-nowrap text-right">
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-page="/Index">Public Site</a>
@@ -32,8 +32,24 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <partial name="_CookieConsentPartial" />
+        @if (ViewData.ContainsKey("PageHelpID"))
+        {
+    <div class="text-right">
+        @if (ViewData.ContainsKey("PageHelp"))
+        {
+            <a href="#" id="pageHelp" class="btn-link">Help</a>
+        }
+        @if (User.IsInRole("Admin"))
+        {
+            @Html.Raw("|")
+            <a target="_blank" asp-page="/Admin/PageHelp/Edit" asp-route-id="@ViewData["PageHelpID"]" asp-route-ReturnURL="@Context.Request.Path.ToString()" asp-route-ReturnQ="@Context.Request.QueryString.ToString().Replace("?","")" class="btn-link">Edit Help</a>
+        }
+        <hr />
+    </div>
+        }
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -49,5 +65,19 @@
     <script src="~/js/js.cookie.js"></script>
 
     @RenderSection("Scripts", required: false)
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#pageHelp").click(function () {
+                bootbox.dialog({
+                    title: "<h3>How to use the @ViewData["PageName"] Page</h3>",
+                    message:"@Html.Raw(ViewData["PageHelp"])",
+                    onEscape: true,
+                    backdrop: true,
+                    centerVertical: true,
+                    scrollable: true
+                });
+            });
+        });
+    </script>
 </body>
 </html>
