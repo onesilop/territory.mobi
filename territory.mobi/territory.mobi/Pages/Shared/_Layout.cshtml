@@ -37,18 +37,18 @@
         <partial name="_CookieConsentPartial" />
         @if (ViewData.ContainsKey("PageHelpID"))
         {
-    <div class="text-right">
-        @if (ViewData.ContainsKey("PageHelp"))
-        {
-            <a href="#" id="pageHelp" class="btn-link">Help</a>
-        }
-        @if (User.IsInRole("Admin"))
-        {
-            @Html.Raw("|")
-            <a target="_blank" asp-page="/Admin/PageHelp/Edit" asp-route-id="@ViewData["PageHelpID"]" asp-route-ReturnURL="@Context.Request.Path.ToString()" asp-route-ReturnQ="@Context.Request.QueryString.ToString().Replace("?","")" class="btn-link">Edit Help</a>
-        }
-        <hr />
-    </div>
+            <div class="text-right">
+                @if (ViewData.ContainsKey("PageHelp"))
+                {
+                    <a href="#" id="pageHelp" class="btn-link">Help</a>
+                }
+                @if (User.IsInRole("Admin"))
+                {
+                    @Html.Raw("|")
+                    <a target="_blank" asp-page="/Admin/PageHelp/Edit" asp-route-id="@ViewData["PageHelpID"]" asp-route-ReturnURL="@Context.Request.Path.ToString()" asp-route-ReturnQ="@Context.Request.QueryString.ToString().Replace("?","")" class="btn-link">Edit Help</a>
+                }
+                <hr />
+            </div>
         }
         <main role="main" class="pb-3">
             @RenderBody()

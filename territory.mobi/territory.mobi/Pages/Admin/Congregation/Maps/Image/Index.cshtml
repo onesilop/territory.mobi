@@ -2,59 +2,81 @@
 @model territory.mobi.Pages.Admin.Congregation.Maps.Image.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Previous Images";
 }
 
-<h2>Index</h2>
+<h2>Images for @ViewData["MapNo"]</h2>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
+<h3>Current Image</h3>
+
+@if (Model.CurrentImage.ImgImage == null)
+{
+    <img id="mappic" class="img-fluid w-50" src="@Model.CurrentImage.ImgPath" alt="@Model.CurrentImage.ImgText" />
+}
+else
+{
+    <img id="mappic" class="img-fluid w-50" src="data:image;base64,@System.Convert.ToBase64String(Model.CurrentImage.ImgImage)" alt="@Model.CurrentImage.ImgText" />
+}
+<br />
+<b>Date Uploaded: </b>@Model.CurrentImage.Updatedatetime
+<hr />
+<h3>Previous Images</h3>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Images[0].ImgText)
+                Image
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Images[0].ImgPath)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Images[0].ImgImage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Images[0].MapId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Images[0].Updatedatetime)
+                Date Uploaded
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Images) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImgText)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImgPath)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImgImage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MapId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Updatedatetime)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.ImgId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ImgId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ImgId">Delete</a>
-            </td>
-        </tr>
-}
+        @if (Model.Images.Count == 0)
+        {
+            <tr>
+                <td>
+                    <label>No previous images</label>
+                </td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model.Images)
+            {
+                <tr>
+                    <td>
+                        @if (item.ImgImage == null)
+                        {
+                            <img id="mappic" class="img-fluid w-50" src="@item.ImgPath" alt="@item.ImgText" />
+                        }
+                        else
+                        {
+                            <img id="mappic" class="img-fluid w-50" src="data:image;base64,@System.Convert.ToBase64String(item.ImgImage)" alt="@item.ImgText" />
+                        }
+                    </td>
+                    <td>
+                        <script type="text/javascript">
+                            var strdate = new String('@item.Updatedatetime.ToString("dd/MM/yyyy hh:mm:ss")');
+                            console.log(strdate);
+                            var localtime = new Date(strdate);
+                            console.log(localtime);
+                            document.write(localtime.toLocaleString());
+                        </script>
+                    </td>
+                    <td>
+                        <form method="post">
+                            <button class="btn btn-default" asp-route-mapid="@Model.CurrentImage.MapId" asp-route-ImgId="@item.ImgId">Replace Current</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
     </tbody>
 </table>
+<div>
+    <a asp-page="/Admin/Congregation/Maps/Edit" asp-route-id="@Model.CurrentImage.MapId">Back to Map</a>
+</div>

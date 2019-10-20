@@ -146,17 +146,18 @@
                     {
                         <img id="mappic" class="img-fluid w-50" src="data:image;base64,@System.Convert.ToBase64String(Model.CurrentImage.ImgImage)" alt="@Model.CurrentImage.ImgText" />
                     }
-                    <div class="form-group mt-1">
-                        <form asp-page-handler="UploadImage" method="post" enctype="multipart/form-data">
-                            <input type="hidden" asp-for="Map.MapId" name="id" />
-                            <div>
-                                <label class="btn btn-default bg-primary text-white mt-2">
-                                    Find New Image <input hidden type="file" style="display: none;" id="NewImage" name="files">
-                                </label>
-                                <button id="changeMap" class="d-none">Save Image</button>
-                            </div>
-                        </form>
-                    </div>
+                <div class="form-group mt-1">
+                    <form asp-page-handler="UploadImage" method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="Map.MapId" name="id" />
+                        <div>
+                            <label class="btn btn-default bg-primary text-white mt-2">
+                                Find New Image <input hidden type="file" style="display: none;" id="NewImage" name="files">
+                            </label>
+                            <button id="changeMap" class="d-none">Save Image</button>
+                        </div>
+                    </form>
+                    <a asp-page="/Admin/Congregation/Maps/Image/Index" asp-route-mapid="@Model.Map.MapId">Previous Images</a>
+                </div>
                 </div>
             </div>
         </div>
