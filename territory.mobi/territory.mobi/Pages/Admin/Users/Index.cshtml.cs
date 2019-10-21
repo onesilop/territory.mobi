@@ -54,11 +54,15 @@ namespace territory.mobi.Pages.Admin.Users
         {
             List<string> notsentto = new List<string>();
             Mailer ml = new Mailer(_context);
+            if (Body != null)
+            {
+                Body = Body.ToString().Replace("\r\n", "<br>").Replace("\r", "<br>").Replace("\n", "<br>");
+            }
             foreach (string e in AreChecked)
             {
                 try
                 {
-                   await ml.SendMailAsync(e, Subject, Body.ToString().Replace("\r\n", "<br>").Replace("\r", "<br>").Replace("\n", "<br>"), null);
+                   await ml.SendMailAsync(e, Subject,Body , null);
                 }
                 catch
                 {

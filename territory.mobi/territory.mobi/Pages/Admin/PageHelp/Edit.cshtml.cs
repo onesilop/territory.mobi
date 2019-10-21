@@ -64,8 +64,11 @@ namespace territory.mobi.Pages.Admin.PageHelp
                 return Page();
             }
             PageHelp.SectionId = Section;
-            PageHelp.HtmlHelp = PageHelp.HtmlHelp.ToString().Replace("\r\n", "<br>").Replace("\r", "<br>").Replace("\n", "<br>");
-            if (!PageHelpExists(PageHelp.PageId,PageHelp.SectionId))
+            if (PageHelp.HtmlHelp != null)
+            {
+                PageHelp.HtmlHelp = PageHelp.HtmlHelp.ToString().Replace("\r\n", "<br>").Replace("\r", "<br>").Replace("\n", "<br>");
+            }
+                if (!PageHelpExists(PageHelp.PageId,PageHelp.SectionId))
             {
                 _context.PageHelp.Add(PageHelp);
             }

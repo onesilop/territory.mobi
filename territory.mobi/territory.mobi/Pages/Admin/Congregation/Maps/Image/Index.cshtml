@@ -60,7 +60,7 @@ else
                     </td>
                     <td>
                         <script type="text/javascript">
-                            var strdate = new String('@item.Updatedatetime.ToString("dd/MM/yyyy hh:mm:ss")');
+                            var strdate = new String('@item.Updatedatetime.ToString()');
                             console.log(strdate);
                             var localtime = new Date(strdate);
                             console.log(localtime);
