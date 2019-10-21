@@ -18,7 +18,7 @@ namespace territory.mobi.Pages.Admin.Users.Claims
             _context = context;
         }
 
-        public IActionResult OnGet(string id, string assignType, string returl = "")
+        public IActionResult OnGet(string id,  string assignType, int claimid = -1, string returl = "")
         {
             if (User.Identity.IsAuthenticated == false)
             {
@@ -38,6 +38,10 @@ namespace territory.mobi.Pages.Admin.Users.Claims
                 }
                 ViewData["Congs"] = new SelectList(cng, "CongName", "CongName");
                 ViewData["name"] = _context.AspNetUsers.Where(u => u.Id == id).FirstOrDefault().FullName;
+                if (claimid != -1)
+                { 
+                    ViewData["cong"] = _context.AspNetUserClaims.Where(u => u.Id == claimid).FirstOrDefault().ClaimValue;
+                }
                 return Page();
             }
         }

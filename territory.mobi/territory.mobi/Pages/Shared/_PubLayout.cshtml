@@ -40,11 +40,11 @@
         $(document).ready(function () {
             scalestuff();
         });
-        $(window).resize(function () {
+        $(window).on('resize',function () {
             scalestuff()
         });
 
-        $(window).load(function () {
+        $(window).on('load',function () {
             scalestuff()
         });
     </script>

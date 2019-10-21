@@ -9,12 +9,26 @@
 <hr />
 <div class="panel-group" id="accordion">
     <div class="panel border pt-2 mb-2">
-        <div class="panel-heading">
-            <h5 class="panel-title pl-2">
+        <div class="panel-heading d-flex">
+            <h5 class="panel-title pl-2 d-inline">
                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
                     Basic Information
                 </a>
             </h5>
+            @if (ViewData.ContainsKey("PageHelpID"))
+            {
+                <div class="text-right d-inline ml-auto mr-1">
+                    @if (ViewData.ContainsKey("PageHelpBasic"))
+                    {
+                        <a href="#" id="BasicSectionHelp" class="btn-link">Help</a>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        @Html.Raw("|")
+                        <a target="_blank" asp-page="/Admin/PageHelp/Edit" asp-route-id="@ViewData["PageHelpID"]" asp-route-ReturnURL="@Request.Path.ToString()" asp-route-ReturnQ="@Request.QueryString.ToString().Replace("?","")" asp-route-section="Basic" class="btn-link">Edit Help</a>
+                    }
+                </div>
+            }
         </div>
         <div id="collapse1" class="panel-collapse collapse show border-top mb-2">
             <form method="post">
@@ -96,12 +110,26 @@
         </div>
     </div>
     <div class="panel  border pt-2 mb-2">
-        <div class="panel-heading">
-            <h5 class="panel-title pl-2">
+        <div class="panel-heading d-flex">
+            <h5 class="panel-title pl-2 d-inline">
                 <a class="h5" data-toggle="collapse" data-parent="#accordion" href="#collapse2">
                     Map Image
                 </a>
             </h5>
+            @if (ViewData.ContainsKey("PageHelpID"))
+            {
+                <div class="text-right d-inline ml-auto mr-1">
+                    @if (ViewData.ContainsKey("PageHelpImage"))
+                    {
+                        <a href="#" id="ImageSectionHelp" class="btn-link">Help</a>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        @Html.Raw("|")
+                        <a target="_blank" asp-page="/Admin/PageHelp/Edit" asp-route-id="@ViewData["PageHelpID"]" asp-route-ReturnURL="@Request.Path.ToString()" asp-route-ReturnQ="@Request.QueryString.ToString().Replace("?","")" asp-route-section="Image" class="btn-link">Edit Help</a>
+                    }
+                </div>
+            }
         </div>
         <div id="collapse2" class="panel-collapse collapse">
             <div class="col-md-10">
@@ -118,46 +146,75 @@
                     {
                         <img id="mappic" class="img-fluid w-50" src="data:image;base64,@System.Convert.ToBase64String(Model.CurrentImage.ImgImage)" alt="@Model.CurrentImage.ImgText" />
                     }
-                    <div class="form-group mt-1">
-                        <form asp-page-handler="UploadImage" method="post" enctype="multipart/form-data">
-                            <input type="hidden" asp-for="Map.MapId" name="id" />
-                            <div>
-                                <label class="btn btn-default bg-primary text-white mt-2">
-                                    Find New Image <input hidden type="file" style="display: none;" id="NewImage" name="files">
-                                </label>
-                                <button id="changeMap" class="btn btn-default bg-primary text-white ml-2">Save Image</button>
-                            </div>
-                        </form>
-                    </div>
+                <div class="form-group mt-1">
+                    <form asp-page-handler="UploadImage" method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="Map.MapId" name="id" />
+                        <div>
+                            <label class="btn btn-default bg-primary text-white mt-2">
+                                Find New Image <input hidden type="file" style="display: none;" id="NewImage" name="files">
+                            </label>
+                            <button id="changeMap" class="d-none">Save Image</button>
+                        </div>
+                    </form>
+                    <a asp-page="/Admin/Congregation/Maps/Image/Index" asp-route-mapid="@Model.Map.MapId">Previous Images</a>
+                </div>
                 </div>
             </div>
         </div>
     </div>
-        <div class="panel  border pt-2 mb-2">
-            <div class="panel-heading">
-                <h5 class="panel-title pl-2">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
-                        Google Map
-                    </a>
-                </h5>
-            </div>
-            <div id="collapse3" class="panel-collapse collapse">
-                <div class="form-group border rounded p-3">
-                    <div id="map" style="height: 586px; width: 100%;"></div>
-                    <div class="pt-3">
-                        <a asp-page="CreateMapG" asp-route-id="@Request.Query["id"]" class="btn btn-default text-white bg-secondary">Edit Google View</a>
-                    </div>
+    <div class="panel  border pt-2 mb-2">
+        <div class="panel-heading d-flex">
+            <h5 class="panel-title pl-2 d-inline">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                    Google Map
+                </a>
+            </h5>
+            @if (ViewData.ContainsKey("PageHelpID"))
+            {
+                <div class="text-right d-inline ml-auto mr-1">
+                    @if (ViewData.ContainsKey("PageHelpGoogle"))
+                    {
+                        <a href="#" id="GoogleSectionHelp" class="btn-link">Help</a>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        @Html.Raw("|")
+                        <a target="_blank" asp-page="/Admin/PageHelp/Edit" asp-route-id="@ViewData["PageHelpID"]" asp-route-ReturnURL="@Request.Path.ToString()" asp-route-ReturnQ="@Request.QueryString.ToString().Replace("?","")" asp-route-section="Google" class="btn-link">Edit Help</a>
+                    }
+                </div>
+            }
+        </div>
+        <div id="collapse3" class="panel-collapse collapse">
+            <div class="form-group border rounded p-3">
+                <div id="map" style="height: 586px; width: 100%;"></div>
+                <div class="pt-3">
+                    <a asp-page="CreateMapG" asp-route-id="@Request.Query["id"]" class="btn btn-default text-white bg-secondary">Edit Google View</a>
                 </div>
             </div>
         </div>
+    </div>
     
     <div class="panel border pt-2 mb-2">
-        <div class="panel-heading">
-            <h5 class="panel-title pl-2">
+        <div class="panel-heading d-flex">
+            <h5 class="panel-title pl-2 d-inline">
                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">
                     Do Not Calls
                 </a>
             </h5>
+            @if (ViewData.ContainsKey("PageHelpID"))
+            {
+                <div class="text-right d-inline ml-auto mr-1">
+                    @if (ViewData.ContainsKey("PageHelpDNC"))
+                    {
+                        <a href="#" id="DNCSectionHelp" class="btn-link">Help</a>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        @Html.Raw("|")
+                        <a target="_blank" asp-page="/Admin/PageHelp/Edit" asp-route-id="@ViewData["PageHelpID"]" asp-route-ReturnURL="@Request.Path.ToString()" asp-route-ReturnQ="@Request.QueryString.ToString().Replace("?","")" asp-route-section="DNC" class="btn-link">Edit Help</a>
+                    }
+                </div>
+            }
         </div>
         <div id="collapse4" class="panel-collapse collapse">
             <div class="form-group border rounded p-3">
@@ -264,6 +321,12 @@
                 $('#saveBtn').attr("disabled", true);
             }
         });
+                    $("#NewImage").on("change", function () {
+                        if ($(this).val()) {
+                            $("#changeMap").click();
+                        }
+                    });
+
                 </script>
                 <script src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleKey&libraries=drawing"></script>
                 <script>
@@ -275,6 +338,54 @@
             } else {
                 $('#map').hide();
             };
+
+
+            $("#BasicSectionHelp").click(function () {
+                bootbox.dialog({
+                    title: "<h3>Basic Section</h3>",
+                    message:"@Html.Raw(ViewData["PageHelpBasic"])",
+                    onEscape: true,
+                    backdrop: true,
+                    centerVertical: true,
+                    scrollable: true
+                });
+            });
+
+            $("#ImageSectionHelp").click(function () {
+                bootbox.dialog({
+                    title: "<h3>Image Section</h3>",
+                    message:"@Html.Raw(ViewData["PageHelpImage"])",
+                    onEscape: true,
+                    backdrop: true,
+                    centerVertical: true,
+                    scrollable: true
+                });
+            });
+
+            $("#GoogleSectionHelp").click(function () {
+                bootbox.dialog({
+                    title: "<h3>Google Map Section</h3>",
+                    message:"@Html.Raw(ViewData["PageHelpGoogle"])",
+                    onEscape: true,
+                    backdrop: true,
+                    centerVertical: true,
+                    scrollable: true
+                });
+            });
+
+             $("#DNCSectionHelp").click(function () {
+                bootbox.dialog({
+                    title: "<h3>Do Not Call Section</h3>",
+                    message:"@Html.Raw(ViewData["PageHelpDNC"])",
+                    onEscape: true,
+                    backdrop: true,
+                    centerVertical: true,
+                    scrollable: true
+                });
+            });
+
+
+
         });
 
 //Google map script
@@ -311,8 +422,7 @@
                 fillColor: '#32CD32',
                 fillOpacity: 0.5,
                 clickable: true,
-                zIndex: @Html.Raw(item.ZIndex)
-            });
+                zIndex: @Html.Raw(item.ZIndex)})
 
             PP.setMap(map);
 

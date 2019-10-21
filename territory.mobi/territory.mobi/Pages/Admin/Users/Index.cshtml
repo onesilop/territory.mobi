@@ -17,78 +17,79 @@
     {
         <div id="successMessage" class="alert alert-danger">@Errmessage</div>
     }
-    <form method="post">
-        <table class="table">
-            <thead>
+<form method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    SendTo
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AspNetUsers[0].Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AspNetUsers[0].Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AspNetUsers[0].Surname)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AspNetUsers[0].PhoneNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AspNetUsers[0].LockoutEnabled)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.AspNetUsers)
+            {
                 <tr>
-                    <th>
-                        SendTo
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AspNetUsers[0].Email)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AspNetUsers[0].Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AspNetUsers[0].Surname)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AspNetUsers[0].PhoneNumber)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AspNetUsers[0].LockoutEnabled)
-                    </th>
-                    <th></th>
+                    <td>
+                        <input id="chk" name="AreChecked" type="checkbox" value="@item.Email" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Surname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhoneNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LockoutEnabled)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.Id">View</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a> |
+                        <a id="ResetPassword" onclick="sendReset('@item.Email')" href="#">Reset Password</a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.AspNetUsers)
-                {
-                    <tr>
-                        <td>
-                            <input id="chk" name="AreChecked" type="checkbox" value="@item.Email" />
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Surname)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PhoneNumber)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LockoutEnabled)
-                        </td>
-                        <td>
-                            <a asp-page="./Edit" asp-route-id="@item.Id">View</a> |
-                            <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <div class="form-group">
-            <div id="notif" class="d-none">
-                <div>
-                    <label class="control-label">Subject</label>
-                    <input asp-for="Subject" class="form-control" />
-                </div>
-                <div>
-                    <label class="control-label">Body</label>
-                    <textarea id="taBody" asp-for="Body"></textarea>
-                </div>
-                <div>
-                    <br /> <input type="submit" value="Send Notification" class="btn btn-default bg-primary text-white" />
-                </div>
+            }
+        </tbody>
+    </table>
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <div id="notif" class="d-none">
+            <div>
+                <label class="control-label">Subject</label>
+                <input asp-for="Subject" class="form-control" />
+            </div>
+            <div>
+                <label class="control-label">Body</label>
+                <textarea id="taBody" asp-for="Body"></textarea>
+            </div>
+            <div>
+                <br /> <input type="submit" value="Send Notification" class="btn btn-default bg-primary text-white" />
             </div>
         </div>
-    </form>
+    </div>
+</form>
 
     @section Scripts
     {
@@ -125,8 +126,45 @@
                         if (chks == 0)
                             $("#notif").addClass("d-none");
                     }
-                });
+                });    
             });
+            function sendReset(e)
+                {
+                    $.ajax({
+                                    url: '/Admin/Users/Index?handler=ResetP',
+                                    type: 'POST',
+                                    beforeSend: function (xhr) {
+                                        xhr.setRequestHeader("XSRF-TOKEN",
+                                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                                    },
+                                    data: {
+                                        email: e
+                                    }
+                                })
+                                .done(function (result) {
+                                        console.log(result);
+                                        bootbox.dialog({
+                                            title: "<h3>Reset link sent</h3>",
+                                            message: "Yeay the reset password email was sent.",
+                                            onEscape: true,
+                                            backdrop: true,
+                                            centerVertical: true,
+                                            scrollable: true
+                                        });
+
+                                    })
+                                .fail(function (result) {
+                                    console.log(result);
+                                    bootbox.dialog({
+                                        title: "<h3>Unable to send email</h3>",
+                                        message: "Sorry something went wrong and we couldn't send the reset email",
+                                        onEscape: true,
+                                        backdrop: true,
+                                        centerVertical: true,
+                                        scrollable: true
+                                    });
+                                })
+                };
         </script>
     }
 </body>
