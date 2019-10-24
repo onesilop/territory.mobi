@@ -112,11 +112,11 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
 
             if (Map.Notes != null)
             { 
-                Map.Notes = Map.Notes.ToString().Replace("\r\n", "<br>").Replace("\r", "<br>").Replace("\n", "<br>");
+                Map.Notes = Map.Notes.ToString().Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
             }
             if (Map.Parking != null)
             { 
-                Map.Parking = Map.Parking.ToString().Replace("\r\n", "<br>").Replace("\r", "<br>").Replace("\n", "<br>");
+                Map.Parking = Map.Parking.ToString().Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
             }
             Map.UpdateDatetime = DateTime.UtcNow;
             _context.Attach(Map).State = EntityState.Modified;

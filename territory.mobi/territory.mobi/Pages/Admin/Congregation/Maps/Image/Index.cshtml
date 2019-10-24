@@ -18,7 +18,12 @@ else
     <img id="mappic" class="img-fluid w-50" src="data:image;base64,@System.Convert.ToBase64String(Model.CurrentImage.ImgImage)" alt="@Model.CurrentImage.ImgText" />
 }
 <br />
-<b>Date Uploaded: </b>@Model.CurrentImage.Updatedatetime
+<b>Date Uploaded: </b>
+<script> 
+    @{DateTime? dt = Model.CurrentImage.Updatedatetime;}
+    var m = moment('@dt.Value.ToString("yyyy-MM-dd hh:mm:ss") UTC');;
+    document.write(m.format('LLL'));
+</script>
 <hr />
 <h3>Previous Images</h3>
 
@@ -59,18 +64,19 @@ else
                         }
                     </td>
                     <td>
-                        <script type="text/javascript">
-                            var strdate = new String('@item.Updatedatetime.ToString()');
-                            console.log(strdate);
-                            var localtime = new Date(strdate);
-                            console.log(localtime);
-                            document.write(localtime.toLocaleString());
-                        </script>
+                        <div class="w-25">
+                            <script type="text/javascript">
+                            var m = moment('@item.Updatedatetime.Value.ToString("yyyy-MM-dd hh:mm:ss") UTC');;
+                            document.write(m.format('ll')+ " "+m.format('LTS') );
+                            </script>
+                        </div>
                     </td>
                     <td>
-                        <form method="post">
-                            <button class="btn btn-default" asp-route-mapid="@Model.CurrentImage.MapId" asp-route-ImgId="@item.ImgId">Replace Current</button>
-                        </form>
+                        <div class="w-25">
+                            <form method="post">
+                                <button class="btn btn-default" asp-route-mapid="@Model.CurrentImage.MapId" asp-route-ImgId="@item.ImgId">Replace Current</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             }

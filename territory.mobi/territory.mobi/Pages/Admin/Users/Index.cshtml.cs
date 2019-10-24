@@ -56,7 +56,7 @@ namespace territory.mobi.Pages.Admin.Users
             Mailer ml = new Mailer(_context);
             if (Body != null)
             {
-                Body = Body.ToString().Replace("\r\n", "<br>").Replace("\r", "<br>").Replace("\n", "<br>");
+                Body = Body.ToString().Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
             }
             foreach (string e in AreChecked)
             {
