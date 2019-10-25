@@ -42,7 +42,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
         [BindProperty]
         public InputModel Input { get; set; }
         [BindProperty]
-        public AspNetUserClaims AspNetUserClaims { get; set; }
+        public AspNetUserClaims UserClaim { get; set; }
 
         public string ReturnUrl { get; set; }
         public Token Token { get; set; } = new Token();
@@ -123,54 +123,74 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    string type = "New";
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: (area: "Identity", userId: user.Id, code: code),
-                        protocol: Request.Scheme);
-
-                    await _emailSender.SendMailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.", null);
-
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    AspNetUserClaims.ClaimType = "TempCong";
-                    AspNetUserClaims.UserId = user.Id;
+                    _ = await _emailSender.SendUserEmailConfirmation(user, code);
+
+                    UserClaim.ClaimType = "TempCong";
+                    UserClaim.UserId = user.Id;
 
                     if (token != null)
                     {
                         Token = _context.Token.Find(token);
                         if (Token.UpdateDateTime.Add(new System.TimeSpan(24, 0, 0)) >= DateTime.UtcNow)
                         {
-                            AspNetUserClaims.ClaimType = "Congregation";
+                            UserClaim.ClaimType = "Congregation";
+                            type = "NewUser";
                         }
                     }
 
-                    if (Input.NewCongName != null)
+
+                    if (Input.NewCongName != null && _context.Cong.Count(a => a.CongName.ToUpper() == Input.NewCongName.ToUpper()) == 0)
                     {
-                        if (_context.Cong.Count(a => a.CongName.ToUpper() == Input.NewCongName.ToUpper()) == 0)
+                        Cong NewCong = new Cong
                         {
-                            Cong NewCong = new Cong
-                            {
-                                CongId = Guid.NewGuid(),
-                                CongName = Input.NewCongName,
-                                UpdateDatetime = DateTime.UtcNow
-                            };
+                            CongId = Guid.NewGuid(),
+                            CongName = Input.NewCongName,
+                            UpdateDatetime = DateTime.UtcNow
+                        };
 
-                            _context.Cong.Add(NewCong);
-                            await _emailSender.SendMailAsync(Input.Email, "New Congreation " + Input.NewCongName + " Created",
-                               $"Your new congregation " + Input.NewCongName + " has been created. When you log into the administration portal you will be able to add maps and administer do not calls. ", null);
-                        }
-                        AspNetUserClaims.ClaimType = "Congregation";
-                        AspNetUserClaims.ClaimValue = Input.NewCongName;
-
+                        _context.Cong.Add(NewCong);
+                        UserClaim.ClaimType = "Congregation";
+                        UserClaim.ClaimValue = Input.NewCongName;
+                        type = "NewCong";
                     }
 
-                    _context.AspNetUserClaims.Add(AspNetUserClaims);
+                    _context.AspNetUserClaims.Add(UserClaim);
                     await _context.SaveChangesAsync();
+
+                    IList<AspNetUserClaims> Usrs = await _context.AspNetUserClaims.Where(c => c.ClaimValue == UserClaim.ClaimValue && c.ClaimType == "Congregation" && c.User.Id != user.Id).ToListAsync();
+                    Cong cng = await _context.Cong.FirstOrDefaultAsync(c => c.CongName == UserClaim.ClaimValue);
+                    switch (type)
+                    {
+                        case "New":
+                            foreach (AspNetUserClaims u in Usrs)
+                            {
+                                _ = await _emailSender.SendUserApprovalRequest(u.User.Email, UserClaim.ClaimValue, user.FullName, cng.CongId.ToString());
+                            }
+                            break;
+                        case "NewUser":
+                            foreach (AspNetUserClaims u in Usrs)
+                            {
+                                _ = await _emailSender.SendUserAddition(u.User.Email, UserClaim.ClaimValue , user.FullName , cng.CongId.ToString() );
+                            }
+                            break;
+                        case "NewCong":
+                            _ = await _emailSender.SendNewCongregation(user.Email, UserClaim.ClaimValue, cng.CongId.ToString());
+                            IList<AspNetUserRoles> Admins = await _context.AspNetUserRoles.Where(r => r.Role.Name == "Admin").ToListAsync();
+                            foreach (AspNetUserRoles a in Admins)
+                            {
+                                _ = await _emailSender.SendUserApprovalRequest(a.User.Email, UserClaim.ClaimValue, user.FullName, cng.CongId.ToString(),true);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
 
                     return LocalRedirect(returnUrl);
                 }

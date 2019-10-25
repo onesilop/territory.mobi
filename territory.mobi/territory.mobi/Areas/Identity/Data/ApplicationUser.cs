@@ -13,5 +13,8 @@ namespace territory.mobi.Areas.Identity.Data
 
         [PersonalData]
         public string Surname { get; set; }
+
+        [PersonalData]
+        public string FullName => Name + " " + Surname;
     }
 }
