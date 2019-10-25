@@ -48,6 +48,7 @@ namespace territory.mobi
             From = new EmailAddress(FromAddress.SettingValue, FromName.SettingValue);
             UserInviteTemplateID = UserInviteT.SettingValue;
             SiteAddress = SiteAdd.SettingValue.ToString();
+            SiteAddress = "https://localhost:44339";
         }
 
 
@@ -107,13 +108,11 @@ namespace territory.mobi
         public async Task<IActionResult> SendUserEmailConfirmation(ApplicationUser user, string code)
         {
 
-            return new OkResult();
-            /* for some reason the token is not working
             string callbackUrl = SiteAddress + "/Identity/Account/ConfirmEmail?userId=" + user.Id + "&code=" + code;
 
             return await SendMailAsync(user.Email, "Confirm your email",
                                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.", null);
-            */
+            
         }
 
        

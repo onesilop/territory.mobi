@@ -126,8 +126,9 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                     string type = "New";
 
                     _logger.LogInformation("User created a new account with password.");
+                    Tokeniser tk = new Tokeniser(_context);
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    string code = await tk.GetUserToken(user);
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
                     _ = await _emailSender.SendUserEmailConfirmation(user, code);
@@ -213,3 +214,5 @@ namespace territory.mobi.Areas.Identity.Pages.Account
         }
     }
 }
+
+
