@@ -15,6 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using territory.mobi.Models;
 using territory.mobi.Areas.Identity.Data;
+using Microsoft.AspNetCore.ResponseCompression;
+using System.IO.Compression;
 
 namespace territory.mobi
 {
@@ -59,6 +61,16 @@ namespace territory.mobi
                 options.Lockout.AllowedForNewUsers = true;
             });
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
+            
+            services.AddResponseCompression(options => {
+                options.Providers.Add<BrotliCompressionProvider>();
+                options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "text/json" });
+            });
+
+            services.Configure<BrotliCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Optimal;
+            });
 
         }
 

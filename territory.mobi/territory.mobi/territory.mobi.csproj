@@ -6,6 +6,7 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>territory.mobi</RootNamespace>
     <TypeScriptToolsVersion>3.3</TypeScriptToolsVersion>
+    <ServerGarbageCollection>false</ServerGarbageCollection>
   </PropertyGroup>
 
   <ItemGroup>

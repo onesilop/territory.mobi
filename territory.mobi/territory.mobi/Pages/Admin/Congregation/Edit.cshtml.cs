@@ -119,20 +119,15 @@ namespace territory.mobi.Pages.Admin.Congregation
             };
             try
                 {
-                    Setting SiteAddress = _context.Setting.Where(a => a.SettingType == "SiteAddress").FirstOrDefault();
-                    var RedirectURL = SiteAddress.SettingValue.ToString() + "/Identity/Account/Register?token=" + userInvite.TokenId.ToString();
+
 
                     _context.Token.Add(userInvite);
-
+                    
+                    await _context.SaveChangesAsync();
                     Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongId == congid);
 
-
-                    await _context.SaveChangesAsync();
                     Mailer mailer = new Mailer(_context);
-                    return await mailer.SendUserInviteMail(email, RedirectURL, Cong.CongName.ToString());
-                    //var subject = "territory.mobi Invitation";
-                    //var htmlContent = "<h5>Hey there</h5></br>Please select this link to register for territory.mobi</br><a href='" + RedirectURL + "' >Register</a>";
-                    //return await mailer.SendMailAsync(email, subject, htmlContent, "");
+                    return await mailer.SendUserInviteMail(email, userInvite.TokenId.ToString(), Cong.CongName.ToString());
                 }
             catch (Exception ex)
                 {
