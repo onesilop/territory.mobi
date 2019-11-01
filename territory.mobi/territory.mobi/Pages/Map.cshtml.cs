@@ -54,7 +54,7 @@ namespace territory.mobi.Pages
                 foreach (DoNotCall d in dd)
                 {
                     string tmp = "";
-                    if (d.AptNo != "") { tmp = d.AptNo + "/ "; }
+                    if (d.AptNo != "" && d.AptNo != null) { tmp = d.AptNo + "/ "; }
                     tmp = tmp + d.StreetNo + " " + d.StreetName+"</br>";
                     res += tmp;
                 }
