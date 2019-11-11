@@ -45,6 +45,21 @@
 
     <div class="container">
         <partial name="_CookieConsentPartial" />
+        @if (TempData.ContainsKey("UserMessage"))
+        {
+            var cls = "alert-info";
+            if (TempData.ContainsKey("UserMessageClass"))
+            {
+                if (!String.IsNullOrEmpty(TempData["UserMessageClass"].ToString()))
+                {
+                    cls = TempData["UserMessageClass"].ToString();
+                }
+            }
+            <div id="message" class="alert @cls alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @TempData["UserMessage"].ToString()
+            </div>
+        }
         @if (ViewData.ContainsKey("PageHelpID"))
         {
             <div class="text-right">
@@ -60,6 +75,7 @@
                 <hr />
             </div>
         }
+
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -80,6 +96,12 @@
                 });
             });
         });
+
+        $(function () {
+            setTimeout(function () {
+                    $("#message").addClass('d-none');
+                }, 5000);
+            });
     </script>
 </body>
 </html>

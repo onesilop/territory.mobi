@@ -73,11 +73,14 @@ namespace territory.mobi.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
+            ApplicationUser usr = _userManager.GetUserAsync(User).Result;
 
             Input = new InputModel
             {
                 Email = email,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Name = usr.Name,
+                Surname = usr.Surname
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -118,6 +121,18 @@ namespace territory.mobi.Areas.Identity.Pages.Account.Manage
                     var userId = await _userManager.GetUserIdAsync(user);
                     throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
                 }
+            }
+
+            user.Email = Input.Email;
+            user.PhoneNumber = Input.PhoneNumber;
+            user.Name = Input.Name;
+            user.Surname = Input.Surname;
+
+            var setUser = await _userManager.UpdateAsync(user);
+            if (!setUser.Succeeded)
+            {
+                var userId = await _userManager.GetUserIdAsync(user);
+                throw new InvalidOperationException($"Unexpected error occurred setting name for user with ID '{userId}'.");
             }
 
             await _signInManager.RefreshSignInAsync(user);
