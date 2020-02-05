@@ -10,8 +10,8 @@ using territory.mobi.Models;
 namespace territory.mobi.Migrations
 {
     [DbContext(typeof(TerritoryContext))]
-    [Migration("20191111012414_territory")]
-    partial class territory
+    [Migration("20200204235620_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

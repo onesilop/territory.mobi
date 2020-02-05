@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace territory.mobi.Migrations
 {
-    public partial class territory : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.EnsureSchema(
+        { 
+           migrationBuilder.EnsureSchema(
                 name: "dbo");
 
             migrationBuilder.EnsureSchema(

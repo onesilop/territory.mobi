@@ -34,6 +34,7 @@ namespace territory.mobi.Pages.Admin.Congregation
             {
                 Cong = new Cong();
                 Cong.CongId = Guid.NewGuid();
+                Cong.UpdateDatetime = DateTime.UtcNow;
                 return Page();
             }
 
