@@ -4,5 +4,30 @@
     ViewData["Title"] = "Contact";
 }
 
-<h1>Contact</h1>
+<h1>Send us a message </h1>
+<hr />
+<form id="contact-form" method="post">
+    <div>
+        <label asp-for="Input.Subject" class="control-label"></label>
+        <input asp-for="Input.Subject" class="form-control" />
+        <span asp-validation-for="Input.Subject" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="Input.Body" class="control-label"></label>
+        <textarea id="body" asp-for="Input.Body" class="form-control"></textarea>
+        <span asp-validation-for="Input.Body" class="text-danger"></span>
+    </div>
+    <hr />
+    <button id="send-button" type="submit" class="btn btn-primary">Send</button>
+</form>
 
+
+    <script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=p2i7lwvunskci02cqotz0r5e9sacm04shhnafxbw8ru2r5y8"></script>
+    <script>
+        tinymce.init({
+            selector: '#body',
+            menubar: false,
+            plugins: "lists",
+            toolbar: 'undo redo | styleselect | bold italic | link image | alignleft aligncenter alignright alignjustify| outdent indent| numlist bullist |'
+        });
+    </script>

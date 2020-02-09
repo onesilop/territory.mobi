@@ -31,87 +31,35 @@ namespace territory.mobi
 
         // GET: api/Maps/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Map>> GetMap(Guid id)
+        public async Task<ActionResult<MapMin>> GetMap(Guid id)
         {
-            var map = await _context.Map.FindAsync(id);
+            Map m = await _context.Map.FindAsync(id);
 
-            if (map == null)
+            if (m == null)
             {
                 return NotFound();
             }
 
-            return map;
+            Images im = await _context.Images.Where(d => d.ImgId == m.ImgId).FirstOrDefaultAsync();
+            Section s = await _context.Section.Where(sc => sc.SectionId == m.SectionId).FirstOrDefaultAsync();
+            MapMin mm = new MapMin
+            {
+                DoNotCalls = m.DoNotCall,
+                ImgImage = im.ImgImage,
+                MapArea = m.MapArea,
+                MapDesc = m.MapDesc,
+                MapKey = m.MapKey,
+                Section = s.SectionId.ToString(),
+                SortOrder = m.SortOrder,
+                Display = m.Display,
+                Notes = m.Notes,
+                Parking = m.Parking
+            };
+
+            return mm;
         }
 
-        // PUT: api/Maps/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMap(Guid id, Map map)
-        {
-            if (id != map.MapId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(map).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MapExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Maps
-        [HttpPost]
-        public async Task<ActionResult<Map>> PostMap(Map map)
-        {
-            _context.Map.Add(map);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (MapExists(map.MapId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetMap", new { id = map.MapId }, map);
-        }
-
-        // DELETE: api/Maps/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Map>> DeleteMap(Guid id)
-        {
-            var map = await _context.Map.FindAsync(id);
-            if (map == null)
-            {
-                return NotFound();
-            }
-
-            _context.Map.Remove(map);
-            await _context.SaveChangesAsync();
-
-            return map;
-        }
+  
 
         private bool MapExists(Guid id)
         {
@@ -128,4 +76,6 @@ namespace territory.mobi
 
         }
     }
+
+   
 }

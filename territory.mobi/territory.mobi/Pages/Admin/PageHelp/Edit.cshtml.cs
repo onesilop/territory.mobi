@@ -66,7 +66,7 @@ namespace territory.mobi.Pages.Admin.PageHelp
             PageHelp.SectionId = Section;
             if (PageHelp.HtmlHelp != null)
             {
-                PageHelp.HtmlHelp = PageHelp.HtmlHelp.ToString().Replace("\r\n", "<br>").Replace("\r", "<br>").Replace("\n", "<br>");
+                PageHelp.HtmlHelp = PageHelp.HtmlHelp.ToString().Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
             }
                 if (!PageHelpExists(PageHelp.PageId,PageHelp.SectionId))
             {

@@ -7,6 +7,16 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="shortcut icon" href="~/images/assets/apple-touch-icon.png">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/popper/popper.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/js/bootbox/bootbox.js"></script>
+    <script src="~/js/sha.js"></script>
+    <script src="~/js/js.cookie.js"></script>
+    <script src="~/js/moment.js"></script>
+
 </head>
 <body>
     <header>
@@ -35,6 +45,21 @@
 
     <div class="container">
         <partial name="_CookieConsentPartial" />
+        @if (TempData.ContainsKey("UserMessage"))
+        {
+            var cls = "alert-info";
+            if (TempData.ContainsKey("UserMessageClass"))
+            {
+                if (!String.IsNullOrEmpty(TempData["UserMessageClass"].ToString()))
+                {
+                    cls = TempData["UserMessageClass"].ToString();
+                }
+            }
+            <div id="message" class="alert @cls alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @TempData["UserMessage"].ToString()
+            </div>
+        }
         @if (ViewData.ContainsKey("PageHelpID"))
         {
             <div class="text-right">
@@ -50,19 +75,12 @@
                 <hr />
             </div>
         }
+
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/js/popper/popper.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-
-    <script src="~/js/bootbox/bootbox.js"></script>
-    <script src="~/js/sha.js"></script>
-    <script src="~/js/js.cookie.js"></script>
 
     @RenderSection("Scripts", required: false)
     <script type="text/javascript">
@@ -78,6 +96,12 @@
                 });
             });
         });
+
+        $(function () {
+            setTimeout(function () {
+                    $("#message").addClass('d-none');
+                }, 5000);
+            });
     </script>
 </body>
 </html>

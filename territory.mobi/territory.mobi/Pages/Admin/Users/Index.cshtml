@@ -9,14 +9,6 @@
     <title>Index</title>
 </head>
 <body>
-    @if (TempData[IndexModel.MessageKey] is string message)
-    {
-        <div id="successMessage" class="alert alert-success">@message</div>
-    }
-    @if (TempData[IndexModel.ErrorKey] is string Errmessage)
-    {
-        <div id="successMessage" class="alert alert-danger">@Errmessage</div>
-    }
 <form method="post">
     <table class="table">
         <thead>

@@ -56,7 +56,7 @@ namespace territory.mobi.Pages.Admin.Users
             Mailer ml = new Mailer(_context);
             if (Body != null)
             {
-                Body = Body.ToString().Replace("\r\n", "<br>").Replace("\r", "<br>").Replace("\n", "<br>");
+                Body = Body.ToString().Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
             }
             foreach (string e in AreChecked)
             {
@@ -70,11 +70,17 @@ namespace territory.mobi.Pages.Admin.Users
                 }
             }
             if (notsentto.Count > 0)
-                TempData[MessageKey] = TempData[ErrorKey] + "</br>But not to"+ string.Join(", ", notsentto);
+                TempData[MessageKey] = TempData[ErrorKey] + "</br>But not to" + string.Join(", ", notsentto);
             else if (notsentto.Count >= AreChecked.Count)
-                TempData[ErrorKey] = "Email failed to send";
+            {
+                TempData["UserMessage"] = "Email failed to send";
+                TempData["UserMessageClass"] = "alert-danger";
+            }
             else
-                TempData[MessageKey] = "Email sent successfully";
+            {
+                TempData["UserMessageClass"] = "Email sent successfully";
+                TempData["UserMessage"] = "alert-success";
+            }
 
             return Redirect(Request.Path);    
         }

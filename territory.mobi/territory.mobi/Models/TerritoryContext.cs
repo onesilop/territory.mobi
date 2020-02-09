@@ -242,7 +242,7 @@ namespace territory.mobi.Models
                 entity.Property(e => e.StreetNo)
                     .IsRequired()
                     .HasColumnName("streetNo")
-                    .HasMaxLength(10)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Suburb)

@@ -48,13 +48,13 @@
                 <label>Select a congregation</label>
                 @if (Request.Query["token"].Count() > 0)
                 {
-                    <select class="form-control" asp-for="AspNetUserClaims.ClaimValue" disabled="disabled" asp-items="ViewBag.Congs"></select>
+                    <select class="form-control" asp-for="UserClaim.ClaimValue" disabled="disabled" asp-items="ViewBag.Congs"></select>
                 }
                 else
                 {
-                    <select class="form-control" asp-for="AspNetUserClaims.ClaimValue" asp-items="ViewBag.Congs"><option disabled selected>Select a congregation</option></select>
+                    <select class="form-control" asp-for="UserClaim.ClaimValue" asp-items="ViewBag.Congs"><option disabled selected>Select a congregation</option></select>
 
-                    <span asp-validation-for="AspNetUserClaims.ClaimValue" class="text-danger"></span>
+                    <span asp-validation-for="UserClaim.ClaimValue" class="text-danger"></span>
                     <label>To create a new congregation enter the name here:</label>
                     <input id="NewCong" asp-for="Input.NewCongName" class="form-control"/>
                     <span asp-validation-for="Input.NewCongName" class="text-danger"></span>
