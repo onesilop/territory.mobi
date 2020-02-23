@@ -28,10 +28,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
-    <PackageReference Include="Octokit" Version="0.36.0" />
-    <PackageReference Include="ReverseMarkdown" Version="3.9.0" />
-    <PackageReference Include="Sendgrid" Version="9.12.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="Octokit" Version="0.40.0" />
+    <PackageReference Include="ReverseMarkdown" Version="3.10.0" />
+    <PackageReference Include="Sendgrid" Version="9.12.7" />
   </ItemGroup>
 
 

@@ -48,6 +48,7 @@
                             </select>
                             <span asp-validation-for="Cong.ServId" class="text-danger"></span>
                         </div>
+                        <a target="_blank" asp-page="/Admin/PageHelp/Edit" id="SetDNCPassword" class="btn-link">Set Do Not Call password</a>
                         <div class="form-group">
                             <input id="saveBtn" type="submit" value="Save" class="btn btn-default bg-primary text-white" />
                         </div>
@@ -316,6 +317,45 @@
                     scrollable: true
                 });
             });
+
+             $("#SetDNCPassword").click(function () {
+                   bootbox.prompt({
+                        title: "<h3>Enter a new Do Not Call password</h3>",
+                        inputType: "text",
+                        onEscape: true,
+                        backdrop: true,
+                        centerVertical: true,
+                        scrollable: true,
+                        callback: function (result) {
+                            if (result != null) {
+                                $.ajax({
+                                    url: '/Admin/Congregation/Edit?handler=SetPassword',
+                                    type: 'POST',
+                                    beforeSend: function (xhr) {
+                                        xhr.setRequestHeader("XSRF-TOKEN",
+                                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                                    },
+                                    data: {
+                                        password: result,
+                                        congId: "@Model.Cong.CongId"
+                                    }
+                                })
+                                .fail(function (result) {
+                                    console.log(result);
+                                    bootbox.dialog({
+                                        title: "<h3>Unable to set password</h3>",
+                                        message: "Sorry something went wrong and we couldn't set the password",
+                                        onEscape: true,
+                                        backdrop: true,
+                                        centerVertical: true,
+                                        scrollable: true
+                                    });
+                                })
+
+                            };
+                        }
+                   });
+                });
 
                 $("#invite").click(function () {
                    bootbox.prompt({

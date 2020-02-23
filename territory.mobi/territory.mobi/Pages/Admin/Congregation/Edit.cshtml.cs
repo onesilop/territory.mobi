@@ -33,7 +33,7 @@ namespace territory.mobi.Pages.Admin.Congregation
         public IList<Setting> Setting { get; set; }
         public IList<AspNetUserClaims> UnapprovedUsers { get; set; }
         public string CongNames { get; set; }
-
+        public IList<Dncpword> Password { get; set; }
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
             if (User.Identity.IsAuthenticated == false)
@@ -104,6 +104,7 @@ namespace territory.mobi.Pages.Admin.Congregation
                         }
                     }
                 }
+                Password = await _context.Dncpword.Where(p => p.CongId == Cong.CongId && p.Notinuse == 0).ToListAsync();
                 return Page();
             }
         }
@@ -134,6 +135,37 @@ namespace territory.mobi.Pages.Admin.Congregation
                     Debug.WriteLine(ex.InnerException);
                     return new BadRequestResult();
                 }
+        }
+
+        public async Task<IActionResult> OnPostSetPassword(string password, Guid congid, bool stopOthers = false)
+        {
+            Guid newid = Guid.NewGuid();
+            Dncpword pword = new Dncpword();
+            pword.PwdId = newid;
+            pword.PasswordHash = password;
+            pword.CongId = congid;
+            pword.Notinuse = 0;
+            try
+            {
+                Password = await _context.Dncpword.Where(p => p.CongId == Cong.CongId).ToListAsync();
+                _context.Dncpword.Add(pword);
+                await _context.SaveChangesAsync();
+                if (stopOthers)
+                {
+                    foreach (Dncpword pwd in Password)
+                    {
+                        pwd.Notinuse = 1;
+                        _context.Dncpword.Attach(pwd);
+                    }
+                    await _context.SaveChangesAsync();
+                }
+                return new StatusCodeResult(200);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.InnerException);
+                return new BadRequestResult();
+            }
         }
 
 
