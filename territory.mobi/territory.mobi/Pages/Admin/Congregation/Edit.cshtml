@@ -48,7 +48,6 @@
                             </select>
                             <span asp-validation-for="Cong.ServId" class="text-danger"></span>
                         </div>
-                        <a hidden="hidden" target="_blank" asp-page="/Admin/PageHelp/Edit" id="SetDNCPassword" class="btn-link">Set Do Not Call password</a>
                         <div class="form-group">
                             <input id="saveBtn" type="submit" value="Save" class="btn btn-default bg-primary text-white" />
                         </div>
@@ -120,7 +119,6 @@
                 </div>
                 </div>
         </div>
-
             <div id="Maps" class="panel  border pt-2 mb-2">
                 <div class="panel-heading d-flex">
                     <h5 class="panel-title pl-2 d-inline">
@@ -145,8 +143,9 @@
                 </div>
             <div id="collapse3" class="panel-collapse collapse  border-top mb-2">
                 <div class="p-2">
+                    <a href="#" id="SetDNCPassword" class="btn-link">Set Do Not Call password</a> |
                     <a asp-page="./Section/Index" asp-route-id="@Request.Query["id"]">Edit Sections</a> |
-                    <a asp-page="./Maps/Create" asp-route-id="@Request.Query["id"]">New Map</a><p/>
+                    <a asp-page="./Maps/Create" asp-route-id="@Request.Query["id"]">New Map</a><p />
                     <table class="table border-0">
                         <thead>
                             <tr>
@@ -336,7 +335,7 @@
                                             $('input:hidden[name="__RequestVerificationToken"]').val());
                                     },
                                     data: {
-                                        password: result,
+                                        password: sha1(result),
                                         congId: "@Model.Cong.CongId"
                                     }
                                 })
