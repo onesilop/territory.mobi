@@ -13,13 +13,13 @@
 
 <div id="imgDiv" class="m-0 p-0 align-middle">
 
-    @if (Model.Image.ImgImage == null)
-    {
-        <img id="mappic" class="img-fluid align-self-center align-middle d-block mx-auto w-auto h-auto" src="@Model.Image.ImgPath" alt="@Model.Image.ImgText" />
-    }
-    else
+    @if (Model.ImgPath == "b64")
     {
         <img id="mappic" class="img-fluid align-self-center align-middle d-block mx-auto w-auto h-auto" src="data:image;base64,@System.Convert.ToBase64String(Model.Image.ImgImage)" alt="@Model.Image.ImgText" />
+    }
+    else if (Model.ImgPath == "pth")
+    {
+        <img id="mappic" class="img-fluid align-self-center align-middle d-block mx-auto w-auto h-auto" src="@Model.Image.ImgPath" alt="@Model.Image.ImgText" />
     }
 </div>
 

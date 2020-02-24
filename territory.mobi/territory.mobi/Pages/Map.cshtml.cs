@@ -34,6 +34,7 @@ namespace territory.mobi.Pages
         public string ParkingHT { get; set; }
         public string NotesHT { get; set; }
         public string DncHT { get; set; }
+        public string ImgPath { get; set; } = "b64";
         public bool ShowMap { get; set; } = false;
         public string GoogleKey { get; set; }
         public IList<Setting> Setting { get; set; }
@@ -94,13 +95,20 @@ namespace territory.mobi.Pages
 
 
             Image = await _context.Images.FirstOrDefaultAsync(m => m.ImgId == Map.ImgId);
-
+            if (Image != null)
+            {
+                if (Image.ImgPath != null) { ImgPath = "pth"; }
+            }
+            else
+            {
+                ImgPath = "";
+            }
             DNC = await _context.DoNotCall.ToListAsync();
             DNC = DNC.Where(d => d.MapId == Map.MapId && d.Display == true).ToList();
 
             if (await _context.MapFeature.Where(m => m.MapId == Map.MapId).CountAsync() > 0) { ShowMap = true; }
 
-            if (Map.MapPolygon != "") { ShowMap = true; }
+            if (Map.MapPolygon != "" && Map.MapPolygon != null) { ShowMap = true; }
 
             Setting set = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync();
             GoogleKey = set.SettingValue;
