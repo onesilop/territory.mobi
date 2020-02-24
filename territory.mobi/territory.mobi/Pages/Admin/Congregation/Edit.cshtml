@@ -49,6 +49,14 @@
                             <span asp-validation-for="Cong.ServId" class="text-danger"></span>
                         </div>
                         <div class="form-group">
+                            <label asp-for="Cong.Hide" class="control-label"></label>
+                            <select class="form-control" asp-for="Cong.Hide">
+                                <option value="false">Show in congregation directory</option>
+                                <option value="true">Hide in congregation directory</option>
+                            </select>
+                            <span asp-validation-for="Cong.Hide" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
                             <input id="saveBtn" type="submit" value="Save" class="btn btn-default bg-primary text-white" />
                         </div>
                     </form>

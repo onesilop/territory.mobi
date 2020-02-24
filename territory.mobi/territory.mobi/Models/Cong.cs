@@ -13,6 +13,8 @@ namespace territory.mobi.Models
         public string ServId { get; set; }
         public DateTime UpdateDatetime { get; set; }
 
+        public bool Hide { get; set; }
+
         public static implicit operator string(Cong v)
         {
             throw new NotImplementedException();

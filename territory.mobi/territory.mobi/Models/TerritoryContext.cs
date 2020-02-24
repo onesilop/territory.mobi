@@ -183,6 +183,8 @@ namespace territory.mobi.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Hide).HasColumnName("hide");
+
                 entity.Property(e => e.UpdateDatetime).HasColumnType("datetime");
             });
 
