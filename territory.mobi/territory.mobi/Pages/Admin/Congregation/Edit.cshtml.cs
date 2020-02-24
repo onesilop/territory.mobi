@@ -169,11 +169,11 @@ namespace territory.mobi.Pages.Admin.Congregation
         }
 
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(Guid? id)
         {
             if (!ModelState.IsValid)
             {
-                return Page();
+                return await OnGetAsync(id);
             }
             Cong.UpdateDatetime = DateTime.UtcNow; 
             _context.Attach(Cong).State = EntityState.Modified;

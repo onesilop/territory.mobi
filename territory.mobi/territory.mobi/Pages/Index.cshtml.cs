@@ -23,7 +23,7 @@ namespace territory.mobi.Pages
 
         public async Task OnGetAsync()
         {
-            Cong = await _context.Cong.ToListAsync();
+            Cong = await _context.Cong.Where(c => c.Hide == false).ToListAsync();
         }
     }
 }
