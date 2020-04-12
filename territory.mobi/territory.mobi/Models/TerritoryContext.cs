@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace territory.mobi.Models
 {
-    public partial class TerritoryContext : DbContext
+    public partial class TerritoryContext : Microsoft.EntityFrameworkCore.DbContext
     {
         public TerritoryContext()
         {

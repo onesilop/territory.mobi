@@ -116,7 +116,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null, Guid? token = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl ??= Url.Content("~/");
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, Name = Input.Name, Surname = Input.Surname };
@@ -157,13 +157,11 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                         };
 
                         _context.Cong.Add(NewCong);
+                        _context.SaveChanges();
                         UserClaim.ClaimType = "Congregation";
                         UserClaim.ClaimValue = Input.NewCongName;
                         type = "NewCong";
                     }
-
-                    _context.AspNetUserClaims.Add(UserClaim);
-                    await _context.SaveChangesAsync();
 
                     IList<AspNetUserClaims> Usrs = await _context.AspNetUserClaims.Where(c => c.ClaimValue == UserClaim.ClaimValue && c.ClaimType == "Congregation" && c.User.Id != user.Id).ToListAsync();
                     Cong cng = await _context.Cong.FirstOrDefaultAsync(c => c.CongName == UserClaim.ClaimValue);
@@ -192,6 +190,8 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                         default:
                             break;
                     }
+                    _context.AspNetUserClaims.Add(UserClaim);
+                    await _context.SaveChangesAsync();
 
                     return LocalRedirect(returnUrl);
                 }

@@ -24,9 +24,15 @@ namespace territory.mobi
 
         // GET: api/Maps
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Map>>> GetMap()
+        public async Task<ActionResult<IEnumerable<MapMin>>> GetMap()
         {
-            return await _context.Map.ToListAsync();
+            IList<MapMin> MapMins = new List<MapMin>();
+            IList<Map> mps = await _context.Map.ToListAsync();
+            foreach (Map m in mps)
+            {
+                MapMins.Add(new MapMin(m, _context));
+            }
+            return MapMins.ToList();
         }
 
         // GET: api/Maps/5
@@ -40,21 +46,7 @@ namespace territory.mobi
                 return NotFound();
             }
 
-            Images im = await _context.Images.Where(d => d.ImgId == m.ImgId).FirstOrDefaultAsync();
-            Section s = await _context.Section.Where(sc => sc.SectionId == m.SectionId).FirstOrDefaultAsync();
-            MapMin mm = new MapMin
-            {
-                DoNotCalls = m.DoNotCall,
-                ImgImage = im.ImgImage,
-                MapArea = m.MapArea,
-                MapDesc = m.MapDesc,
-                MapKey = m.MapKey,
-                Section = s.SectionId.ToString(),
-                SortOrder = m.SortOrder,
-                Display = m.Display,
-                Notes = m.Notes,
-                Parking = m.Parking
-            };
+            MapMin mm = new MapMin(m, _context);
 
             return mm;
         }
