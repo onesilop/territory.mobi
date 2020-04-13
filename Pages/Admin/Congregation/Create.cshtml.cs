@@ -49,7 +49,7 @@ namespace territory.mobi.Pages.Admin.Congregation
             }
 
             _context.Cong.Add(Cong);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
 
             return RedirectToPage("./Index");
         }

@@ -28,7 +28,7 @@ namespace territory.mobi
             _context.AspNetUserTokens.Add(tk);
             try
             {
-                _ = await _context.SaveChangesAsync();
+                _ = await _context.SaveChangesAsync().ConfigureAwait(false);
             }
             catch
             { 
@@ -39,7 +39,7 @@ namespace territory.mobi
 
         public async Task<Boolean> CheckUserToken(AspNetUsers user, string token)
         {
-            AspNetUserTokens tk = await _context.AspNetUserTokens.FirstOrDefaultAsync(t => t.Value == token && t.UserId == user.Id);
+            AspNetUserTokens tk = await _context.AspNetUserTokens.FirstOrDefaultAsync(t => t.Value == token && t.UserId == user.Id).ConfigureAwait(false);
             if (tk != null)
             {
                 _context.AspNetUserTokens.Remove(tk);
@@ -48,7 +48,7 @@ namespace territory.mobi
             
                 try
                 {
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
                 catch
                 {

@@ -30,7 +30,7 @@ namespace territory.mobi.Pages.Admin.Users
                 return NotFound();
             }
 
-            AspNetUsers = await _context.AspNetUsers.FirstOrDefaultAsync(m => m.Id == id);
+            AspNetUsers = await _context.AspNetUsers.FirstOrDefaultAsync(m => m.Id == id).ConfigureAwait(false);
 
             if (AspNetUsers == null)
             {
@@ -51,7 +51,7 @@ namespace territory.mobi.Pages.Admin.Users
             if (AspNetUsers != null)
             {
                 _context.AspNetUsers.Remove(AspNetUsers);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
             }
 
             return RedirectToPage("./Index");

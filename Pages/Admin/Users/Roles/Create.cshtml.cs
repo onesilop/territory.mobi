@@ -59,7 +59,7 @@ namespace territory.mobi.Pages.Admin.Users.Roles
                 return Page();
             }
             _context.AspNetUserRoles.Add(AspNetUserRoles);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
 
             IDictionary<string, string> args = new Dictionary<string, string>();
             args.Add("id", id);

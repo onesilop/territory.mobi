@@ -78,13 +78,13 @@ namespace territory.mobi.Pages
                 return NotFound();
             }
 
-            Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongName == CongName);
+            Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongName == CongName).ConfigureAwait(false);
             if (Cong == null)
             {
                 return NotFound();
             }
             CookieID += CongName;
-            Map = await _context.Map.FirstOrDefaultAsync(m => m.MapKey == MapNo && m.CongId == Cong.CongId);
+            Map = await _context.Map.FirstOrDefaultAsync(m => m.MapKey == MapNo && m.CongId == Cong.CongId).ConfigureAwait(false);
             if (Map == null)
             {
                 return NotFound();
@@ -93,21 +93,21 @@ namespace territory.mobi.Pages
             NotesHT = HttpUtility.HtmlEncode(Map.Notes);
 
 
-            Image = await _context.Images.FirstOrDefaultAsync(m => m.ImgId == Map.ImgId);
+            Image = await _context.Images.FirstOrDefaultAsync(m => m.ImgId == Map.ImgId).ConfigureAwait(false);
 
-            DNC = await _context.DoNotCall.ToListAsync();
+            DNC = await _context.DoNotCall.ToListAsync().ConfigureAwait(false);
             DNC = DNC.Where(d => d.MapId == Map.MapId && d.Display == true).ToList();
 
-            if (await _context.MapFeature.Where(m => m.MapId == Map.MapId).CountAsync() > 0) { ShowMap = true; }
+            if (await _context.MapFeature.Where(m => m.MapId == Map.MapId).CountAsync().ConfigureAwait(false) > 0) { ShowMap = true; }
 
             if (Map.MapPolygon != "") { ShowMap = true; }
 
-            Setting set = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync();
+            Setting set = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync().ConfigureAwait(false);
             GoogleKey = set.SettingValue;
 
-            MapPolygons = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Polygon").ToListAsync();
-            MapMarkers = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Marker").ToListAsync();
-            MapFeature MapCentre = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Centre").FirstOrDefaultAsync();
+            MapPolygons = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Polygon").ToListAsync().ConfigureAwait(false);
+            MapMarkers = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Marker").ToListAsync().ConfigureAwait(false);
+            MapFeature MapCentre = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Centre").FirstOrDefaultAsync().ConfigureAwait(false);
 
             if (MapCentre != null)
             {
@@ -131,7 +131,7 @@ namespace territory.mobi.Pages
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
             }
             catch (DbUpdateConcurrencyException)
             {

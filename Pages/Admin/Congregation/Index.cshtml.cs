@@ -36,7 +36,7 @@ namespace territory.mobi.Pages.Admin.Congregation
             {
                 if (User.IsInRole("Admin"))
                 {
-                    Cong = await _context.Cong.ToListAsync();
+                    Cong = await _context.Cong.ToListAsync().ConfigureAwait(false);
                 }
                 else
                 { 
@@ -51,7 +51,7 @@ namespace territory.mobi.Pages.Admin.Congregation
                         foreach (Claim c in claims)
                         {
 
-                            Cong.Add(await _context.Cong.Where(a => a.CongName == c.Value).FirstOrDefaultAsync());
+                            Cong.Add(await _context.Cong.Where(a => a.CongName == c.Value).FirstOrDefaultAsync().ConfigureAwait(false));
 
                         }
                     }
@@ -61,7 +61,7 @@ namespace territory.mobi.Pages.Admin.Congregation
                 ViewData["PageHelpID"] = pId;
                 if (_context.PageHelp.Count(p => p.PageId == pId) > 0)
                 {
-                    IList<PageHelpText> phl = await _context.PageHelp.Where(p => p.PageId == pId).ToListAsync();
+                    IList<PageHelpText> phl = await _context.PageHelp.Where(p => p.PageId == pId).ToListAsync().ConfigureAwait(false);
                     foreach (PageHelpText ph in phl)
                     { 
                     if (ph.HtmlHelp != null)

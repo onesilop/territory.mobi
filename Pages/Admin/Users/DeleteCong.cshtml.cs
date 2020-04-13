@@ -30,7 +30,7 @@ namespace territory.mobi.Pages.Admin.Users.Claims
             else
             {
                 AspNetUserClaims = await _context.AspNetUserClaims
-                .Include(a => a.User).FirstOrDefaultAsync(m => m.Id == claimid);
+                .Include(a => a.User).FirstOrDefaultAsync(m => m.Id == claimid).ConfigureAwait(false);
 
                 ViewData["name"] = _context.AspNetUsers.Where(u => u.Id == id).FirstOrDefault().FullName;
                 if (AspNetUserClaims == null)
@@ -49,7 +49,7 @@ namespace territory.mobi.Pages.Admin.Users.Claims
             if (AspNetUserClaims != null)
             {
                 _context.AspNetUserClaims.Remove(AspNetUserClaims);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
             }
 
             if (cong != "") { id = cong; }

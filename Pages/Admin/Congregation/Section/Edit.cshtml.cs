@@ -30,13 +30,13 @@ namespace territory.mobi.Pages.Admin.Congregation.Sections
                 return NotFound();
             }
 
-            Section = await _context.Section.FirstOrDefaultAsync(m => m.SectionId == id);
+            Section = await _context.Section.FirstOrDefaultAsync(m => m.SectionId == id).ConfigureAwait(false);
 
             if (Section == null)
             {
                 return NotFound();
             }
-            Cong ThisCong = await _context.Cong.Where(a => a.CongId == Section.CongId).FirstOrDefaultAsync();
+            Cong ThisCong = await _context.Cong.Where(a => a.CongId == Section.CongId).FirstOrDefaultAsync().ConfigureAwait(false);
             ViewData["Cong"] = ThisCong.CongName;
 
             return Page();
@@ -53,7 +53,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Sections
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
             }
             catch (DbUpdateConcurrencyException)
             {

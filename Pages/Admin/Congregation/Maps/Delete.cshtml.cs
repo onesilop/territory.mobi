@@ -28,7 +28,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
                 return NotFound();
             }
 
-            Map = await _context.Map.FirstOrDefaultAsync(m => m.MapId == id);
+            Map = await _context.Map.FirstOrDefaultAsync(m => m.MapId == id).ConfigureAwait(false);
 
             if (Map == null)
             {
@@ -60,9 +60,9 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
                 {
                     _context.DoNotCall.Remove(d);
                 }
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
                 _context.Map.Remove(Map);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
             }
             IDictionary<string, string> args = new Dictionary<string, string>
             {

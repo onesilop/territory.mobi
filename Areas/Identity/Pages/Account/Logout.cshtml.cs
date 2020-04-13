@@ -25,7 +25,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGet(string returnUrl = null)
         {
-            await _signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync().ConfigureAwait(false);
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {
@@ -39,7 +39,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
-            await _signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync().ConfigureAwait(false);
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {

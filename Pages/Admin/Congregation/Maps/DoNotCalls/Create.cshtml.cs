@@ -40,7 +40,7 @@ namespace territory.mobi.Pages.Admin.Congregation.DoNotCalls
             }
 
             _context.DoNotCall.Add(DoNotCall);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             IDictionary<string, string> args = new Dictionary<string, string>
             {
                 { "id", id.ToString()}

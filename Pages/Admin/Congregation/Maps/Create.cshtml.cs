@@ -86,7 +86,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
 
             Map.CongId = id;
             _context.Map.Add(Map);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
 
             IDictionary<string, string> args = new Dictionary<string, string>
             {

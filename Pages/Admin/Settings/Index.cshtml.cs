@@ -22,7 +22,7 @@ namespace territory.mobi.Pages.Admin.Settings
 
         public async Task OnGetAsync()
         {
-            Setting = await _context.Setting.ToListAsync();
+            Setting = await _context.Setting.ToListAsync().ConfigureAwait(false);
         }
     }
 }

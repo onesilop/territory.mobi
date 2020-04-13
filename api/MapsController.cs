@@ -27,7 +27,7 @@ namespace territory.mobi
         public async Task<ActionResult<IEnumerable<MapMin>>> GetMap()
         {
             IList<MapMin> MapMins = new List<MapMin>();
-            IList<Map> mps = await _context.Map.ToListAsync();
+            IList<Map> mps = await _context.Map.ToListAsync().ConfigureAwait(false);
             foreach (Map m in mps)
             {
                 MapMins.Add(new MapMin(m, _context));

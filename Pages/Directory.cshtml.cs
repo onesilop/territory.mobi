@@ -31,20 +31,20 @@ namespace territory.mobi.Pages
 
             CongName = CongName.Split("/")[0];
                         
-            Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongName.ToUpper() == CongName.ToUpper());
+            Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongName.ToUpper() == CongName.ToUpper()).ConfigureAwait(false);
 
             if (Cong == null)
             {
                 return Redirect("Index");
             }
 
-            Map = await _context.Map.ToListAsync();
+            Map = await _context.Map.ToListAsync().ConfigureAwait(false);
             Map = Map.Where(m => m.CongId == Cong.CongId && m.SectionId == null && m.Display == true).OrderBy(m => m.SortOrder).ToList();
 
-            Section = await _context.Section.Where(s => s.CongId == Cong.CongId).ToListAsync();
+            Section = await _context.Section.Where(s => s.CongId == Cong.CongId).ToListAsync().ConfigureAwait(false);
             foreach (Section s in Section)
             {
-                s.Maps = await _context.Map.Where(m => m.CongId == Cong.CongId && m.SectionId == s.SectionId && m.Display == true).ToListAsync();
+                s.Maps = await _context.Map.Where(m => m.CongId == Cong.CongId && m.SectionId == s.SectionId && m.Display == true).ToListAsync().ConfigureAwait(false);
             }
             return Page();
     }

@@ -36,7 +36,7 @@ namespace territory.mobi.Pages.Admin.Congregation
                     return NotFound();
                 }
 
-                Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongId == id);
+                Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongId == id).ConfigureAwait(false);
 
                 if (Cong == null)
                 {
@@ -58,7 +58,7 @@ namespace territory.mobi.Pages.Admin.Congregation
             if (Cong != null)
             {
                 _context.Cong.Remove(Cong);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
             }
 
             return RedirectToPage("./Index");

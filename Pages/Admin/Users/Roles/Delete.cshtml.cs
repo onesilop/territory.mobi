@@ -36,7 +36,7 @@ namespace territory.mobi.Pages.Admin.Users.Roles
 
                 AspNetUserRoles = await _context.AspNetUserRoles
                     .Include(a => a.Role) 
-                    .Include(a => a.User).FirstOrDefaultAsync(m => m.UserId == id && m.RoleId == roleid);
+                    .Include(a => a.User).FirstOrDefaultAsync(m => m.UserId == id && m.RoleId == roleid).ConfigureAwait(false);
 
                 if (AspNetUserRoles == null)
                 {
@@ -53,12 +53,12 @@ namespace territory.mobi.Pages.Admin.Users.Roles
                 return NotFound();
             }
 
-            AspNetUserRoles = await _context.AspNetUserRoles.FirstOrDefaultAsync(m => m.UserId == id && m.RoleId == roleid);
+            AspNetUserRoles = await _context.AspNetUserRoles.FirstOrDefaultAsync(m => m.UserId == id && m.RoleId == roleid).ConfigureAwait(false);
 
             if (AspNetUserRoles != null)
             {
                 _context.AspNetUserRoles.Remove(AspNetUserRoles);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
             }
             IDictionary<string, string> args = new Dictionary<string, string>();
             args.Add("id", id);

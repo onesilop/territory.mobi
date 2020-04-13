@@ -27,7 +27,7 @@ namespace territory.mobi.Pages.Admin.Settings
                 return NotFound();
             }
 
-            Setting = await _context.Setting.FirstOrDefaultAsync(m => m.SettingId == id);
+            Setting = await _context.Setting.FirstOrDefaultAsync(m => m.SettingId == id).ConfigureAwait(false);
 
             if (Setting == null)
             {

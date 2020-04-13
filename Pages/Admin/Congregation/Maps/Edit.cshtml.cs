@@ -35,7 +35,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
         public int MapZoom { get; set; } = 16;
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            Setting set = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync();
+            Setting set = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync().ConfigureAwait(false);
             GoogleKey = set.SettingValue;
 
             if (id == null)
@@ -45,16 +45,16 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
 
             Map = await _context.Map
                 .Include(d => d.DoNotCall)
-                .FirstOrDefaultAsync(m => m.MapId == id);
+                .FirstOrDefaultAsync(m => m.MapId == id).ConfigureAwait(false);
 
             if (Map == null)
             {
                 return NotFound();
             }
 
-            MapPolygons = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Polygon").ToListAsync();
-            MapMarkers = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Marker").ToListAsync();
-            MapFeature MapCentre = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Centre").FirstOrDefaultAsync();
+            MapPolygons = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Polygon").ToListAsync().ConfigureAwait(false);
+            MapMarkers = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Marker").ToListAsync().ConfigureAwait(false);
+            MapFeature MapCentre = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Centre").FirstOrDefaultAsync().ConfigureAwait(false);
 
             if (MapCentre != null)
             {
@@ -64,7 +64,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
                 MapZoom = MapCentre.Zoom;
             }
 
-            CurrentImage = await _context.Images.FirstOrDefaultAsync(m => m.ImgId == Map.ImgId);
+            CurrentImage = await _context.Images.FirstOrDefaultAsync(m => m.ImgId == Map.ImgId).ConfigureAwait(false);
             if (CurrentImage == null)
             {
                 CurrentImage = new Images();
@@ -82,7 +82,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
             MapKeys = Newtonsoft.Json.JsonConvert.SerializeObject(ListOMapKeys);
 
             DoNotCall = _context.DoNotCall.Where(d => d.MapId == Map.MapId).ToList();
-            IList<Models.Section> slist = await _context.Section.Where(s => s.CongId == Map.CongId).ToListAsync();
+            IList<Models.Section> slist = await _context.Section.Where(s => s.CongId == Map.CongId).ToListAsync().ConfigureAwait(false);
             ViewData["Section"] = new SelectList(slist, "SectionId", "SectionTitle", Map.SectionId);
 
             string pId = "Map/Edit";
@@ -90,7 +90,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
             ViewData["PageHelpID"] = pId;
             if (_context.PageHelp.Count(p => p.PageId == pId) > 0)
             {
-                IList<PageHelpText> phl = await _context.PageHelp.Where(p => p.PageId == pId).ToListAsync();
+                IList<PageHelpText> phl = await _context.PageHelp.Where(p => p.PageId == pId).ToListAsync().ConfigureAwait(false);
                 foreach (PageHelpText ph in phl)
                 {
                     if (ph.HtmlHelp != null)
@@ -124,7 +124,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -151,7 +151,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
 
             if (files.Count != 0)
             { 
-                Map = await _context.Map.FirstOrDefaultAsync(m => m.MapId == id);
+                Map = await _context.Map.FirstOrDefaultAsync(m => m.MapId == id).ConfigureAwait(false);
                 IFormFile uploadedImage = files.FirstOrDefault();
                 if (uploadedImage == null || uploadedImage.ContentType.ToLower().StartsWith("image/"))
                 {
@@ -172,7 +172,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
                     _context.Attach(Map).State = EntityState.Modified;
                     try
                     {
-                        await _context.SaveChangesAsync();
+                        await _context.SaveChangesAsync().ConfigureAwait(false);
                     }
                     catch (DbUpdateConcurrencyException)
                     {
@@ -187,7 +187,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
                     }
                 }
             }
-            return await OnGetAsync(id);
+            return await OnGetAsync(id).ConfigureAwait(false);
         }
 
         private bool MapExists(Guid id)

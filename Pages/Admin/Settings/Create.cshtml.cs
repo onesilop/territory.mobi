@@ -37,7 +37,7 @@ namespace territory.mobi.Pages.Admin.Settings
             }
 
             _context.Setting.Add(Setting);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
 
             return RedirectToPage("./Index");
         }

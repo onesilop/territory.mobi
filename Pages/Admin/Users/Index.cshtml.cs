@@ -46,7 +46,7 @@ namespace territory.mobi.Pages.Admin.Users
         }
         else
         {
-            AspNetUsers = await _context.AspNetUsers.ToListAsync();
+            AspNetUsers = await _context.AspNetUsers.ToListAsync().ConfigureAwait(false);
             }
         }
 
@@ -62,7 +62,7 @@ namespace territory.mobi.Pages.Admin.Users
             {
                 try
                 {
-                   await ml.SendMailAsync(e, Subject,Body , null);
+                   await ml.SendMailAsync(e, Subject,Body , null).ConfigureAwait(false);
                 }
                 catch
                 {
@@ -87,9 +87,9 @@ namespace territory.mobi.Pages.Admin.Users
 
         public async Task<IActionResult> OnPostResetPAsync(string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
             Mailer _emailSender = new Mailer(_context);
-            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
             var callbackUrl = Url.Page(
                 "/Account/ResetPassword",
                 pageHandler: null,
@@ -98,7 +98,7 @@ namespace territory.mobi.Pages.Admin.Users
 
             var msg = $"Please reset your password by<a href= '{HtmlEncoder.Default.Encode(callbackUrl)}' > clicking here</ a >.";
 
-            return await _emailSender.SendMailAsync(email, "Reset Password", msg, null);
+            return await _emailSender.SendMailAsync(email, "Reset Password", msg, null).ConfigureAwait(false);
 
         }
     }

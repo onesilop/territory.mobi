@@ -41,7 +41,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Sections
             Section.CongId = id;
             Section.SectionId = Guid.NewGuid();
             _context.Section.Add(Section);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
 
             IDictionary<string, string> args = new Dictionary<string, string>
             {

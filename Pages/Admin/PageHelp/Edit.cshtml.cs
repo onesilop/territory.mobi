@@ -30,7 +30,7 @@ namespace territory.mobi.Pages.Admin.PageHelp
                 return NotFound();
             }
 
-            PageHelp = await _context.PageHelp.FirstOrDefaultAsync(m => m.PageId == id && m.SectionId == Section);
+            PageHelp = await _context.PageHelp.FirstOrDefaultAsync(m => m.PageId == id && m.SectionId == Section).ConfigureAwait(false);
 
             if (PageHelp == null)
             {
@@ -78,7 +78,7 @@ namespace territory.mobi.Pages.Admin.PageHelp
             }
             try
             {
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
             }
             catch (DbUpdateConcurrencyException)
             {

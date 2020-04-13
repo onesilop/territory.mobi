@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -120,7 +118,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, Name = Input.Name, Surname = Input.Surname };
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                var result = await _userManager.CreateAsync(user, Input.Password).ConfigureAwait(false);
                 if (result.Succeeded)
                 {
                     string type = "New";
@@ -128,10 +126,10 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
                     Tokeniser tk = new Tokeniser(_context);
 
-                    string code = await tk.GetUserToken(user);
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    string code = await tk.GetUserToken(user).ConfigureAwait(false);
+                    await _signInManager.SignInAsync(user, isPersistent: false).ConfigureAwait(false);
 
-                    _ = await _emailSender.SendUserEmailConfirmation(user, code);
+                    _ = await _emailSender.SendUserEmailConfirmation(user, code).ConfigureAwait(false);
 
                     UserClaim.ClaimType = "TempCong";
                     UserClaim.UserId = user.Id;
@@ -163,35 +161,35 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                         type = "NewCong";
                     }
 
-                    IList<AspNetUserClaims> Usrs = await _context.AspNetUserClaims.Where(c => c.ClaimValue == UserClaim.ClaimValue && c.ClaimType == "Congregation" && c.User.Id != user.Id).ToListAsync();
-                    Cong cng = await _context.Cong.FirstOrDefaultAsync(c => c.CongName == UserClaim.ClaimValue);
+                    IList<AspNetUserClaims> Usrs = await _context.AspNetUserClaims.Where(c => c.ClaimValue == UserClaim.ClaimValue && c.ClaimType == "Congregation" && c.User.Id != user.Id).ToListAsync().ConfigureAwait(false);
+                    Cong cng = await _context.Cong.FirstOrDefaultAsync(c => c.CongName == UserClaim.ClaimValue).ConfigureAwait(false);
                     switch (type)
                     {
                         case "New":
                             foreach (AspNetUserClaims u in Usrs)
                             {
-                                _ = await _emailSender.SendUserApprovalRequest(u.User.Email, UserClaim.ClaimValue, user.FullName, cng.CongId.ToString());
+                                _ = await _emailSender.SendUserApprovalRequest(u.User.Email, UserClaim.ClaimValue, user.FullName, cng.CongId.ToString()).ConfigureAwait(false);
                             }
                             break;
                         case "NewUser":
                             foreach (AspNetUserClaims u in Usrs)
                             {
-                                _ = await _emailSender.SendUserAddition(u.User.Email, UserClaim.ClaimValue , user.FullName , cng.CongId.ToString() );
+                                _ = await _emailSender.SendUserAddition(u.User.Email, UserClaim.ClaimValue , user.FullName , cng.CongId.ToString() ).ConfigureAwait(false);
                             }
                             break;
                         case "NewCong":
-                            _ = await _emailSender.SendNewCongregation(user.Email, UserClaim.ClaimValue, cng.CongId.ToString());
-                            IList<AspNetUserRoles> Admins = await _context.AspNetUserRoles.Where(r => r.Role.Name == "Admin").ToListAsync();
+                            _ = await _emailSender.SendNewCongregation(user.Email, UserClaim.ClaimValue, cng.CongId.ToString()).ConfigureAwait(false);
+                            IList<AspNetUserRoles> Admins = await _context.AspNetUserRoles.Where(r => r.Role.Name == "Admin").ToListAsync().ConfigureAwait(false);
                             foreach (AspNetUserRoles a in Admins)
                             {
-                                _ = await _emailSender.SendUserApprovalRequest(a.User.Email, UserClaim.ClaimValue, user.FullName, cng.CongId.ToString(),true);
+                                _ = await _emailSender.SendUserApprovalRequest(a.User.Email, UserClaim.ClaimValue, user.FullName, cng.CongId.ToString(),true).ConfigureAwait(false);
                             }
                             break;
                         default:
                             break;
                     }
                     _context.AspNetUserClaims.Add(UserClaim);
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync().ConfigureAwait(false);
 
                     return LocalRedirect(returnUrl);
                 }

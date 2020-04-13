@@ -43,21 +43,21 @@ namespace territory.mobi.Pages
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
-            Setting set  = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync();
+            Setting set  = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync().ConfigureAwait(false);
             GoogleKey = set.SettingValue;
 
-            Map = await _context.Map.Where(m => m.MapId == id).FirstOrDefaultAsync();
+            Map = await _context.Map.Where(m => m.MapId == id).FirstOrDefaultAsync().ConfigureAwait(false);
 
-            CurrentImage = await _context.Images.FirstOrDefaultAsync(m => m.ImgId == Map.ImgId);
+            CurrentImage = await _context.Images.FirstOrDefaultAsync(m => m.ImgId == Map.ImgId).ConfigureAwait(false);
             if (CurrentImage == null)
             {
                 CurrentImage = new Images();
                 ViewData["catme"] = CurrentImage.Cat;
             }
 
-            MapPolygons = await _context.MapFeature.Where(m => m.MapId == id && m.Type =="Polygon").ToListAsync();
-            MapMarkers = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Marker").ToListAsync();
-            MapFeature MapCentre = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Centre").FirstOrDefaultAsync();
+            MapPolygons = await _context.MapFeature.Where(m => m.MapId == id && m.Type =="Polygon").ToListAsync().ConfigureAwait(false);
+            MapMarkers = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Marker").ToListAsync().ConfigureAwait(false);
+            MapFeature MapCentre = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Centre").FirstOrDefaultAsync().ConfigureAwait(false);
             
             if (MapCentre != null) {
                 dynamic Coords = JsonConvert.DeserializeObject(MapCentre.Position);
@@ -77,35 +77,35 @@ namespace territory.mobi.Pages
 
         public async Task<IActionResult> OnPostMapCentre(Guid id, string position, int zoom)
         {
-            return await AddUpdateFeature(id, "Centre", position,"",0.5m,0,"",zoom);
+            return await AddUpdateFeature(id, "Centre", position,"",0.5m,0,"",zoom).ConfigureAwait(false);
         }
 
         public async Task<IActionResult> OnPostPolygon(Guid id, string position, string color, decimal opacity, int zIndex)
         {
-            return await AddUpdateFeature(id, "Polygon", position, color, opacity, zIndex);
+            return await AddUpdateFeature(id, "Polygon", position, color, opacity, zIndex).ConfigureAwait(false);
         }
 
         public async Task<IActionResult> OnPostLabel(Guid id, string position, int zIndex, string title)
         {
-            return await AddUpdateFeature(id, "Marker", position,"" ,0.5m ,zIndex,title);
+            return await AddUpdateFeature(id, "Marker", position,"" ,0.5m ,zIndex,title).ConfigureAwait(false);
         }
 
 
         public async Task<IActionResult> OnPostDeletePolygon(Guid id, int zIndex)
         {
-            return await DeleteFeature(id, "Polygon", zIndex);
+            return await DeleteFeature(id, "Polygon", zIndex).ConfigureAwait(false);
         }
 
         public async Task<IActionResult> OnPostDeleteLabel(Guid id, int zIndex)
         {
-            return await DeleteFeature(id, "Marker",zIndex);
+            return await DeleteFeature(id, "Marker",zIndex).ConfigureAwait(false);
         }
 
 
 
         public async Task<IActionResult> DeleteFeature(Guid id, string type,int zIndex)
         {
-            MapFeature MF = await _context.MapFeature.Where(m => m.MapId == id && m.Type == type && m.ZIndex == zIndex).FirstOrDefaultAsync();
+            MapFeature MF = await _context.MapFeature.Where(m => m.MapId == id && m.Type == type && m.ZIndex == zIndex).FirstOrDefaultAsync().ConfigureAwait(false);
             if (MF == null)
             {
                 return new OkResult();
@@ -115,7 +115,7 @@ namespace territory.mobi.Pages
                 _context.MapFeature.Remove(MF);
                 try
                 {
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync().ConfigureAwait(false);
                     return new OkResult();
                 }
                 catch (Exception ex)
@@ -129,7 +129,7 @@ namespace territory.mobi.Pages
         private async Task<IActionResult> AddUpdateFeature(Guid id, string type, string position, string color = "", decimal opacity = 0.5m, int zIndex = 0, string title = "", int zoom = 16)
         {
 
-            MapFeature MF = await _context.MapFeature.Where(m => m.MapId == id && m.Type == type && m.ZIndex == zIndex).FirstOrDefaultAsync();
+            MapFeature MF = await _context.MapFeature.Where(m => m.MapId == id && m.Type == type && m.ZIndex == zIndex).FirstOrDefaultAsync().ConfigureAwait(false);
             if (MF == null)
             {
                 MapFeature newMF = new MapFeature
@@ -162,7 +162,7 @@ namespace territory.mobi.Pages
             try
             {
 
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
                 return new OkResult();
             }
             catch (Exception ex)

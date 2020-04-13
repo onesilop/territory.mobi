@@ -23,9 +23,9 @@ namespace territory.mobi.Pages.Admin.Congregation.Sections
         public async Task OnGetAsync(Guid id)
         {
             if (id == null) { NotFound(); }
-            Cong ThisCong = await _context.Cong.Where(a => a.CongId == id).FirstOrDefaultAsync();
+            Cong ThisCong = await _context.Cong.Where(a => a.CongId == id).FirstOrDefaultAsync().ConfigureAwait(false);
             ViewData["Cong"] = ThisCong.CongName;
-            Section = await _context.Section.Where(a => a.CongId == ThisCong.CongId).OrderBy(a => a.SortOrder).ToListAsync();
+            Section = await _context.Section.Where(a => a.CongId == ThisCong.CongId).OrderBy(a => a.SortOrder).ToListAsync().ConfigureAwait(false);
         }
     }
 }

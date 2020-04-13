@@ -33,7 +33,7 @@ namespace territory.mobi.Pages.Admin.Users
                 return NotFound();
             }
 
-            AspNetUsers = await _context.AspNetUsers.FirstOrDefaultAsync(m => m.Id == id);
+            AspNetUsers = await _context.AspNetUsers.FirstOrDefaultAsync(m => m.Id == id).ConfigureAwait(false);
 
             if (AspNetUsers == null)
             {
@@ -50,11 +50,11 @@ namespace territory.mobi.Pages.Admin.Users
 
             AspNetUserRoles = await _context.AspNetUserRoles
                             .Include(a => a.Role)
-                            .Include(a => a.User).ToListAsync();
+                            .Include(a => a.User).ToListAsync().ConfigureAwait(false);
             AspNetUserRoles = AspNetUserRoles.Where(m => m.UserId == id).ToList();
 
 
-            AspNetUserClaims = await _context.AspNetUserClaims.ToListAsync();
+            AspNetUserClaims = await _context.AspNetUserClaims.ToListAsync().ConfigureAwait(false);
             AspNetUserClaims = AspNetUserClaims.Where(m => m.UserId == id).ToList();
   
             return Page();
@@ -79,7 +79,7 @@ namespace territory.mobi.Pages.Admin.Users
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
             }
             catch (DbUpdateConcurrencyException)
             {

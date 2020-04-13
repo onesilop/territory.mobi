@@ -33,16 +33,16 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                 return RedirectToPage("/Admin/Index");
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{userId}'.");
             }
 
-            AspNetUsers usr = await _context.AspNetUsers.FirstOrDefaultAsync(u => u.Id == userId);
+            AspNetUsers usr = await _context.AspNetUsers.FirstOrDefaultAsync(u => u.Id == userId).ConfigureAwait(false);
             Tokeniser tk = new Tokeniser(_context);
 
-            if (await tk.CheckUserToken(usr, code) == false)
+            if (await tk.CheckUserToken(usr, code).ConfigureAwait(false) == false)
             {
                 throw new InvalidOperationException($"Error confirming email for user with ID '{userId}':");
             }

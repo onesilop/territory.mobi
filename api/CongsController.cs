@@ -26,14 +26,14 @@ namespace territory.mobi
         [HttpGet]
         public async Task<IEnumerable<Cong>> GetAsync()
         {
-            return await _context.Cong.ToListAsync();
+            return await _context.Cong.ToListAsync().ConfigureAwait(false);
         }
 
         // GET: api/Cong/5
         [HttpGet("{id}", Name = "Get")]
         public async Task<string> GetAsync(Guid id)
         {
-            return await _context.Cong.FirstOrDefaultAsync(c => c.CongId == id);
+            return await _context.Cong.FirstOrDefaultAsync(c => c.CongId == id).ConfigureAwait(false);
         }
 
         // GET: api/Cong/5/Maps
@@ -41,19 +41,19 @@ namespace territory.mobi
         public async Task<ActionResult<IEnumerable<MapMin>>> GetCongMaps(Guid CongID)
         {
             DateTime LastCheckedDate = new DateTime(1970, 1, 1);
-            return await CongMapsSince(CongID, LastCheckedDate);
+            return await CongMapsSince(CongID, LastCheckedDate).ConfigureAwait(false);
         }
         // GET: api/Cong/5/MapSince/123456
         [HttpGet("{CongID}/MapSince/{LastCheckedDate}")]
         public async Task<ActionResult<IEnumerable<MapMin>>> GetCongMapsSince(Guid CongID, Int64 LastCheckedDate)
         {
-            return await CongMapsSince(CongID, new DateTime(LastCheckedDate));
+            return await CongMapsSince(CongID, new DateTime(LastCheckedDate)).ConfigureAwait(false);
         }
 
         private async Task<ActionResult<IEnumerable<MapMin>>> CongMapsSince(Guid CongID, DateTime LastCheckedDate)
         {
             IList<MapMin> ListOmm = new List<MapMin>();
-            IList<Map> mps = await _context.Map.Where(m => m.CongId == CongID && m.UpdateDatetime >= LastCheckedDate).ToListAsync();
+            IList<Map> mps = await _context.Map.Where(m => m.CongId == CongID && m.UpdateDatetime >= LastCheckedDate).ToListAsync().ConfigureAwait(false);
             foreach (Map m in mps)
             {
                 ListOmm.Add(new MapMin(m, _context));

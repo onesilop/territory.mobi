@@ -28,7 +28,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Sections
                 return NotFound();
             }
 
-            Section = await _context.Section.FirstOrDefaultAsync(m => m.SectionId == id);
+            Section = await _context.Section.FirstOrDefaultAsync(m => m.SectionId == id).ConfigureAwait(false);
 
             if (Section == null)
             {
@@ -49,7 +49,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Sections
             if (Section != null)
             {
                 _context.Section.Remove(Section);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
             }
 
             return RedirectToPage("./Index");

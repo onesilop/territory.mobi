@@ -54,7 +54,7 @@ namespace territory.mobi
 
         public async Task<IActionResult> SendMailAsync(string addressee, string subject, string htmlContent, string plainTextContent)
         {
-            return (await Client.SendEmailAsync(MailHelper.CreateSingleEmail(From, new EmailAddress(addressee), subject, plainTextContent, htmlContent))).StatusCode == System.Net.HttpStatusCode.Accepted ? new OkResult() : (IActionResult)new BadRequestResult();
+            return (await Client.SendEmailAsync(MailHelper.CreateSingleEmail(From, new EmailAddress(addressee), subject, plainTextContent, htmlContent)).ConfigureAwait(false)).StatusCode == System.Net.HttpStatusCode.Accepted ? new OkResult() : (IActionResult)new BadRequestResult();
         }
 
        
@@ -67,7 +67,7 @@ namespace territory.mobi
             };
 
             SendGridMessage msg = MailHelper.CreateSingleTemplateEmail(From, new EmailAddress(addressee), UserInviteTemplateID, dynamicTemplateData);
-            return (await Client.SendEmailAsync(msg)).StatusCode == System.Net.HttpStatusCode.Accepted ? new OkResult() : (IActionResult)new BadRequestResult();
+            return (await Client.SendEmailAsync(msg).ConfigureAwait(false)).StatusCode == System.Net.HttpStatusCode.Accepted ? new OkResult() : (IActionResult)new BadRequestResult();
         }
 
         public async Task<IActionResult> SendUserApprovalRequest(string addressee, string UserName, string CName, string CongId, Boolean NewCong = false)
@@ -77,10 +77,10 @@ namespace territory.mobi
             if (NewCong)
             {
                 return await SendMailAsync(addressee, "A new congregation " + CName + " has been created.",
-                                          UserName + " has created and requested to be added to the " + CName + " congregation.<br>Please log into <a href='" + HtmlEncoder.Default.Encode(RedirectURL) + "'>terrirtory.mobi</a> and approve or reject their request.", null);
+                                          UserName + " has created and requested to be added to the " + CName + " congregation.<br>Please log into <a href='" + HtmlEncoder.Default.Encode(RedirectURL) + "'>terrirtory.mobi</a> and approve or reject their request.", null).ConfigureAwait(false);
             }
             return await SendMailAsync(addressee, "A new user has requested to be added to the " + CName + " congregation on territory.mobi.",
-                                              UserName + " has requested to be added to the " + CName + " congregation.<br>Please log into <a href='" + HtmlEncoder.Default.Encode(RedirectURL) + "'>terrirtory.mobi</a> and approve or reject their request.", null);
+                                              UserName + " has requested to be added to the " + CName + " congregation.<br>Please log into <a href='" + HtmlEncoder.Default.Encode(RedirectURL) + "'>terrirtory.mobi</a> and approve or reject their request.", null).ConfigureAwait(false);
         }
 
         public async Task<IActionResult> SendUserAddition(string addressee, string UserName, string CName, string CongId)
@@ -90,7 +90,7 @@ namespace territory.mobi
 
 
             return await SendMailAsync(addressee, "A new user has been added to the " + CName + " congregation on territory.mobi.",
-                                         UserName + " has been added to the " + CName + " congregation.<br>Please log into <a href='" + HtmlEncoder.Default.Encode(RedirectURL) + "'>terrirtory.mobi</a> if this has been incorrectly provided and remove thier access.", null);
+                                         UserName + " has been added to the " + CName + " congregation.<br>Please log into <a href='" + HtmlEncoder.Default.Encode(RedirectURL) + "'>terrirtory.mobi</a> if this has been incorrectly provided and remove thier access.", null).ConfigureAwait(false);
 
         }
 
@@ -101,7 +101,7 @@ namespace territory.mobi
 
 
             return await SendMailAsync(addressee, CName + " congregation has been created on territory.mobi.",
-                                         CName + " congregation has been created on territori.mobi.<br>Please log into <a href='" + HtmlEncoder.Default.Encode(RedirectURL) + "'>terrirtory.mobi</a> to begin administering your maps.", null);
+                                         CName + " congregation has been created on territori.mobi.<br>Please log into <a href='" + HtmlEncoder.Default.Encode(RedirectURL) + "'>terrirtory.mobi</a> to begin administering your maps.", null).ConfigureAwait(false);
 
         }
 
@@ -111,7 +111,7 @@ namespace territory.mobi
             string callbackUrl = SiteAddress + "/Identity/Account/ConfirmEmail?userId=" + user.Id + "&code=" + code;
 
             return await SendMailAsync(user.Email, "Confirm your email",
-                                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.", null);
+                                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.", null).ConfigureAwait(false);
             
         }
 

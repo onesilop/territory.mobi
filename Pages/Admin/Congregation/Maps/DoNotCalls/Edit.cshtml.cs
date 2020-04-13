@@ -29,7 +29,7 @@ namespace territory.mobi.Pages.Admin.Congregation.DoNotCalls
                 return NotFound();
             }
 
-            DoNotCall = await _context.DoNotCall.Include(m => m.Map).FirstOrDefaultAsync(m => m.DncId == id);
+            DoNotCall = await _context.DoNotCall.Include(m => m.Map).FirstOrDefaultAsync(m => m.DncId == id).ConfigureAwait(false);
 
             if (DoNotCall == null)
             {
@@ -50,7 +50,7 @@ namespace territory.mobi.Pages.Admin.Congregation.DoNotCalls
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
             }
             catch (DbUpdateConcurrencyException)
             {

@@ -28,7 +28,7 @@ namespace territory.mobi.Pages.Admin.Settings
                 return NotFound();
             }
 
-            Setting = await _context.Setting.FirstOrDefaultAsync(m => m.SettingId == id);
+            Setting = await _context.Setting.FirstOrDefaultAsync(m => m.SettingId == id).ConfigureAwait(false);
 
             if (Setting == null)
             {
@@ -49,7 +49,7 @@ namespace territory.mobi.Pages.Admin.Settings
             if (Setting != null)
             {
                 _context.Setting.Remove(Setting);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
             }
 
             return RedirectToPage("./Index");

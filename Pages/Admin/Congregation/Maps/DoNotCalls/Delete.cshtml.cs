@@ -28,7 +28,7 @@ namespace territory.mobi.Pages.Admin.Congregation.DoNotCalls
                 return NotFound();
             }
 
-            DoNotCall = await _context.DoNotCall.FirstOrDefaultAsync(m => m.DncId == id);
+            DoNotCall = await _context.DoNotCall.FirstOrDefaultAsync(m => m.DncId == id).ConfigureAwait(false);
 
             if (DoNotCall == null)
             {
@@ -50,7 +50,7 @@ namespace territory.mobi.Pages.Admin.Congregation.DoNotCalls
             if (DoNotCall != null)
             {
                 _context.DoNotCall.Remove(DoNotCall);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
             }
 
             IDictionary<string, string> args = new Dictionary<string, string>

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using territory.mobi.Areas.Identity.Data;
@@ -40,7 +37,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(Input.Email);
+                var user = await _userManager.FindByEmailAsync(Input.Email).ConfigureAwait(false);
                 // if (user == null || !(await _userManager.IsEmailConfirmedAsync(user))) update email confirmation and then we can use this. 
                 if (user == null)
                 {
@@ -49,7 +46,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                 }
 
                 Mailer _emailSender = new Mailer(_context);
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
                 var callbackUrl = Url.Page(
                     "/Account/ResetPassword",
                     pageHandler: null,
@@ -58,7 +55,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
 
                 var msg = $"Please reset your password by<a href= '{HtmlEncoder.Default.Encode(callbackUrl)}' > clicking here</ a >.";
 
-                await _emailSender.SendMailAsync(Input.Email,"Reset Password",msg,null);
+                await _emailSender.SendMailAsync(Input.Email,"Reset Password",msg,null).ConfigureAwait(false);
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

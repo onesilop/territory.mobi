@@ -66,7 +66,7 @@ namespace territory.mobi.Pages.Admin
             Converter converter = new Converter(config);
             createIssue.Body = converter.Convert(string.Concat(Input.Body, "<br/>", usr.FullName, "<br/>", usr.Email));
             createIssue.Labels.Add("question");
-            Issue issue = await client.Issue.Create("onesilop", "territory.mobi", createIssue);
+            Issue issue = await client.Issue.Create("onesilop", "territory.mobi", createIssue).ConfigureAwait(false);
             if (issue != null)
             {
                 TempData["UserMessage"] = $"Your message was sent, we'll have a look soon (contact reference - {issue.Number.ToString()})";
