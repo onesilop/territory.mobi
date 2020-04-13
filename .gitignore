@@ -260,3 +260,5 @@ paket-files/
 __pycache__/
 *.pyc
 territory.mobi/territory.mobi/appsettings.Development.json
+appsettings.Development.json
+appsettings.Development.json

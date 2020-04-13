@@ -14,6 +14,7 @@ using territory.mobi.Models;
 using territory.mobi.Areas.Identity.Data;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace territory.mobi
 {
@@ -46,7 +47,9 @@ namespace territory.mobi
             services.AddDefaultIdentity<ApplicationUser>().AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultUI();
 
-            services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddMvc(option => option.EnableEndpointRouting = false)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddRazorPagesOptions(o => { o.Conventions.AddPageRoute("/Index", ""); });
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -67,6 +70,8 @@ namespace territory.mobi
                 options.Level = CompressionLevel.Optimal;
             });
 
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "API Docs", Version = "v1" }); });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,6 +89,14 @@ namespace territory.mobi
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c => 
+            { 
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+                c.RoutePrefix = "/api";
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
