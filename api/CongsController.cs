@@ -23,28 +23,28 @@ namespace territory.mobi
 
 
         // GET: api/Cong
-        [HttpGet]
+        [HttpGet(Name = "GetAllCongs")]
         public async Task<IEnumerable<Cong>> GetAsync()
         {
             return await _context.Cong.ToListAsync().ConfigureAwait(false);
         }
 
         // GET: api/Cong/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}", Name = "GetCongById")]
         public async Task<string> GetAsync([FromQuery] Guid id)
         {
             return await _context.Cong.FirstOrDefaultAsync(c => c.CongId == id).ConfigureAwait(false);
         }
 
         // GET: api/Cong/5/Maps
-        [HttpGet("{CongID}/Maps")]
+        [HttpGet("{CongID}/Maps", Name = "GetMapsByCongId")]
         public async Task<ActionResult<IEnumerable<MapMin>>> GetCongMaps([FromQuery] Guid CongID)
         {
             DateTime LastCheckedDate = new DateTime(1970, 1, 1);
             return await CongMapsSince(CongID, LastCheckedDate).ConfigureAwait(false);
         }
         // GET: api/Cong/5/MapSince/123456
-        [HttpGet("{CongID}/MapSince/{LastCheckedDate}")]
+        [HttpGet("{CongID}/MapSince/{LastCheckedDate}", Name = "GetMapsByCongByLastChanged")]
         public async Task<ActionResult<IEnumerable<MapMin>>> GetCongMapsSince([FromQuery] Guid CongID, [FromQuery] Int64 LastCheckedDate)
         {
             return await CongMapsSince(CongID, new DateTime(LastCheckedDate)).ConfigureAwait(false);
@@ -61,7 +61,7 @@ namespace territory.mobi
             return ListOmm.ToList();
         }
         // GET: api/Cong/5/Directory
-        [HttpGet("{CongID}/Directory/")]
+        [HttpGet("{CongID}/Directory/", Name = "GetCongDirectory")]
         public CongDirectory GetCongSections([FromQuery] Guid CongID)
         {
             CongDirectory cd = new CongDirectory(CongID, _context);

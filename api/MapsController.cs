@@ -23,7 +23,7 @@ namespace territory.mobi
         }
 
         // GET: api/Maps
-        [HttpGet]
+        [HttpGet(Name = "GetAllMaps")]
         public async Task<ActionResult<IEnumerable<MapMin>>> GetMap()
         {
             IList<MapMin> MapMins = new List<MapMin>();
@@ -36,7 +36,7 @@ namespace territory.mobi
         }
 
         // GET: api/Maps/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetMapByID")]
         public async Task<ActionResult<MapMin>> GetMap([FromQuery] Guid id)
         {
             Map m = await _context.Map.FindAsync(id);

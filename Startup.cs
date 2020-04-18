@@ -88,12 +88,16 @@ namespace territory.mobi
                 app.UseHsts();
             }
 
-            app.UseSwagger(c => { c.RouteTemplate = "api/swagger/{documentName}/swagger.json"; });
-
+            app.UseSwagger(c => 
+            {   
+                c.RouteTemplate = "api/swagger/{documentName}/swagger.json";
+                c.SerializeAsV2 = true; 
+            });
+            
             app.UseSwaggerUI(c => 
             { 
                 c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "API V1");
-                c.RoutePrefix = "api/swagger";
+                c.RoutePrefix = "api";
             });
 
             app.UseHttpsRedirection();
