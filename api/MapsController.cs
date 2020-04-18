@@ -58,7 +58,7 @@ namespace territory.mobi
             return _context.Map.Any(e => e.MapId == id);
         }
 
-        public string GetCoords(string address)
+        private string GetCoords(string address)
         {
             var url = "https://nominatim.openstreetmap.org/search?q=" + address.Replace(" ", "+") + "&format=json";
             var client = new WebClient();

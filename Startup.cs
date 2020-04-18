@@ -14,7 +14,6 @@ using territory.mobi.Models;
 using territory.mobi.Areas.Identity.Data;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace territory.mobi
 {
@@ -48,8 +47,7 @@ namespace territory.mobi
                 .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultUI();
 
             services.AddMvc(option => option.EnableEndpointRouting = false)
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-                .AddRazorPagesOptions(o => { o.Conventions.AddPageRoute("/Index", ""); });
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -90,12 +88,12 @@ namespace territory.mobi
                 app.UseHsts();
             }
 
-            app.UseSwagger();
+            app.UseSwagger(c => { c.RouteTemplate = "api/swagger/{documentName}/swagger.json"; });
 
             app.UseSwaggerUI(c => 
             { 
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
-                c.RoutePrefix = "/api";
+                c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "API V1");
+                c.RoutePrefix = "api/swagger";
             });
 
             app.UseHttpsRedirection();
