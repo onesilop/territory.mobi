@@ -37,7 +37,7 @@ namespace territory.mobi
 
         // GET: api/Maps/5
         [HttpGet("{id}", Name = "GetMapByID")]
-        public async Task<ActionResult<MapMin>> GetMap([FromQuery] Guid id)
+        public async Task<ActionResult<MapMin>> GetMap([FromRoute] Guid id)
         {
             Map m = await _context.Map.FindAsync(id);
 
@@ -53,7 +53,7 @@ namespace territory.mobi
 
   
 
-        private bool MapExists([FromQuery] Guid id)
+        private bool MapExists([FromRoute] Guid id)
         {
             return _context.Map.Any(e => e.MapId == id);
         }

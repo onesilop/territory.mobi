@@ -31,21 +31,21 @@ namespace territory.mobi
 
         // GET: api/Cong/5
         [HttpGet("{id}", Name = "GetCongById")]
-        public async Task<string> GetAsync([FromQuery] Guid id)
+        public async Task<Cong> GetAsync([FromRoute] Guid id)
         {
             return await _context.Cong.FirstOrDefaultAsync(c => c.CongId == id).ConfigureAwait(false);
         }
 
         // GET: api/Cong/5/Maps
         [HttpGet("{CongID}/Maps", Name = "GetMapsByCongId")]
-        public async Task<ActionResult<IEnumerable<MapMin>>> GetCongMaps([FromQuery] Guid CongID)
+        public async Task<ActionResult<IEnumerable<MapMin>>> GetCongMaps([FromRoute] Guid CongID)
         {
             DateTime LastCheckedDate = new DateTime(1970, 1, 1);
             return await CongMapsSince(CongID, LastCheckedDate).ConfigureAwait(false);
         }
         // GET: api/Cong/5/MapSince/123456
         [HttpGet("{CongID}/MapSince/{LastCheckedDate}", Name = "GetMapsByCongByLastChanged")]
-        public async Task<ActionResult<IEnumerable<MapMin>>> GetCongMapsSince([FromQuery] Guid CongID, [FromQuery] Int64 LastCheckedDate)
+        public async Task<ActionResult<IEnumerable<MapMin>>> GetCongMapsSince([FromRoute] Guid CongID, [FromRoute] Int64 LastCheckedDate)
         {
             return await CongMapsSince(CongID, new DateTime(LastCheckedDate)).ConfigureAwait(false);
         }

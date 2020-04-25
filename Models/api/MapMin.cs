@@ -13,10 +13,12 @@ namespace territory.mobi.Models
 
         public MapMin(Map m, TerritoryContext context)
         {
-            TerritoryContext _context = context; 
+            
+            TerritoryContext _context = context;
+            MapId = m.MapId;
             DoNotCalls = new HashSet<DoNotCall>();
             Display = m.Display;
-            DoNotCalls =  _context.DoNotCall.Where(x => x.MapId == m.MapId && x.Display == true).ToList();
+            DoNotCalls = _context.DoNotCall.Where(x => x.MapId == m.MapId && x.Display == true).ToList();
             ImgImage =  _context.Images.Where(i => i.ImgId == m.ImgId).Select(i => i.ImgImage).SingleOrDefault();
             MapArea = m.MapArea;
             MapKey = m.MapKey;
@@ -28,6 +30,7 @@ namespace territory.mobi.Models
         }
 
         public string MapKey { get; set; }
+        public Guid MapId { get; set; }
         public string MapDesc { get; set; }
         public string MapArea { get; set; }
         public string Notes { get; set; }

@@ -93,7 +93,8 @@ namespace territory.mobi
                 c.RouteTemplate = "api/swagger/{documentName}/swagger.json";
                 c.SerializeAsV2 = true; 
             });
-            
+
+
             app.UseSwaggerUI(c => 
             { 
                 c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "API V1");
