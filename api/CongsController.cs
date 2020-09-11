@@ -30,10 +30,10 @@ namespace territory.mobi
         }
 
         // GET: api/Cong/5
-        [HttpGet("{id}", Name = "GetCongById")]
-        public async Task<Cong> GetAsync([FromRoute] Guid id)
+        [HttpGet("{CongID}", Name = "GetCongById")]
+        public async Task<Cong> GetAsync([FromRoute] Guid CongID)
         {
-            return await _context.Cong.FirstOrDefaultAsync(c => c.CongId == id).ConfigureAwait(false);
+            return await _context.Cong.FirstOrDefaultAsync(c => c.CongId == CongID).ConfigureAwait(false);
         }
 
         // GET: api/Cong/5/Maps

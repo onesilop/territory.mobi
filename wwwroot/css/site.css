@@ -63,13 +63,7 @@ body {
 
 .dir-btn {
     width: 5.5vh;
-    max-width: 5.5vh;
-    height: 5.5vh;
-    max-height: 5.5vh;
-    min-height: 50px;
     min-width: 50px;
-    border-radius: 3.5px !important;
-    padding-top: 1.7vh;
 }
 
 .sec-head {
