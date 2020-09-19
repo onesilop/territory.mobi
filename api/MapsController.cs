@@ -60,11 +60,11 @@ namespace territory.mobi
 
         private string GetCoords(string address)
         {
-            var url = "https://nominatim.openstreetmap.org/search?q=" + address.Replace(" ", "+") + "&format=json";
-            var client = new WebClient();
+            //var url = "https://nominatim.openstreetmap.org/search?q=" + address.Replace(" ", "+") + "&format=json";
+            //var client = new WebClient();
 
-            var response = client.DownloadString(url);
-            return response;
+            //var response = client.DownloadString(url);
+            return null;
 
         }
     }

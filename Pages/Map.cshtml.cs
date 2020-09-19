@@ -12,6 +12,7 @@ using static System.Net.WebRequestMethods;
 using System.Security.Cryptography;
 using System.Xml;
 using Newtonsoft.Json;
+using NUnit.Framework;
 
 namespace territory.mobi.Pages
 {
@@ -47,16 +48,19 @@ namespace territory.mobi.Pages
 
         public ContentResult OnGetPwdCheck(string pwd,Guid congId, Guid mapId)
         {
-            if (_context.Dncpword.Count(x => x.PasswordHash == pwd && x.Notinuse == 0 && x.CongId == congId ) > 0)
+            if (_context.Dncpword.Any(x => x.PasswordHash == pwd && x.Notinuse == 0 && x.CongId == congId))
             {
-                string res = "";
+                string res = "No do not calls for this map";
                 IList<DoNotCall> dd = _context.DoNotCall.Where(d => d.MapId == mapId && d.Display == true).ToList();
-                foreach (DoNotCall d in dd)
-                {
-                    string tmp = "";
-                    if (d.AptNo != "" && d.AptNo != null) { tmp = d.AptNo + "/ "; }
-                    tmp = tmp + d.StreetNo + " " + d.StreetName+"</br>";
-                    res += tmp;
+                if (dd.Count > 0) {
+                    res = "";
+                    foreach (DoNotCall d in dd)
+                    {
+                        string tmp = "";
+                        if (d.AptNo != "" && d.AptNo != null) { tmp = d.AptNo + "/ "; }
+                        tmp = tmp + d.StreetNo + " " + d.StreetName + "</br>";
+                        res += tmp;
+                    }
                 }
                 return Content(res);
             }
@@ -64,31 +68,40 @@ namespace territory.mobi.Pages
                 return Content("false"); 
         }
 
-        public async Task<IActionResult> OnGetAsync(string CongName, string MapNo)
+        public async Task<IActionResult> OnGetAsync(string CongName, string MapNo, Guid? id = null)
         {
 
             ViewData["Page"] = "Map";
-            if (MapNo == null)
+            if (MapNo == null || CongName == null)
             {
-                return NotFound();
+                if (id != null)
+                {
+                    Map = _context.Map.FirstOrDefault(c => c.MapId == id);
+                    MapNo = Map.MapKey;
+                    Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongId == Map.CongId).ConfigureAwait(false);
+                    CongName = Cong.CongName;
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            else
+            {
+                Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongName == CongName).ConfigureAwait(false);
+                if (Cong == null)
+                {
+                    return NotFound();
+                }
+                Map = await _context.Map.FirstOrDefaultAsync(m => m.MapKey == MapNo && m.CongId == Cong.CongId).ConfigureAwait(false);
+                if (Map == null)
+                {
+                    return NotFound();
+                }
+
             }
 
-            if (CongName == null)
-            {
-                return NotFound();
-            }
-
-            Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongName == CongName).ConfigureAwait(false);
-            if (Cong == null)
-            {
-                return NotFound();
-            }
-            CookieID += CongName;
-            Map = await _context.Map.FirstOrDefaultAsync(m => m.MapKey == MapNo && m.CongId == Cong.CongId).ConfigureAwait(false);
-            if (Map == null)
-            {
-                return NotFound();
-            }
+            CookieID += Cong.CongName;
             ParkingHT = HttpUtility.HtmlEncode(Map.Parking);
             NotesHT = HttpUtility.HtmlEncode(Map.Notes);
 
@@ -100,7 +113,7 @@ namespace territory.mobi.Pages
 
             if (await _context.MapFeature.Where(m => m.MapId == Map.MapId).CountAsync().ConfigureAwait(false) > 0) { ShowMap = true; }
 
-            if (Map.MapPolygon != "") { ShowMap = true; }
+            if (Map.MapPolygon != null) { ShowMap = true; }
 
             Setting set = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync().ConfigureAwait(false);
             GoogleKey = set.SettingValue;

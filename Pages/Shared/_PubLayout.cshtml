@@ -16,7 +16,22 @@
         <div class="text-white pubTitle">@ViewData["RightTitle"]</div>
     </div>
     <div id="bdy" class="d-block">
-        <partial name="_CookieConsentPartial" />
+        <!-- <partial name="_CookieConsentPartial" />-->
+        @if (TempData.ContainsKey("UserMessage"))
+        {
+            var cls = "alert-info";
+            if (TempData.ContainsKey("UserMessageClass"))
+            {
+                if (!String.IsNullOrEmpty(TempData["UserMessageClass"].ToString()))
+                {
+                    cls = TempData["UserMessageClass"].ToString();
+                }
+            }
+            <div id="message" class="alert @cls alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @TempData["UserMessage"].ToString()
+            </div>
+        }
         @RenderBody()
     </div>
 

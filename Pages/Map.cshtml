@@ -50,12 +50,9 @@
             <img class="MapMenuIcon" src="~/images/assets/Notes.png" />
         </a>
     }
-    @if (Model.DNC.Count() > 0)
-    {
-        <a class="footer-link align-self-center m-1" id="dnc" href="#">
+    <a class="footer-link align-self-center m-1" id="dnc" href="#">
             <img class="MapMenuIcon" src="~/images/assets/DNC.png" />
-        </a>
-    }
+    </a>
 </div>
 <form id="pwrdInput" method="post" class="invisible">
     <div>Enter In your Password</div>
@@ -182,7 +179,18 @@
                             onEscape: true,
                             backdrop: true,
                             centerVertical: true,
-                            scrollable: true
+                            scrollable: true,
+                            buttons: {
+                                cancel: {
+                                    label: "Add Do Not call",
+                                    className: 'btn-danger',
+                                    callback: function () {
+                                        console.log('Add');
+                                        window.location.href = "/CreateDNC?id=@Model.Map.MapId";
+                                    }
+                                }
+                            }
+
                             });
                     }
                 })

@@ -47,8 +47,8 @@ namespace territory.mobi
             Client = new SendGridClient(SendGridKey.SettingValue);
             From = new EmailAddress(FromAddress.SettingValue, FromName.SettingValue);
             UserInviteTemplateID = UserInviteT.SettingValue;
-            SiteAddress = SiteAdd.SettingValue.ToString();
-            SiteAddress = "https://localhost:44339";
+            SiteAddress = SiteAdd.SettingValue;
+           // SiteAddress = "https://localhost:44339";
         }
 
 
@@ -115,7 +115,20 @@ namespace territory.mobi
             
         }
 
-       
+        public void SendNewDNC(Guid DNCID, Guid MapID)
+        {
+
+            string RedirectURL = SiteAddress + "/Admin/Congregation/Maps/DoNotCalls/Edit?id=" + DNCID.ToString();
+
+            Map mp = _context.Map.FirstOrDefault(m => m.MapId == MapID);
+            Guid cngid = mp.CongId;
+            Cong cn = _context.Cong.FirstOrDefault(c => c.CongId == cngid);
+            AspNetUsers us = _context.AspNetUsers.FirstOrDefault(u => u.Id == cn.ServId);
+
+            SendMailAsync(us.Email, " A new Do Not Call has been created on territory.mobi.",
+                                         "A new Do Not Call has been created on territory.mobi.<br>Please log into <a href='" + HtmlEncoder.Default.Encode(RedirectURL) + "'>terrirtory.mobi</a> to action this do not call.", null).ConfigureAwait(false);
+        }
+
 
     }
 }
