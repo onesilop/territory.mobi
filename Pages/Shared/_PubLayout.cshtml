@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="shortcut icon" href="~/images/assets/apple-touch-icon.png">
+
+</head>
+<body id="erthing">
+    <nav id="dummyNavy" class="navbar navbar-default"></nav>
+    <div id="navy" class="navbar bg-primary fixed-top">
+        <div class="text-white pubTitle">@ViewData["LeftTitle"]</div>
+        <div class="text-white pubTitle">@ViewData["RightTitle"]</div>
+    </div>
+    <div id="bdy" class="d-block">
+        <!-- <partial name="_CookieConsentPartial" />-->
+        @if (TempData.ContainsKey("UserMessage"))
+        {
+            var cls = "alert-info";
+            if (TempData.ContainsKey("UserMessageClass"))
+            {
+                if (!String.IsNullOrEmpty(TempData["UserMessageClass"].ToString()))
+                {
+                    cls = TempData["UserMessageClass"].ToString();
+                }
+            }
+            <div id="message" class="alert @cls alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @TempData["UserMessage"].ToString()
+            </div>
+        }
+        @RenderBody()
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/popper/popper.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/js/bootbox/bootbox.js"></script>
+    <script src="~/js/sha.js"></script>
+    <script src="~/js/js.cookie.js"></script>
+
+    <script type="text/javascript">
+        function scalestuff() {
+            var tHgt = $(window).height();
+            var fhHgt = tHgt * .08
+            $('#navy').css("height", fhHgt);
+            $('#dummyNavy').css("margin-bottom", 0);
+            $('#dummyNavy').css("height", fhHgt);
+       }
+        $(document).ready(function () {
+            scalestuff();
+        });
+        $(window).on('resize',function () {
+            scalestuff()
+        });
+
+        $(window).on('load',function () {
+            scalestuff()
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

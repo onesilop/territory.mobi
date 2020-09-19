@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="shortcut icon" href="~/images/assets/apple-touch-icon.png">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/popper/popper.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/js/bootbox/bootbox.js"></script>
+    <script src="~/js/sha.js"></script>
+    <script src="~/js/js.cookie.js"></script>
+    <script src="~/js/moment.js"></script>
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="text-white mr-5 pubTitle" asp-area="" asp-page="/Index">territory.mobi</a>
+                <button class="navbar-toggler navbar-dark" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse flex-sm-row-reverse">
+                    <hr class="bg-white" />
+                    <ul class="nav navbar-nav ml-auto flex-nowrap text-right">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-page="/Index">Public Site</a>
+                        </li>
+                        <li class="nav-item flex-grow-0">
+                            <a class="nav-link text-white" asp-area="" asp-page="/Admin/Index">Admin Home</a>
+                        </li>
+                        <partial name="_LoginPartial" />
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!--        <partial name="_CookieConsentPartial" />-->
+        @if (TempData.ContainsKey("UserMessage"))
+        {
+            var cls = "alert-info";
+            if (TempData.ContainsKey("UserMessageClass"))
+            {
+                if (!String.IsNullOrEmpty(TempData["UserMessageClass"].ToString()))
+                {
+                    cls = TempData["UserMessageClass"].ToString();
+                }
+            }
+            <div id="message" class="alert @cls alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @TempData["UserMessage"].ToString()
+            </div>
+        }
+        @if (ViewData.ContainsKey("PageHelpID"))
+        {
+            <div class="text-right">
+                @if (ViewData.ContainsKey("PageHelp"))
+                {
+                    <a href="#" id="pageHelp" class="btn-link">Help</a>
+                }
+                @if (User.IsInRole("Admin"))
+                {
+                    @Html.Raw("|")
+                    <a target="_blank" asp-page="/Admin/PageHelp/Edit" asp-route-id="@ViewData["PageHelpID"]" asp-route-ReturnURL="@Context.Request.Path.ToString()" asp-route-ReturnQ="@Context.Request.QueryString.ToString().Replace("?","")" class="btn-link">Edit Help</a>
+                }
+                <hr />
+            </div>
+        }
+
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+
+    @RenderSection("Scripts", required: false)
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#pageHelp").click(function () {
+                bootbox.dialog({
+                    title: "<h3>How to use the @ViewData["PageName"] Page</h3>",
+                    message:"@Html.Raw(ViewData["PageHelp"])",
+                    onEscape: true,
+                    backdrop: true,
+                    centerVertical: true,
+                    scrollable: true
+                });
+            });
+        });
+
+        $(function () {
+            setTimeout(function () {
+                    $("#message").addClass('d-none');
+                }, 5000);
+            });
+    </script>
+</body>
+</html>
