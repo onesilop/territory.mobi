@@ -69,7 +69,6 @@ namespace territory.mobi
             });
 
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "API Docs", Version = "v1" }); });
-            services.AddApplicationInsightsTelemetry();
 
         }
 
