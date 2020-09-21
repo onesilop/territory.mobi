@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.Users.Roles
@@ -28,14 +26,14 @@ namespace territory.mobi.Pages.Admin.Users.Roles
                 return this.Redirect("/Admin/Index");
             }
             else
-            { 
+            {
                 if (id == null)
                 {
                     return NotFound();
                 }
 
                 AspNetUserRoles = await _context.AspNetUserRoles
-                    .Include(a => a.Role) 
+                    .Include(a => a.Role)
                     .Include(a => a.User).FirstOrDefaultAsync(m => m.UserId == id && m.RoleId == roleid).ConfigureAwait(false);
 
                 if (AspNetUserRoles == null)
@@ -62,7 +60,7 @@ namespace territory.mobi.Pages.Admin.Users.Roles
             }
             IDictionary<string, string> args = new Dictionary<string, string>();
             args.Add("id", id);
-            return RedirectToPage("/Admin/Users/Edit",args);
+            return RedirectToPage("/Admin/Users/Edit", args);
         }
     }
 }

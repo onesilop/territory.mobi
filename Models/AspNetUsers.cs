@@ -33,7 +33,7 @@ namespace territory.mobi.Models
         public string Surname { get; set; }
 
         [NotMapped]
-        public string FullName { get {return Name + " " + Surname; }}
+        public string FullName { get { return Name + " " + Surname; } }
 
         public ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         public ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }

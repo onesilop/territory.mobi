@@ -7,7 +7,7 @@ namespace territory.mobi.Models
     public partial class Map
     {
 
-        
+
         public Map()
         {
             DoNotCall = new HashSet<DoNotCall>();
@@ -45,19 +45,19 @@ namespace territory.mobi.Models
         public virtual ICollection<Images> Images { get; set; }
 
         public IList<String> MapTypeVal
-            {
+        {
 
-                get
-                {
-                    IList<String> lst = new List<string>
+            get
+            {
+                IList<String> lst = new List<string>
                     {
                         "Business",
                         "Residential",
                         "Carts",
                         "Other"
                     };
-                    return lst;
-                }
+                return lst;
             }
+        }
     }
 }

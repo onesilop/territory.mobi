@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 using territory.mobi.Areas.Identity.Data;
 
 namespace territory.mobi.Pages.Admin
@@ -61,7 +60,7 @@ namespace territory.mobi.Pages.Admin
                     ModelState.AddModelError(string.Empty, ErrorMessage);
                 }
 
-                
+
 
                 // Clear the existing external cookie to ensure a clean login process
                 await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme).ConfigureAwait(false);
@@ -74,7 +73,7 @@ namespace territory.mobi.Pages.Admin
             {
                 Response.Redirect(returnUrl);
             }
-            
+
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

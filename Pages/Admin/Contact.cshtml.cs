@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Octokit;
 using ReverseMarkdown;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using territory.mobi.Areas.Identity.Data;
 
 namespace territory.mobi.Pages.Admin
@@ -40,11 +37,11 @@ namespace territory.mobi.Pages.Admin
             [Display(Name = "Body")]
             public string Body { get; set; }
         }
-        
-        
+
+
         public void OnGet()
         {
- 
+
         }
 
         public async Task<PageResult> OnPostAsync()

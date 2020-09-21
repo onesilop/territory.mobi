@@ -1,19 +1,19 @@
-using System;
-using System.Linq;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
-using territory.mobi.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using territory.mobi.Models;
-using territory.mobi.Areas.Identity.Data;
-using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.IO.Compression;
+using System.Linq;
+using territory.mobi.Areas.Identity.Data;
+using territory.mobi.Data;
+using territory.mobi.Models;
 
 namespace territory.mobi
 {
@@ -57,8 +57,9 @@ namespace territory.mobi
                 options.Lockout.AllowedForNewUsers = true;
             });
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
-            
-            services.AddResponseCompression(options => {
+
+            services.AddResponseCompression(options =>
+            {
                 options.Providers.Add<BrotliCompressionProvider>();
                 options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "text/json" });
             });
@@ -88,15 +89,15 @@ namespace territory.mobi
                 app.UseHsts();
             }
 
-            app.UseSwagger(c => 
-            {   
+            app.UseSwagger(c =>
+            {
                 c.RouteTemplate = "api/swagger/{documentName}/swagger.json";
-                c.SerializeAsV2 = true; 
+                c.SerializeAsV2 = true;
             });
 
 
-            app.UseSwaggerUI(c => 
-            { 
+            app.UseSwaggerUI(c =>
+            {
                 c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "API V1");
                 c.RoutePrefix = "api";
             });

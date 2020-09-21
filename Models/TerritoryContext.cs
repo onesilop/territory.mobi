@@ -1,7 +1,6 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace territory.mobi.Models
 {
@@ -177,7 +176,7 @@ namespace territory.mobi.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
-                
+
                 entity.Property(e => e.ServId)
                     .HasColumnName("ServID")
                     .HasMaxLength(50)

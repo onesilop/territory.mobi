@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.Congregation.Maps.Image
@@ -23,7 +23,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps.Image
 
         public Images CurrentImage { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(Guid ?mapid)
+        public async Task<IActionResult> OnGetAsync(Guid? mapid)
         {
 
             Map mp = await _context.Map.FirstOrDefaultAsync(m => m.MapId == mapid).ConfigureAwait(false);
@@ -51,5 +51,5 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps.Image
             }
             return await OnGetAsync(CurrentImage.MapId).ConfigureAwait(false);
         }
-    }           
+    }
 }

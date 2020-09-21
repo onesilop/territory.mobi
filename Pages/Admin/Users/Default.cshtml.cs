@@ -1,13 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json.Linq;
+using System.Security.Claims;
 using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.Users
@@ -21,7 +14,7 @@ namespace territory.mobi.Pages.Admin.Users
             _context = context;
         }
 
-        public string CatUri { get; set; } 
+        public string CatUri { get; set; }
         public IActionResult OnGet()
         {
             Images I = new Images();

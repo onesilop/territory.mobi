@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using territory.mobi.Areas.Identity.Data;
 using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.Users
 {
-    
+
 
     [Authorize(Roles = "Admin")]
 
@@ -33,20 +31,20 @@ namespace territory.mobi.Pages.Admin.Users
         {
             _userManager = userManager;
             _context = context;
-           
+
         }
 
-        public IList<AspNetUsers> AspNetUsers { get;set; }
+        public IList<AspNetUsers> AspNetUsers { get; set; }
 
         public async Task OnGetAsync()
         {
-        if (User.Identity.IsAuthenticated == false)
-        {
-            Response.Redirect("/Admin/Index");
-        }
-        else
-        {
-            AspNetUsers = await _context.AspNetUsers.ToListAsync().ConfigureAwait(false);
+            if (User.Identity.IsAuthenticated == false)
+            {
+                Response.Redirect("/Admin/Index");
+            }
+            else
+            {
+                AspNetUsers = await _context.AspNetUsers.ToListAsync().ConfigureAwait(false);
             }
         }
 
@@ -62,7 +60,7 @@ namespace territory.mobi.Pages.Admin.Users
             {
                 try
                 {
-                   await ml.SendMailAsync(e, Subject,Body , null).ConfigureAwait(false);
+                    await ml.SendMailAsync(e, Subject, Body, null).ConfigureAwait(false);
                 }
                 catch
                 {
@@ -82,7 +80,7 @@ namespace territory.mobi.Pages.Admin.Users
                 TempData["UserMessage"] = "alert-success";
             }
 
-            return Redirect(Request.Path);    
+            return Redirect(Request.Path);
         }
 
         public async Task<IActionResult> OnPostResetPAsync(string email)

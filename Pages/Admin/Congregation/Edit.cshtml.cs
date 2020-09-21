@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.Congregation
@@ -28,7 +26,7 @@ namespace territory.mobi.Pages.Admin.Congregation
         public IList<AspNetUserRoles> Roles { get; set; }
         public IList<AspNetUserClaims> Claims { get; set; }
         public IList<CongUser> CongUsers { get; set; }
-        public IList<Map> Maps { get; set;}
+        public IList<Map> Maps { get; set; }
         public IList<Models.Section> Section { get; set; }
         public IList<Setting> Setting { get; set; }
         public IList<AspNetUserClaims> UnapprovedUsers { get; set; }
@@ -56,14 +54,15 @@ namespace territory.mobi.Pages.Admin.Congregation
                 List<string> ListOCongNames = new List<string>();
                 foreach (Cong c in _context.Cong.ToList())
                 {
-                    if (c != Cong) { 
+                    if (c != Cong)
+                    {
                         ListOCongNames.Add(c.CongName);
                     }
                 }
                 CongNames = Newtonsoft.Json.JsonConvert.SerializeObject(ListOCongNames);
                 Claims = await _context.AspNetUserClaims
                     .Include(a => a.User)
-                    .Where(c => c.ClaimValue == Cong.CongName && c.ClaimType=="Congregation").ToListAsync().ConfigureAwait(false);
+                    .Where(c => c.ClaimValue == Cong.CongName && c.ClaimType == "Congregation").ToListAsync().ConfigureAwait(false);
 
                 UnapprovedUsers = await _context.AspNetUserClaims
                    .Include(a => a.User)
@@ -119,22 +118,22 @@ namespace territory.mobi.Pages.Admin.Congregation
                 UpdateDateTime = DateTime.UtcNow
             };
             try
-                {
+            {
 
 
-                    _context.Token.Add(userInvite);
-                    
-                    await _context.SaveChangesAsync().ConfigureAwait(false);
-                    Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongId == congid).ConfigureAwait(false);
+                _context.Token.Add(userInvite);
 
-                    Mailer mailer = new Mailer(_context);
-                    return await mailer.SendUserInviteMail(email, userInvite.TokenId.ToString(), Cong.CongName.ToString()).ConfigureAwait(false);
-                }
+                await _context.SaveChangesAsync().ConfigureAwait(false);
+                Cong = await _context.Cong.FirstOrDefaultAsync(m => m.CongId == congid).ConfigureAwait(false);
+
+                Mailer mailer = new Mailer(_context);
+                return await mailer.SendUserInviteMail(email, userInvite.TokenId.ToString(), Cong.CongName.ToString()).ConfigureAwait(false);
+            }
             catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.InnerException);
-                    return new BadRequestResult();
-                }
+            {
+                Debug.WriteLine(ex.InnerException);
+                return new BadRequestResult();
+            }
         }
 
         public async Task<IActionResult> OnPostSetPassword(string password, Guid congid, bool stopOthers = false)
@@ -175,7 +174,7 @@ namespace territory.mobi.Pages.Admin.Congregation
             {
                 return await OnGetAsync(id).ConfigureAwait(false);
             }
-            Cong.UpdateDatetime = DateTime.UtcNow; 
+            Cong.UpdateDatetime = DateTime.UtcNow;
             _context.Attach(Cong).State = EntityState.Modified;
 
             try

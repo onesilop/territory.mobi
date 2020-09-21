@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 
 namespace territory.mobi.Models
 {
 
-[NotMapped]
+    [NotMapped]
     public partial class MapDir
     {
-        
+
         public MapDir(Map m)
         {
             MapArea = m.MapArea;

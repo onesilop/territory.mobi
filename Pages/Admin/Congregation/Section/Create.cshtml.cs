@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using territory.mobi.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace territory.mobi.Pages.Admin.Congregation.Sections
 {
@@ -24,7 +21,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Sections
         public IActionResult OnGet(Guid id)
         {
             Models.Section Section = new Models.Section();
-            if (id == null) { return NotFound();}
+            if (id == null) { return NotFound(); }
             Section.CongId = id;
             return Page();
 

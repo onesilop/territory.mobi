@@ -1,17 +1,12 @@
-﻿using System;
-using System.Web;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using System.Web;
 using territory.mobi.Models;
-using static System.Net.WebRequestMethods;
-using System.Security.Cryptography;
-using System.Xml;
-using Newtonsoft.Json;
 
 namespace territory.mobi.Pages
 {
@@ -45,9 +40,9 @@ namespace territory.mobi.Pages
 
 
 
-        public ContentResult OnGetPwdCheck(string pwd,Guid congId, Guid mapId)
+        public ContentResult OnGetPwdCheck(string pwd, Guid congId, Guid mapId)
         {
-            if (_context.Dncpword.Count(x => x.PasswordHash == pwd && x.Notinuse == 0 && x.CongId == congId ) > 0)
+            if (_context.Dncpword.Count(x => x.PasswordHash == pwd && x.Notinuse == 0 && x.CongId == congId) > 0)
             {
                 string res = "";
                 IList<DoNotCall> dd = _context.DoNotCall.Where(d => d.MapId == mapId && d.Display == true).ToList();
@@ -55,13 +50,13 @@ namespace territory.mobi.Pages
                 {
                     string tmp = "";
                     if (d.AptNo != "") { tmp = d.AptNo + "/ "; }
-                    tmp = tmp + d.StreetNo + " " + d.StreetName+"</br>";
+                    tmp = tmp + d.StreetNo + " " + d.StreetName + "</br>";
                     res = res + tmp;
                 }
                 return Content(res);
             }
             else
-                return Content("false"); 
+                return Content("false");
         }
 
 
@@ -99,16 +94,18 @@ namespace territory.mobi.Pages
 
             if (Map.MapPolygon != "") { ShowMap = true; }
 
-            Setting set  = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync().ConfigureAwait(false);
+            Setting set = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync().ConfigureAwait(false);
             GoogleKey = set.SettingValue;
 
             MapPolygons = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Polygon").ToListAsync().ConfigureAwait(false);
             MapMarkers = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Marker").ToListAsync().ConfigureAwait(false);
             MapFeature MapCentre = await _context.MapFeature.Where(m => m.MapId == Map.MapId && m.Type == "Centre").FirstOrDefaultAsync().ConfigureAwait(false);
 
-            if (MapCentre == null) {
+            if (MapCentre == null)
+            {
                 return NotFound();
-            } else 
+            }
+            else
             {
                 dynamic Coords = Newtonsoft.Json.JsonConvert.DeserializeObject(MapCentre.Position);
                 MapCentreLat = Coords.lat;

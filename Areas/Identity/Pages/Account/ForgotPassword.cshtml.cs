@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using territory.mobi.Areas.Identity.Data;
 using territory.mobi.Models;
 
@@ -55,7 +55,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
 
                 var msg = $"Please reset your password by<a href= '{HtmlEncoder.Default.Encode(callbackUrl)}' > clicking here</ a >.";
 
-                await _emailSender.SendMailAsync(Input.Email,"Reset Password",msg,null).ConfigureAwait(false);
+                await _emailSender.SendMailAsync(Input.Email, "Reset Password", msg, null).ConfigureAwait(false);
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
