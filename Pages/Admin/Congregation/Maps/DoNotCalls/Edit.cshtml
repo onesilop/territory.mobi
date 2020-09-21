@@ -44,12 +44,11 @@
                     <span asp-validation-for="DoNotCall.Note" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="DoNotCall.Display" class="control-label" />
+                    <label class="control-label">Show do not call on public page?<mark> When a new do not call is added by a user this is set to no by default</mark></label>
                     <select asp-for="DoNotCall.Display" class="form-control">
                         <option value="false">No</option>
                         <option value="true">Yes</option>
-                    </select>
-                    <span asp-validation-for="DoNotCall.Display" class="text-danger"></span>
+                    </select><span asp-validation-for="DoNotCall.Display" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="DoNotCall.DateCreated" class="control-label"></label>

@@ -122,7 +122,7 @@ namespace territory.mobi
             Cong cn = _context.Cong.FirstOrDefault(c => c.CongId == cngid);
             AspNetUsers us = _context.AspNetUsers.FirstOrDefault(u => u.Id == cn.ServId);
 
-            SendMailAsync(us.Email, " A new Do Not Call has been created on territory.mobi.",
+            SendMailAsync(us.Email, " A new Do Not Call has been created on territory mobi.",
                                          "A new Do Not Call has been created on territory.mobi for map " + mp.MapKey + ".<br>Please log into <a href='" + HtmlEncoder.Default.Encode(RedirectURL) + "'>terrirtory.mobi</a> to action this do not call.", null).ConfigureAwait(false);
         }
 

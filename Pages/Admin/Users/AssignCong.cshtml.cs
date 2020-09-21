@@ -73,7 +73,7 @@ namespace territory.mobi.Pages.Admin.Users.Claims
             _context.AspNetUserClaims.Add(AspNetUserClaims);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            if (cong.Length == 0) { id = cong; }
+            if (cong.Length != 0) { id = cong; }
 
             returl = returl.Length == 0 ? "/Admin/Users/Edit" : "/Admin/" + returl + "/Edit";
             IDictionary<string, string> args = new Dictionary<string, string>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,14 +17,22 @@ namespace territory.mobi.Pages.CreateDNC
             _context = context;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync(Guid id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            DoNotCall = new DoNotCall();
+   
+            DoNotCall.Map = await _context.Map.FirstOrDefaultAsync(m => m.MapId == id).ConfigureAwait(false);
+
             return Page();
         }
 
         [BindProperty]
         public DoNotCall DoNotCall { get; set; }
-
         public async Task<IActionResult> OnPostAsync(Guid id)
         {
             DoNotCall.DncId = Guid.NewGuid();
@@ -32,7 +41,6 @@ namespace territory.mobi.Pages.CreateDNC
             DoNotCall.DateCreated = DateTime.Now;
             DoNotCall.DateValidated = DateTime.Now;
             DoNotCall.Display = false;
-
             if (!ModelState.IsValid)
             {
                 return Page();
