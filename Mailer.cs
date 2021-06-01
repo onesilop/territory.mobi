@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System;
+using System.Linq;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using territory.mobi.Areas.Identity.Data;
 using territory.mobi.Models;
 
@@ -48,8 +45,8 @@ namespace territory.mobi
             From = new EmailAddress(FromAddress.SettingValue, FromName.SettingValue);
             UserInviteTemplateID = UserInviteT.SettingValue;
             SiteAddress = SiteAdd.SettingValue;
-           // SiteAddress = "https://localhost:44339";
-        }
+            //SiteAddress = "https://localhost:44339";
+            }
 
 
         public async Task<IActionResult> SendMailAsync(string addressee, string subject, string htmlContent, string plainTextContent)
@@ -57,8 +54,8 @@ namespace territory.mobi
             return (await Client.SendEmailAsync(MailHelper.CreateSingleEmail(From, new EmailAddress(addressee), subject, plainTextContent, htmlContent)).ConfigureAwait(false)).StatusCode == System.Net.HttpStatusCode.Accepted ? new OkResult() : (IActionResult)new BadRequestResult();
         }
 
-       
-        public async Task<IActionResult> SendUserInviteMail (string addressee, string tokenId, string CName)
+
+        public async Task<IActionResult> SendUserInviteMail(string addressee, string tokenId, string CName)
         {
             UserInviteTemplateData dynamicTemplateData = new UserInviteTemplateData
             {
@@ -112,7 +109,7 @@ namespace territory.mobi
 
             return await SendMailAsync(user.Email, "Confirm your email",
                                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.", null).ConfigureAwait(false);
-            
+
         }
 
         public void SendNewDNC(Guid DNCID, Guid MapID)
@@ -125,11 +122,10 @@ namespace territory.mobi
             Cong cn = _context.Cong.FirstOrDefault(c => c.CongId == cngid);
             AspNetUsers us = _context.AspNetUsers.FirstOrDefault(u => u.Id == cn.ServId);
 
-            SendMailAsync(us.Email, " A new Do Not Call has been created on territory.mobi.",
-                                         "A new Do Not Call has been created on territory.mobi.<br>Please log into <a href='" + HtmlEncoder.Default.Encode(RedirectURL) + "'>terrirtory.mobi</a> to action this do not call.", null).ConfigureAwait(false);
+            SendMailAsync(us.Email, " A new Do Not Call has been created on territory mobi.",
+                                         "A new Do Not Call has been created on territory.mobi for map " + mp.MapKey + ".<br>Please log into <a href='" + HtmlEncoder.Default.Encode(RedirectURL) + "'>terrirtory.mobi</a> to action this do not call.", null).ConfigureAwait(false);
         }
 
 
     }
 }
- 

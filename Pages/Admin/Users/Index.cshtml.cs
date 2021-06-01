@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using territory.mobi.Areas.Identity.Data;
 using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.Users
 {
-    
+
 
     [Authorize(Roles = "Admin")]
 
@@ -33,20 +31,20 @@ namespace territory.mobi.Pages.Admin.Users
         {
             _userManager = userManager;
             _context = context;
-           
+
         }
 
-        public IList<AspNetUsers> AspNetUsers { get;set; }
+        public IList<AspNetUsers> AspNetUsers { get; set; }
 
         public async Task OnGetAsync()
         {
-        if (User.Identity.IsAuthenticated == false)
-        {
-            Response.Redirect("/Admin/Index");
-        }
-        else
-        {
-            AspNetUsers = await _context.AspNetUsers.ToListAsync().ConfigureAwait(false);
+            if (User.Identity.IsAuthenticated == false)
+            {
+                Response.Redirect("/Admin/Index");
+            }
+            else
+            {
+                AspNetUsers = await _context.AspNetUsers.ToListAsync().ConfigureAwait(false);
             }
         }
 
@@ -62,7 +60,7 @@ namespace territory.mobi.Pages.Admin.Users
             {
                 try
                 {
-                   await ml.SendMailAsync(e, Subject,Body , null).ConfigureAwait(false);
+                    await ml.SendMailAsync(e, Subject, Body, null).ConfigureAwait(false);
                 }
                 catch
                 {
@@ -82,24 +80,31 @@ namespace territory.mobi.Pages.Admin.Users
                 TempData["UserMessage"] = "alert-success";
             }
 
-            return Redirect(Request.Path);    
+            return Redirect(Request.Path);
         }
 
-        public async Task<IActionResult> OnPostResetPAsync(string email)
+        public async Task<IActionResult> OnPostResetPAsync(string email,string Password)
         {
             var user = await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
-            Mailer _emailSender = new Mailer(_context);
-            var code = await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
-            var callbackUrl = Url.Page(
-                "/Account/ResetPassword",
-                pageHandler: null,
-                values: new { area = "Identity", code },
-                protocol: Request.Scheme);
+            if (user != null)
+            {
+                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, Password);
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return new OkResult();
+                }
+            }
+            //            Mailer _emailSender = new Mailer(_context);
+            //           var code = await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
+            //          var callbackUrl = Url.Page(
+            //             "/Account/ResetPassword",
+            //             pageHandler: null,
+            //             values: new { area = "Identity", code },
+            //             protocol: Request.Scheme);
+            //            var msg = $"Please reset your password by<a href= '{HtmlEncoder.Default.Encode(callbackUrl)}' > clicking here</ a >.";
 
-            var msg = $"Please reset your password by<a href= '{HtmlEncoder.Default.Encode(callbackUrl)}' > clicking here</ a >.";
-
-            return await _emailSender.SendMailAsync(email, "Reset Password", msg, null).ConfigureAwait(false);
-
+            return (IActionResult)new BadRequestResult();
         }
     }
 }

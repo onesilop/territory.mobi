@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace territory.mobi.Models
+﻿namespace territory.mobi.Models
 {
     public partial class AspNetUserTokens
     {

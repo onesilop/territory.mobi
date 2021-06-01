@@ -1,12 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.PageHelp
@@ -23,7 +21,7 @@ namespace territory.mobi.Pages.Admin.PageHelp
         [BindProperty]
         public PageHelpText PageHelp { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string ReturnURL, string ReturnQ,string id = "", string Section = "")
+        public async Task<IActionResult> OnGetAsync(string ReturnURL, string ReturnQ, string id = "", string Section = "")
         {
             if (id == "")
             {
@@ -51,13 +49,13 @@ namespace territory.mobi.Pages.Admin.PageHelp
             string str = string.Concat("Help for ", PageHelp.PageId);
             if (PageHelp.SectionId != "")
             {
-                str = string.Concat(str," Section ", PageHelp.SectionId);
+                str = string.Concat(str, " Section ", PageHelp.SectionId);
             }
             ViewData["HelpFor"] = str;
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(string ReturnURL,string ReturnQ,string Section = "")
+        public async Task<IActionResult> OnPostAsync(string ReturnURL, string ReturnQ, string Section = "")
         {
             if (!ModelState.IsValid)
             {
@@ -68,12 +66,12 @@ namespace territory.mobi.Pages.Admin.PageHelp
             {
                 PageHelp.HtmlHelp = PageHelp.HtmlHelp.ToString().Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
             }
-                if (!PageHelpExists(PageHelp.PageId,PageHelp.SectionId))
+            if (!PageHelpExists(PageHelp.PageId, PageHelp.SectionId))
             {
                 _context.PageHelp.Add(PageHelp);
             }
             else
-            { 
+            {
                 _context.Attach(PageHelp).State = EntityState.Modified;
             }
             try
@@ -96,13 +94,13 @@ namespace territory.mobi.Pages.Admin.PageHelp
                 return RedirectToPage(ReturnURL);
             }
             else
-            { 
+            {
                 IDictionary<string, string> args = ParseQueryString(ReturnQ);
                 return RedirectToPage(ReturnURL, args);
             }
         }
 
-        private bool PageHelpExists(string id,string section="")
+        private bool PageHelpExists(string id, string section = "")
         {
             return _context.PageHelp.Any(e => e.PageId == id && e.SectionId == section);
         }

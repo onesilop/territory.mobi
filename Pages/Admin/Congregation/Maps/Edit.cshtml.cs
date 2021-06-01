@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Drawing;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.Congregation.Maps
@@ -111,11 +110,11 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
             }
 
             if (Map.Notes != null)
-            { 
+            {
                 Map.Notes = Map.Notes.ToString().Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
             }
             if (Map.Parking != null)
-            { 
+            {
                 Map.Parking = Map.Parking.ToString().Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
             }
             Map.UpdateDatetime = DateTime.UtcNow;
@@ -150,7 +149,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
         {
 
             if (files.Count != 0)
-            { 
+            {
                 Map = await _context.Map.FirstOrDefaultAsync(m => m.MapId == id).ConfigureAwait(false);
                 IFormFile uploadedImage = files.FirstOrDefault();
                 if (uploadedImage == null || uploadedImage.ContentType.ToLower().StartsWith("image/"))

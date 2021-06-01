@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
@@ -13,18 +12,18 @@ namespace territory.mobi.Models
 
         public MapMin(Map m, TerritoryContext context)
         {
-            
+
             TerritoryContext _context = context;
             MapId = m.MapId;
             DoNotCalls = new HashSet<DoNotCall>();
             Display = m.Display;
             DoNotCalls = _context.DoNotCall.Where(x => x.MapId == m.MapId && x.Display == true).ToList();
-            ImgImage =  _context.Images.Where(i => i.ImgId == m.ImgId).Select(i => i.ImgImage).SingleOrDefault();
+            ImgImage = _context.Images.Where(i => i.ImgId == m.ImgId).Select(i => i.ImgImage).SingleOrDefault();
             MapArea = m.MapArea;
             MapKey = m.MapKey;
             Notes = m.Notes;
             Parking = m.Parking;
-            Section =  _context.Section.Where(s => s.SectionId == m.SectionId).Select(s => s.SectionTitle).SingleOrDefault();
+            Section = _context.Section.Where(s => s.SectionId == m.SectionId).Select(s => s.SectionTitle).SingleOrDefault();
             SortOrder = m.SortOrder;
             UpdateDatetime = m.UpdateDatetime;
         }

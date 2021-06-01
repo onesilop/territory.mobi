@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using territory.mobi.Areas.Identity.Data;
 using territory.mobi.Models;
@@ -16,7 +14,7 @@ namespace territory.mobi
         {
             _context = Context;
         }
-        
+
         public async Task<string> GetUserToken(ApplicationUser user)
         {
             AspNetUserTokens tk = new AspNetUserTokens();
@@ -31,7 +29,7 @@ namespace territory.mobi
                 _ = await _context.SaveChangesAsync().ConfigureAwait(false);
             }
             catch
-            { 
+            {
                 return "";
             }
             return tk.Value;
@@ -45,7 +43,7 @@ namespace territory.mobi
                 _context.AspNetUserTokens.Remove(tk);
                 user.EmailConfirmed = true;
                 _context.AspNetUsers.Attach(user);
-            
+
                 try
                 {
                     await _context.SaveChangesAsync().ConfigureAwait(false);

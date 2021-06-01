@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.Congregation.Maps
@@ -39,7 +39,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
 
         public async Task<IActionResult> OnPostAsync(Guid? id)
         {
-           
+
             if (id == null)
             {
                 return NotFound();
@@ -47,7 +47,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
             string cngid = "";
 
             Map = await _context.Map.FindAsync(id);
-            
+
             if (Map != null)
             {
 

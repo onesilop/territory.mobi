@@ -44,7 +44,7 @@
         </div>
     }
     <div>
-        @if (Request.Query["returl"] != "")
+        @if (Request.Query["returl"].ToString().Length > 0 )
         {
             <a asp-page="/Admin/@Request.Query["returl"]/Edit" asp-route-id=@Request.Query["cong"]>Back to @Request.Query["returl"]</a>
         }

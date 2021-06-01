@@ -1,18 +1,12 @@
-﻿using System;
-using System.Web;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using System.Web;
 using territory.mobi.Models;
-using static System.Net.WebRequestMethods;
-using System.Security.Cryptography;
-using System.Xml;
-using Newtonsoft.Json;
-using NUnit.Framework;
 
 namespace territory.mobi.Pages
 {
@@ -46,13 +40,14 @@ namespace territory.mobi.Pages
         public string CookieID { get; set; } = "territory.mobi.dnclogin.";
 
 
-        public ContentResult OnGetPwdCheck(string pwd,Guid congId, Guid mapId)
+        public ContentResult OnGetPwdCheck(string pwd, Guid congId, Guid mapId)
         {
             if (_context.Dncpword.Any(x => x.PasswordHash == pwd && x.Notinuse == 0 && x.CongId == congId))
             {
                 string res = "No do not calls for this map";
                 IList<DoNotCall> dd = _context.DoNotCall.Where(d => d.MapId == mapId && d.Display == true).ToList();
-                if (dd.Count > 0) {
+                if (dd.Count > 0)
+                {
                     res = "";
                     foreach (DoNotCall d in dd)
                     {
@@ -65,7 +60,7 @@ namespace territory.mobi.Pages
                 return Content(res);
             }
             else
-                return Content("false"); 
+                return Content("false");
         }
 
         public async Task<IActionResult> OnGetAsync(string CongName, string MapNo, Guid? id = null)

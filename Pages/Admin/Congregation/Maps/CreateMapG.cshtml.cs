@@ -1,18 +1,13 @@
-﻿using System;
-using System.Web;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using territory.mobi.Models;
-using static System.Net.WebRequestMethods;
-using System.Security.Cryptography;
-using System.Xml;
-using Newtonsoft.Json;
-using System.Diagnostics;
 
 namespace territory.mobi.Pages
 {
@@ -43,7 +38,7 @@ namespace territory.mobi.Pages
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
-            Setting set  = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync().ConfigureAwait(false);
+            Setting set = await _context.Setting.Where(s => s.SettingType == "GoogleAPIKey").FirstOrDefaultAsync().ConfigureAwait(false);
             GoogleKey = set.SettingValue;
 
             Map = await _context.Map.Where(m => m.MapId == id).FirstOrDefaultAsync().ConfigureAwait(false);
@@ -55,11 +50,12 @@ namespace territory.mobi.Pages
                 ViewData["catme"] = CurrentImage.Cat;
             }
 
-            MapPolygons = await _context.MapFeature.Where(m => m.MapId == id && m.Type =="Polygon").ToListAsync().ConfigureAwait(false);
+            MapPolygons = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Polygon").ToListAsync().ConfigureAwait(false);
             MapMarkers = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Marker").ToListAsync().ConfigureAwait(false);
             MapFeature MapCentre = await _context.MapFeature.Where(m => m.MapId == id && m.Type == "Centre").FirstOrDefaultAsync().ConfigureAwait(false);
-            
-            if (MapCentre != null) {
+
+            if (MapCentre != null)
+            {
                 dynamic Coords = JsonConvert.DeserializeObject(MapCentre.Position);
                 MapCentreLat = Coords.lat;
                 MapCentreLng = Coords.lng;
@@ -77,7 +73,7 @@ namespace territory.mobi.Pages
 
         public async Task<IActionResult> OnPostMapCentre(Guid id, string position, int zoom)
         {
-            return await AddUpdateFeature(id, "Centre", position,"",0.5m,0,"",zoom).ConfigureAwait(false);
+            return await AddUpdateFeature(id, "Centre", position, "", 0.5m, 0, "", zoom).ConfigureAwait(false);
         }
 
         public async Task<IActionResult> OnPostPolygon(Guid id, string position, string color, decimal opacity, int zIndex)
@@ -87,7 +83,7 @@ namespace territory.mobi.Pages
 
         public async Task<IActionResult> OnPostLabel(Guid id, string position, int zIndex, string title)
         {
-            return await AddUpdateFeature(id, "Marker", position,"" ,0.5m ,zIndex,title).ConfigureAwait(false);
+            return await AddUpdateFeature(id, "Marker", position, "", 0.5m, zIndex, title).ConfigureAwait(false);
         }
 
 
@@ -98,12 +94,12 @@ namespace territory.mobi.Pages
 
         public async Task<IActionResult> OnPostDeleteLabel(Guid id, int zIndex)
         {
-            return await DeleteFeature(id, "Marker",zIndex).ConfigureAwait(false);
+            return await DeleteFeature(id, "Marker", zIndex).ConfigureAwait(false);
         }
 
 
 
-        public async Task<IActionResult> DeleteFeature(Guid id, string type,int zIndex)
+        public async Task<IActionResult> DeleteFeature(Guid id, string type, int zIndex)
         {
             MapFeature MF = await _context.MapFeature.Where(m => m.MapId == id && m.Type == type && m.ZIndex == zIndex).FirstOrDefaultAsync().ConfigureAwait(false);
             if (MF == null)
@@ -146,7 +142,7 @@ namespace territory.mobi.Pages
                     Zoom = zoom
                 };
                 _context.MapFeature.Add(newMF);
-                
+
             }
             else
             {

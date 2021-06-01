@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.Users
 {
-    [Authorize(Roles= "Admin")]
+    [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
     {
         private readonly territory.mobi.Models.TerritoryContext _context;
@@ -42,9 +41,9 @@ namespace territory.mobi.Pages.Admin.Users
             ViewData["UserId"] = new SelectList(_context.AspNetUsers, "Id", "Id");
             string tmp = "";
             foreach (Cong cng in _context.Cong)
-             {
+            {
                 tmp = tmp + ",{ text: " + cng.CongName + ",value: " + cng.CongName + "}";
-                }
+            }
             ViewData["Congs"] = tmp;
             ViewData["Id"] = id;
 
@@ -56,17 +55,17 @@ namespace territory.mobi.Pages.Admin.Users
 
             AspNetUserClaims = await _context.AspNetUserClaims.ToListAsync().ConfigureAwait(false);
             AspNetUserClaims = AspNetUserClaims.Where(m => m.UserId == id).ToList();
-  
+
             return Page();
         }
 
-      /*  public async Task<IActionResult> OnPostAddCong(string Cong, string id)
-        {
-            private aspNetRoleClaim cng;
-            _context.aspNetUserClaim.Add();
-            return Page();
-        }
-        */
+        /*  public async Task<IActionResult> OnPostAddCong(string Cong, string id)
+          {
+              private aspNetRoleClaim cng;
+              _context.aspNetUserClaim.Add();
+              return Page();
+          }
+          */
 
         public async Task<IActionResult> OnPostAsync()
         {

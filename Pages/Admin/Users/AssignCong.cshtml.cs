@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.Users.Claims
@@ -34,12 +33,12 @@ namespace territory.mobi.Pages.Admin.Users.Claims
                 IList<Cong> cng = _context.Cong.ToList();
                 foreach (AspNetUserClaims c in clm)
                 {
-                   cng.Remove(cng.Where(a => a.CongName == c.ClaimValue).FirstOrDefault());
+                    cng.Remove(cng.Where(a => a.CongName == c.ClaimValue).FirstOrDefault());
                 }
                 ViewData["Congs"] = new SelectList(cng, "CongName", "CongName");
                 ViewData["name"] = _context.AspNetUsers.Where(u => u.Id == id).FirstOrDefault().FullName;
                 if (claimid != -1)
-                { 
+                {
                     ViewData["cong"] = _context.AspNetUserClaims.Where(u => u.Id == claimid).FirstOrDefault().ClaimValue;
                 }
                 return Page();
@@ -74,7 +73,7 @@ namespace territory.mobi.Pages.Admin.Users.Claims
             _context.AspNetUserClaims.Add(AspNetUserClaims);
             await _context.SaveChangesAsync().ConfigureAwait(false);
 
-            if (cong.Length == 0) { id = cong; }
+            if (cong.Length != 0) { id = cong; }
 
             returl = returl.Length == 0 ? "/Admin/Users/Edit" : "/Admin/" + returl + "/Edit";
             IDictionary<string, string> args = new Dictionary<string, string>

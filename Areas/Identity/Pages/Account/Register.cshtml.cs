@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 using territory.mobi.Areas.Identity.Data;
 using territory.mobi.Models;
 
@@ -108,7 +108,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                 ListOCongs.Add(c.CongName);
             }
             Congs = Newtonsoft.Json.JsonConvert.SerializeObject(ListOCongs);
-            
+
             ReturnUrl = returnUrl;
         }
 
@@ -174,7 +174,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                         case "NewUser":
                             foreach (AspNetUserClaims u in Usrs)
                             {
-                                _ = await _emailSender.SendUserAddition(u.User.Email, UserClaim.ClaimValue , user.FullName , cng.CongId.ToString() ).ConfigureAwait(false);
+                                _ = await _emailSender.SendUserAddition(u.User.Email, UserClaim.ClaimValue, user.FullName, cng.CongId.ToString()).ConfigureAwait(false);
                             }
                             break;
                         case "NewCong":
@@ -182,7 +182,7 @@ namespace territory.mobi.Areas.Identity.Pages.Account
                             IList<AspNetUserRoles> Admins = await _context.AspNetUserRoles.Where(r => r.Role.Name == "Admin").ToListAsync().ConfigureAwait(false);
                             foreach (AspNetUserRoles a in Admins)
                             {
-                                _ = await _emailSender.SendUserApprovalRequest(a.User.Email, UserClaim.ClaimValue, user.FullName, cng.CongId.ToString(),true).ConfigureAwait(false);
+                                _ = await _emailSender.SendUserApprovalRequest(a.User.Email, UserClaim.ClaimValue, user.FullName, cng.CongId.ToString(), true).ConfigureAwait(false);
                             }
                             break;
                         default:

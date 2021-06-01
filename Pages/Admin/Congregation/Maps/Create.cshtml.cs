@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using territory.mobi.Models;
 
 namespace territory.mobi.Pages.Admin.Congregation.Maps
@@ -28,7 +27,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
         public IActionResult OnGet(Guid id)
         {
             if (id == null)
-            { 
+            {
                 return NotFound();
             }
 
@@ -43,7 +42,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
             MapKeys = Newtonsoft.Json.JsonConvert.SerializeObject(ListOMapKeys);
             Map = new Map();
 
-            IList<Models.Section> slist =  _context.Section.Where(s => s.CongId == id).ToList();
+            IList<Models.Section> slist = _context.Section.Where(s => s.CongId == id).ToList();
             ViewData["Section"] = new SelectList(slist, "SectionId", "SectionTitle");
             ViewData["MapType"] = new SelectList(Map.MapTypeVal);
 
@@ -58,7 +57,7 @@ namespace territory.mobi.Pages.Admin.Congregation.Maps
             Map.UpdateDatetime = DateTime.UtcNow;
             if (files.Count != 0)
             {
-                
+
                 IFormFile uploadedImage = files.FirstOrDefault();
                 if (uploadedImage == null || uploadedImage.ContentType.ToLower().StartsWith("image/"))
                 {
