@@ -42,7 +42,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="Octokit" Version="0.48.0" />
     <PackageReference Include="ReverseMarkdown" Version="3.14.0" />
@@ -54,9 +54,11 @@
   <ItemGroup>
     <Content Update="appsettings.Development.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="appsettings.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="Pages\Directory.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>

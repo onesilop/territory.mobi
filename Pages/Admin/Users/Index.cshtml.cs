@@ -83,21 +83,28 @@ namespace territory.mobi.Pages.Admin.Users
             return Redirect(Request.Path);
         }
 
-        public async Task<IActionResult> OnPostResetPAsync(string email)
+        public async Task<IActionResult> OnPostResetPAsync(string email,string Password)
         {
             var user = await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
-            Mailer _emailSender = new Mailer(_context);
-            var code = await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
-            var callbackUrl = Url.Page(
-                "/Account/ResetPassword",
-                pageHandler: null,
-                values: new { area = "Identity", code },
-                protocol: Request.Scheme);
+            if (user != null)
+            {
+                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, Password);
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return new OkResult();
+                }
+            }
+            //            Mailer _emailSender = new Mailer(_context);
+            //           var code = await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
+            //          var callbackUrl = Url.Page(
+            //             "/Account/ResetPassword",
+            //             pageHandler: null,
+            //             values: new { area = "Identity", code },
+            //             protocol: Request.Scheme);
+            //            var msg = $"Please reset your password by<a href= '{HtmlEncoder.Default.Encode(callbackUrl)}' > clicking here</ a >.";
 
-            var msg = $"Please reset your password by<a href= '{HtmlEncoder.Default.Encode(callbackUrl)}' > clicking here</ a >.";
-
-            return await _emailSender.SendMailAsync(email, "Reset Password", msg, null).ConfigureAwait(false);
-
+            return (IActionResult)new BadRequestResult();
         }
     }
 }

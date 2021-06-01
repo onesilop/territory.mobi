@@ -45,8 +45,8 @@ namespace territory.mobi
             From = new EmailAddress(FromAddress.SettingValue, FromName.SettingValue);
             UserInviteTemplateID = UserInviteT.SettingValue;
             SiteAddress = SiteAdd.SettingValue;
-            // SiteAddress = "https://localhost:44339";
-        }
+            //SiteAddress = "https://localhost:44339";
+            }
 
 
         public async Task<IActionResult> SendMailAsync(string addressee, string subject, string htmlContent, string plainTextContent)

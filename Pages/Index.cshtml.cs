@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace territory.mobi.Pages
 
         public async Task OnGetAsync()
         {
+            Console.WriteLine(_context.Database.GetDbConnection().ConnectionString);
             Cong = await _context.Cong.Where(c => c.Hide == false).ToListAsync().ConfigureAwait(false);
         }
     }

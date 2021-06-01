@@ -122,7 +122,16 @@
             });
             function sendReset(e)
                 {
-                    $.ajax({
+                bootbox.prompt({
+                    title: "<h3>Enter password</h3>",
+                    inputType: "password",
+                    onEscape: true,
+                    backdrop: true,
+                    centerVertical: true,
+                    scrollable: true,
+                    callback: function (result) {
+                        if (result != null) {
+                            $.ajax({
                                     url: '/Admin/Users/Index?handler=ResetP',
                                     type: 'POST',
                                     beforeSend: function (xhr) {
@@ -130,14 +139,15 @@
                                             $('input:hidden[name="__RequestVerificationToken"]').val());
                                     },
                                     data: {
-                                        email: e
+                                        email: e,
+                                        Password: result
                                     }
                                 })
                                 .done(function (result) {
                                         console.log(result);
                                         bootbox.dialog({
-                                            title: "<h3>Reset link sent</h3>",
-                                            message: "Yeay the reset password email was sent.",
+                                            title: "<h3>Password was Reset</h3>",
+                                            message: "Yeay the password was reset.",
                                             onEscape: true,
                                             backdrop: true,
                                             centerVertical: true,
@@ -148,15 +158,18 @@
                                 .fail(function (result) {
                                     console.log(result);
                                     bootbox.dialog({
-                                        title: "<h3>Unable to send email</h3>",
-                                        message: "Sorry something went wrong and we couldn't send the reset email",
+                                        title: "<h3>Unable to reset Password</h3>",
+                                        message: "Sorry something went wrong and we couldn't update the password",
                                         onEscape: true,
                                         backdrop: true,
                                         centerVertical: true,
                                         scrollable: true
                                     });
                                 })
-                };
+                        };
+                    }
+                });
+            };
         </script>
     }
 </body>

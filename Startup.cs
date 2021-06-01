@@ -37,12 +37,14 @@ namespace territory.mobi
             });
 
             services.AddDbContext<TerritoryContext>(options =>
-            options.UseSqlServer(
-            Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
+            
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDefaultIdentity<ApplicationUser>().AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultUI();
 
@@ -57,6 +59,7 @@ namespace territory.mobi
                 options.Lockout.AllowedForNewUsers = true;
             });
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
+
 
             services.AddResponseCompression(options =>
             {
